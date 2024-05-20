@@ -335,4 +335,16 @@ public class SysDeptServiceImpl implements ISysDeptService
     {
         return getChildList(list, t).size() > 0 ? true : false;
     }
+
+    /**
+     * 根据部门ID查询名称
+     *
+     * @param deptId 部门ID
+     * @return 部门信息
+     */
+    @Override
+    public String selectDeptNameById(Long deptId) {
+        return deptMapper.selectDeptNameById(deptId);
+    }
+
 }

@@ -1,3 +1,6 @@
 com.jijia.system.api.factory.RemoteUserFallbackFactory
 com.jijia.system.api.factory.RemoteLogFallbackFactory
 com.jijia.system.api.factory.RemoteFileFallbackFactory
+com.jijia.system.api.factory.RemoterDeptFallbackFactory
+com.jijia.system.api.factory.RemoteConfigFallbackFactory
+com.jijia.system.api.factory.RemoteReadyDeskFallbackFactory

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpFinancialDataMapper">
+
+    <resultMap type="OpFinancialData" id="OpFinancialDataResult">
+        <result property="financialCode"    column="financial_code"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="price"    column="price"    />
+        <result property="amount"    column="amount"    />
+        <result property="collectionMsg"    column="collection_msg"    />
+        <result property="managementFee"    column="management_fee"    />
+        <result property="otherFee"    column="other_fee"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+        <result property="financialId"    column="financial_id"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="companyMsg"    column="company_msg"    />
+    </resultMap>
+
+    <resultMap type="OpFinancialDataVo" id="OpFinancialDataVoResult">
+        <result property="financialCode"    column="financial_code"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="price"    column="price"    />
+        <result property="amount"    column="amount"    />
+        <result property="collectionMsg"    column="collection_msg"    />
+        <result property="managementFee"    column="management_fee"    />
+        <result property="otherFee"    column="other_fee"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+        <result property="financialId"    column="financial_id"    />
+        <result property="collectionTime"    column="collection_time"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="companyMsg"    column="company_msg"    />
+    </resultMap>
+
+    <sql id="selectOpFinancialDataVo">
+        select financial_code, detect_name, report_serial_number, price, amount,
+                collection_msg, management_fee, other_fee, op_financial_data.create_by, op_financial_data.create_time, op_financial_data.update_time,
+               op_financial_data.update_by, op_financial_data.remark, op_financial_data.financial_id , collection_time , op_financial_data.report_unit , op_financial_data.project_msg , op_financial_data.company_msg from op_financial_data
+        left join op_financial_msg on op_financial_msg.financial_id = op_financial_data.financial_id
+    </sql>
+
+    <select id="selectOpFinancialDataList" parameterType="OpFinancialDataInfo" resultMap="OpFinancialDataVoResult">
+        <include refid="selectOpFinancialDataVo"/>
+        <where>
+
+            <if test="detectName != null  and detectName != ''"> and detect_name like concat('%', #{detectName}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="collectionMsg != null  and collectionMsg != ''"> and collection_msg like concat('%', #{collectionMsg}, '%')</if>
+            <if test="managementFee != null "> and management_fee = #{managementFee}</if>
+            <if test="otherFee != null "> and other_fee = #{otherFee}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="financialId != null  and financialId != ''"> and op_financial_data.financial_id = #{financialId}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="financialCodes != null and financialCodes.size() > 0 ">
+                and financial_code in
+                <foreach collection="financialCodes" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOpFinancialDataListNumber" parameterType="OpFinancialDataInfo" resultType="double">
+        select SUM(price * amount - other_fee - management_fee) from op_financial_data
+        <where>
+            <if test="detectName != null  and detectName != ''"> and detect_name like concat('%', #{detectName}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="collectionMsg != null  and collectionMsg != ''"> and collection_msg like concat('%', #{collectionMsg}, '%')</if>
+            <if test="managementFee != null "> and management_fee = #{managementFee}</if>
+            <if test="otherFee != null "> and other_fee = #{otherFee}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="financialId != null  and financialId != ''"> and financial_id = #{financialId}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="financialCodes != null and financialCodes.size() > 0 ">
+                and financial_code in
+                <foreach collection="financialCodes" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="selectOpFinancialDataList_number" parameterType="OpFinancialDataInfo" resultMap="OpFinancialDataVoResult">
+        <include refid="selectOpFinancialDataVo"/>
+        <where>
+
+            <if test="detectName != null  and detectName != ''"> and detect_name like concat('%', #{detectName}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="collectionMsg != null  and collectionMsg != ''"> and collection_msg like concat('%', #{collectionMsg}, '%')</if>
+            <if test="managementFee != null "> and management_fee = #{managementFee}</if>
+            <if test="otherFee != null "> and other_fee = #{otherFee}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="financialId != null  and financialId != ''"> and financial_id = #{financialId}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="financialCodes != null and financialCodes.size() > 0 ">
+                and financial_id in
+                <foreach collection="financialCodes" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOpFinancialDataByFinancialCode" parameterType="Long" resultMap="OpFinancialDataVoResult">
+        <include refid="selectOpFinancialDataVo"/>
+        where financial_code = #{financialCode}
+    </select>
+
+
+
+    <insert id="insertOpFinancialData" parameterType="OpFinancialDataVo" useGeneratedKeys="true" keyProperty="financialCode">
+        insert into op_financial_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="detectName != null">detect_name,</if>
+            <if test="reportSerialNumber != null">report_serial_number,</if>
+            <if test="price != null">price,</if>
+            <if test="amount != null">amount,</if>
+            <if test="collectionMsg != null">collection_msg,</if>
+            <if test="managementFee != null">management_fee,</if>
+            <if test="otherFee != null">other_fee,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="remark != null">remark,</if>
+            <if test="financialId != null">financial_id,</if>
+            <if test="reportUnit != null">report_unit,</if>
+            <if test="projectMsg != null">project_msg,</if>
+            <if test="companyMsg != null">company_msg,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="detectName != null">#{detectName},</if>
+            <if test="reportSerialNumber != null">#{reportSerialNumber},</if>
+            <if test="price != null">#{price},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="collectionMsg != null">#{collectionMsg},</if>
+            <if test="managementFee != null">#{managementFee},</if>
+            <if test="otherFee != null">#{otherFee},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="financialId != null">#{financialId},</if>
+            <if test="reportUnit != null">#{reportUnit},</if>
+            <if test="projectMsg != null">#{projectMsg},</if>
+            <if test="companyMsg != null">#{companyMsg},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpFinancialData" parameterType="OpFinancialDataVo">
+        update op_financial_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detectName != null">detect_name = #{detectName},</if>
+            <if test="reportSerialNumber != null">report_serial_number = #{reportSerialNumber},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="collectionMsg != null">collection_msg = #{collectionMsg},</if>
+            <if test="managementFee != null">management_fee = #{managementFee},</if>
+            <if test="otherFee != null">other_fee = #{otherFee},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="financialId != null">financial_id = #{financialId},</if>
+            <if test="reportUnit != null">report_unit = #{reportUnit},</if>
+            <if test="projectMsg != null">project_msg = #{projectMsg},</if>
+            <if test="companyMsg != null">company_msg = #{companyMsg},</if>
+        </trim>
+        where financial_code = #{financialCode}
+    </update>
+
+    <delete id="deleteOpFinancialDataByFinancialCode" parameterType="Long">
+        delete from op_financial_data where financial_code = #{financialCode}
+    </delete>
+
+    <delete id="deleteOpFinancialDataByFinancialCodes" parameterType="String">
+        delete from op_financial_data where financial_code in
+        <foreach item="financialCode" collection="array" open="(" separator="," close=")">
+            #{financialCode}
+        </foreach>
+    </delete>
+    <delete id="deleteOpFinancialMsgByFinancialMsgId" parameterType="Long">
+        delete from op_financial_data where financial_id = #{financialId}
+    </delete>
+</mapper>

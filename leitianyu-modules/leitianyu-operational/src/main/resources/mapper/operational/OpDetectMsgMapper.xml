@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpDetectMsgMapper">
+
+    <resultMap type="OpDetectMsg" id="OpDetectMsgResult">
+        <result property="deskId"    column="desk_id"    />
+        <result property="completeReportDate"    column="complete_report_date"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="sampleMsg"    column="sample_msg"    />
+        <result property="unit"    column="unit"    />
+        <result property="detectPersonnel"    column="detect_personnel"    />
+        <result property="verifyPersonnel"    column="verify_personnel"    />
+        <result property="composePersonnel"    column="compose_personnel"    />
+        <result property="preliminaryReport"    column="preliminary_report"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="detectTime"    column="detect_time"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="detectCode"    column="detect_code"    />
+        <result property="detectAmount"    column="detect_amount"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="instrument"    column="instrument"    />
+        <result property="chemicals"    column="chemicals"    />
+        <result property="status"    column="status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="authorizationTime"    column="authorization_time"    />
+        <result property="detectRemark"    column="detect_remark"    />
+    </resultMap>
+
+    <resultMap type="OpDetectMsgVo" id="OpDetectMsgVoResult">
+        <result property="deskId"    column="desk_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="entrustmentTime"    column="entrustment_time"    />
+        <result property="entrustSerialNumber"    column="entrust_serial_number"    />
+        <result property="recordSerialNumber"    column="record_serial_number"    />
+        <result property="completeReportDate"    column="complete_report_date"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="sampleMsg"    column="sample_msg"    />
+        <result property="unit"    column="unit"    />
+        <result property="detectPersonnel"    column="detect_personnel"    />
+        <result property="verifyPersonnel"    column="verify_personnel"    />
+        <result property="composePersonnel"    column="compose_personnel"    />
+        <result property="preliminaryReport"    column="preliminary_report"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="detectTime"    column="detect_time"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="detectCode"    column="detect_code"    />
+        <result property="detectAmount"    column="detect_amount"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="instrument"    column="instrument"    />
+        <result property="chemicals"    column="chemicals"    />
+        <result property="status"    column="status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="authorizationTime"    column="authorization_time"    />
+        <result property="sampleAmount"    column="sample_amount"    />
+        <result property="deptPermissionLevel"    column="permission_level"    />
+        <result property="detectRemark"    column="detect_remark"    />
+    </resultMap>
+
+    <sql id="selectOpDetectMsgVo">
+        select desk_id, complete_report_date, report_date, sample_msg, unit, detect_personnel,
+               verify_personnel, compose_personnel, preliminary_report,
+               create_time, update_time, del_flag ,detect_time,detect_name,detect_code,detect_amount,
+               detect_engineering_parts,instrument,chemicals,status,user_id,entrust_status,entrust_note,authorization_time,detect_remark
+        from op_detect_msg
+    </sql>
+
+    <sql id="selectOpDetectMsgVoList">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel, msg.verify_personnel, msg.compose_personnel, msg.preliminary_report, msg.create_time, msg.update_time, msg.del_flag
+                ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_engineering_parts,msg.instrument,msg.chemicals,msg.detect_remark,
+               project.project_name,project.entrustment_unit,desk.entrust_serial_number,desk.record_serial_number,  desk.report_serial_number,desk.order_time,
+               desk.project_id,desk.entrustment_time,msg.status, msg.user_id,msg.entrust_status,msg.entrust_note,msg.authorization_time
+        from op_detect_msg msg
+                 left join op_desk desk on msg.desk_id = desk.desk_id
+                 left join op_project_msg project on desk.project_id = project.project_id
+    </sql>
+
+    <select id="selectOpDetectMsgList" parameterType="OpDetectMsgVo" resultMap="OpDetectMsgVoResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel, msg.verify_personnel, msg.compose_personnel, msg.preliminary_report, msg.create_time, msg.update_time, msg.del_flag
+        ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_engineering_parts,msg.instrument,msg.chemicals,msg.status, msg.user_id,msg.entrust_status,msg.entrust_note,msg.authorization_time,msg.detect_remark,
+        project.project_name,project.entrustment_unit,desk.entrust_serial_number,desk.record_serial_number,  desk.report_serial_number, desk.project_id,desk.entrustment_time,desk.order_time,desk.sample_amount
+        <if test="bool">
+            ,dept.permission_level
+        </if>
+        from op_detect_msg msg
+        inner join op_desk desk on msg.desk_id = desk.desk_id and desk.status in (0,3,4)
+        <if test="opDetectMsg.entrustSerialNumber != null  and opDetectMsg.entrustSerialNumber != ''"> and desk.entrust_serial_number like concat('%', #{opDetectMsg.entrustSerialNumber}, '%')</if>
+        <if test="opDetectMsg.recordSerialNumber != null  and opDetectMsg.recordSerialNumber != ''"> and desk.record_serial_number like concat('%', #{opDetectMsg.recordSerialNumber}, '%')</if>
+        <if test="opDetectMsg.reportSerialNumber != null  and opDetectMsg.reportSerialNumber != ''"> and desk.report_serial_number  like concat('%', #{opDetectMsg.reportSerialNumber}, '%')</if>
+        <if test="opDetectMsg.entrustmentTime != null "> and desk.entrustment_time between #{opDetectMsg.entrustmentTime[0]} and #{opDetectMsg.entrustmentTime[1]}</if>
+        <if test="opDetectMsg.orderTime != null "> and desk.order_time between #{opDetectMsg.orderTime[0]} and #{opDetectMsg.orderTime[1]}</if>
+        inner join op_project_msg project on desk.project_id = project.project_id
+        <if test="opDetectMsg.projectName != null  and opDetectMsg.projectName != ''"> and project.project_name  like concat('%', #{opDetectMsg.projectName}, '%')</if>
+        <if test="opDetectMsg.entrustmentUnit != null  and opDetectMsg.entrustmentUnit != ''"> and project.entrustment_unit  like concat('%', #{opDetectMsg.entrustmentUnit}, '%')</if>
+        <if test="bool">
+        inner join op_desk_dept dept on msg.desk_id = dept.desk_id
+        </if>
+        <where>
+            <if test="opDetectMsg.completeReportDate != null "> and msg.complete_report_date between #{opDetectMsg.completeReportDate[0]} and #{opDetectMsg.completeReportDate[1]}</if>
+            <if test="opDetectMsg.reportDate != null "> and msg.report_date between #{opDetectMsg.reportDate[0]} and #{opDetectMsg.reportDate[1]}</if>
+            <if test="opDetectMsg.sampleMsg != null  and opDetectMsg.sampleMsg != ''"> and msg.sample_msg  like concat('%', #{opDetectMsg.sampleMsg}, '%')</if>
+            <if test="opDetectMsg.unit != null  and opDetectMsg.unit != ''"> and msg.unit  like concat('%', #{opDetectMsg.unit}, '%')</if>
+            <if test="opDetectMsg.detectPersonnel != null  and opDetectMsg.detectPersonnel != ''"> and msg.detect_personnel  like concat('%', #{opDetectMsg.detectPersonnel}, '%')</if>
+            <if test="opDetectMsg.verifyPersonnel != null  and opDetectMsg.verifyPersonnel != ''"> and msg.verify_personnel  like concat('%', #{opDetectMsg.verifyPersonnel}, '%')</if>
+            <if test="opDetectMsg.composePersonnel != null  and opDetectMsg.composePersonnel != ''"> and msg.compose_personnel  like concat('%', #{opDetectMsg.composePersonnel}, '%')</if>
+            <if test="opDetectMsg.preliminaryReport != null  and opDetectMsg.preliminaryReport != ''"> and msg.preliminary_report  like concat('%', #{opDetectMsg.preliminaryReport}, '%')</if>
+            <if test="opDetectMsg.detectTime != null and opDetectMsg.detectTime != ''"> and msg.detect_time  like concat('%', #{opDetectMsg.detectTime}, '%')</if>
+            <if test="opDetectMsg.detectName != null  and opDetectMsg.detectName != ''"> and msg.detect_name  like concat('%', #{opDetectMsg.detectName}, '%')</if>
+            <if test="opDetectMsg.detectCode != null  and opDetectMsg.detectCode != ''"> and msg.detect_code  like concat('%', #{opDetectMsg.detectCode}, '%')</if>
+            <if test="opDetectMsg.detectEngineeringParts != null  and opDetectMsg.detectEngineeringParts != ''"> and msg.detect_engineering_parts  like concat('%', #{opDetectMsg.detectEngineeringParts}, '%')</if>
+            <if test="opDetectMsg.status != null "> and msg.status  =  #{opDetectMsg.status} </if>
+            <if test="opDetectMsg.entrustStatus != null "> and msg.entrust_status  =  #{opDetectMsg.entrustStatus} </if>
+            <if test="opDetectMsg.userIds != null and opDetectMsg.userIds.size() > 0 ">
+                and msg.user_id in
+                <foreach collection="opDetectMsg.userIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="opDetectMsg.deskIds != null and opDetectMsg.deskIds.size() > 0 ">
+                and msg.desk_id in
+                <foreach collection="opDetectMsg.deskIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="bool">
+                and dept.dept_id in
+                    <foreach collection="deptId" item="value" separator="," open="(" close=")">
+                   #{value.deptId}
+                    </foreach>
+                <if test="opDetectMsg.deptPermissionLevel != null and opDetectMsg.deptPermissionLevel != 0">
+                    and dept.permission_level = #{opDetectMsg.deptPermissionLevel}
+                </if>
+            </if>
+            <if test="opDetectMsg.isUse != null and opDetectMsg.isUse != ''">
+                <if test="opDetectMsg.isUse == 0">
+                    and msg.user_id  IS NULL
+                </if>
+                <if test="opDetectMsg.isUse == 1">
+                    and msg.user_id  IS NOT NULL
+                </if>
+            </if>
+        </where>
+        <if test="bool">
+            GROUP by msg.desk_id
+        </if>
+        ORDER BY desk.desk_id, CASE WHEN authorization_time IS NULL THEN 0 ELSE 1 END, authorization_time DESC
+
+    </select>
+
+    <select id="selectOpDetectMsgListByUserId" resultMap="OpDetectMsgVoResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel, msg.verify_personnel, msg.compose_personnel, msg.preliminary_report, msg.create_time, msg.update_time, msg.del_flag
+        ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_engineering_parts,msg.instrument,msg.chemicals,msg.status, msg.user_id,msg.entrust_status,msg.entrust_note,msg.authorization_time,msg.detect_remark,
+        project.project_name,project.entrustment_unit,desk.entrust_serial_number,desk.record_serial_number,  desk.report_serial_number, desk.project_id,desk.entrustment_time,desk.order_time,desk.sample_amount
+        ,dept.permission_level
+        from op_detect_msg msg
+        inner join op_desk desk on msg.desk_id = desk.desk_id and desk.status in (0,3,4)
+        <if test="opDetectMsg.entrustSerialNumber != null  and opDetectMsg.entrustSerialNumber != ''"> and desk.entrust_serial_number like concat('%', #{opDetectMsg.entrustSerialNumber}, '%')</if>
+        <if test="opDetectMsg.recordSerialNumber != null  and opDetectMsg.recordSerialNumber != ''"> and desk.record_serial_number like concat('%', #{opDetectMsg.recordSerialNumber}, '%')</if>
+        <if test="opDetectMsg.reportSerialNumber != null  and opDetectMsg.reportSerialNumber != ''"> and desk.report_serial_number  like concat('%', #{opDetectMsg.reportSerialNumber}, '%')</if>
+        <if test="opDetectMsg.entrustmentTime != null "> and desk.entrustment_time between #{opDetectMsg.entrustmentTime[0]} and #{opDetectMsg.entrustmentTime[1]}</if>
+        <if test="opDetectMsg.orderTime != null "> and desk.order_time between #{opDetectMsg.orderTime[0]} and #{opDetectMsg.orderTime[1]}</if>
+        inner join op_project_msg project on desk.project_id = project.project_id
+        <if test="opDetectMsg.projectName != null  and opDetectMsg.projectName != ''"> and project.project_name  like concat('%', #{opDetectMsg.projectName}, '%')</if>
+        <if test="opDetectMsg.entrustmentUnit != null  and opDetectMsg.entrustmentUnit != ''"> and project.entrustment_unit  like concat('%', #{opDetectMsg.entrustmentUnit}, '%')</if>
+        inner join op_desk_dept dept on msg.desk_id = dept.desk_id and dept.dept_id = #{sysUser.deptId} and dept.permission_level = 1
+        <where>
+            msg.user_id = #{sysUser.userId}
+            <if test="opDetectMsg.completeReportDate != null "> and msg.complete_report_date between #{opDetectMsg.completeReportDate[0]} and #{opDetectMsg.completeReportDate[1]}</if>
+            <if test="opDetectMsg.reportDate != null "> and msg.report_date between #{opDetectMsg.reportDate[0]} and #{opDetectMsg.reportDate[1]}</if>
+            <if test="opDetectMsg.sampleMsg != null  and opDetectMsg.sampleMsg != ''"> and msg.sample_msg  like concat('%', #{opDetectMsg.sampleMsg}, '%')</if>
+            <if test="opDetectMsg.unit != null  and opDetectMsg.unit != ''"> and msg.unit  like concat('%', #{opDetectMsg.unit}, '%')</if>
+            <if test="opDetectMsg.detectPersonnel != null  and opDetectMsg.detectPersonnel != ''"> and msg.detect_personnel  like concat('%', #{opDetectMsg.detectPersonnel}, '%')</if>
+            <if test="opDetectMsg.verifyPersonnel != null  and opDetectMsg.verifyPersonnel != ''"> and msg.verify_personnel  like concat('%', #{opDetectMsg.verifyPersonnel}, '%')</if>
+            <if test="opDetectMsg.composePersonnel != null  and opDetectMsg.composePersonnel != ''"> and msg.compose_personnel  like concat('%', #{opDetectMsg.composePersonnel}, '%')</if>
+            <if test="opDetectMsg.preliminaryReport != null  and opDetectMsg.preliminaryReport != ''"> and msg.preliminary_report  like concat('%', #{opDetectMsg.preliminaryReport}, '%')</if>
+            <if test="opDetectMsg.detectTime != null and opDetectMsg.detectTime != ''"> and msg.detect_time  like concat('%', #{opDetectMsg.detectTime}, '%')</if>
+            <if test="opDetectMsg.detectName != null  and opDetectMsg.detectName != ''"> and msg.detect_name  like concat('%', #{opDetectMsg.detectName}, '%')</if>
+            <if test="opDetectMsg.detectCode != null  and opDetectMsg.detectCode != ''"> and msg.detect_code  like concat('%', #{opDetectMsg.detectCode}, '%')</if>
+            <if test="opDetectMsg.detectEngineeringParts != null  and opDetectMsg.detectEngineeringParts != ''"> and msg.detect_engineering_parts  like concat('%', #{opDetectMsg.detectEngineeringParts}, '%')</if>
+            <if test="opDetectMsg.status != null "> and msg.status  =  #{opDetectMsg.status} </if>
+            <if test="opDetectMsg.entrustStatus != null "> and msg.entrust_status  =  #{opDetectMsg.entrustStatus} </if>
+            <if test="opDetectMsg.deskIds != null and opDetectMsg.deskIds.size() > 0 ">
+                and msg.desk_id in
+                <foreach collection="opDetectMsg.deskIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOpDetectMsgByDeskId" resultMap="OpDetectMsgResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel,
+        msg.verify_personnel, msg.compose_personnel, msg.preliminary_report,
+        msg.create_time, msg.update_time, msg.del_flag ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_remark,
+        msg.detect_engineering_parts,msg.instrument,msg.chemicals,msg.status,msg.user_id,msg.entrust_status,msg.entrust_note,msg.authorization_time
+        <if test="bool">
+            ,dept.permission_level
+        </if>
+        from op_detect_msg msg
+        <if test="bool">
+            inner join op_desk_dept dept on msg.desk_id = dept.desk_id
+        </if>
+        where msg.desk_id = #{deskId}
+        <if test="bool">
+            and
+            (
+            <if test="deptId !=null and deptId.size > 0">
+                dept.dept_id in
+                <foreach collection="deptId" item="value" separator="," open="(" close=")">
+                    #{value.deptId}
+                </foreach>
+                or
+            </if>
+
+            msg.user_id = #{userId}
+                )
+            GROUP by msg.desk_id
+        </if>
+    </select>
+    <select id="selectOne" resultMap="OpDetectMsgResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel, msg.verify_personnel, msg.compose_personnel, msg.preliminary_report, msg.create_time, msg.update_time, msg.del_flag
+                ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_engineering_parts,msg.instrument,msg.chemicals ,msg.status, msg.user_id,msg.entrust_status,msg.entrust_note,msg.detect_remark
+        from op_detect_msg msg
+                 inner join op_desk desk on desk.report_serial_number = #{opDetectMsg.reportSerialNumber} and
+                                            desk.entrust_serial_number = #{opDetectMsg.entrustSerialNumber} and desk.record_serial_number = #{opDetectMsg.recordSerialNumber}
+        <if test="bool">
+            inner join op_desk_dept dept on msg.desk_id = dept.desk_id
+        </if>
+        where desk.desk_id = msg.desk_id
+        <if test="bool">
+            and    dept.dept_id in
+            <foreach collection="deptId" item="value" separator="," open="(" close=")">
+                #{value.deptId}
+            </foreach>
+        </if>
+    </select>
+
+
+    <select id="selectOneByUserId" resultMap="OpDetectMsgResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel, msg.verify_personnel, msg.compose_personnel, msg.preliminary_report, msg.create_time, msg.update_time, msg.del_flag
+        ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,msg.detect_engineering_parts,msg.instrument,msg.chemicals ,msg.status, msg.user_id,msg.entrust_status,msg.entrust_note,msg.detect_remark
+        from op_detect_msg msg
+        inner join op_desk desk on desk.report_serial_number = #{opDetectMsg.reportSerialNumber} and
+        desk.entrust_serial_number = #{opDetectMsg.entrustSerialNumber} and desk.record_serial_number = #{opDetectMsg.recordSerialNumber}
+        inner join op_desk_dept dept on msg.desk_id = dept.desk_id and dept.dept_id = #{sysUser.sysUser.deptId} and dept.permission_level = 1
+        where desk.desk_id = msg.desk_id
+            and msg.user_id = #{sysUser.userid}
+    </select>
+
+    <select id="selectOpDetectMsgByDeskIdAndDept" resultMap="OpDetectMsgResult">
+        select msg.desk_id, msg.complete_report_date, msg.report_date, msg.sample_msg, msg.unit, msg.detect_personnel,
+        msg.verify_personnel, msg.compose_personnel, msg.preliminary_report,msg.detect_remark,
+        msg.create_time, msg.update_time, msg.del_flag ,msg.detect_time,msg.detect_name,msg.detect_code,msg.detect_amount,
+        msg.detect_engineering_parts,msg.instrument,msg.chemicals,msg.status,msg.user_id,msg.entrust_status,msg.entrust_note,msg.authorization_time
+        <if test="bool">
+            ,dept.permission_level
+        </if>
+        from op_detect_msg msg
+        <if test="bool">
+            inner join op_desk_dept dept on msg.desk_id = dept.desk_id
+        </if>
+        where msg.desk_id = #{deskId}
+        <if test="bool">
+            and
+            (
+            <if test="deptId !=null and deptId.size > 0">
+                (dept.dept_id in
+            <foreach collection="deptId" item="value" separator="," open="(" close=")">
+                 #{value.deptId}
+            </foreach>
+                and dept.permission_level = 1
+                     )
+            or
+            </if>
+            msg.user_id = #{userId}
+            )
+            GROUP by msg.desk_id
+        </if>
+    </select>
+
+
+
+    <insert id="insertOpDetectMsg" parameterType="OpDetectMsg">
+        insert into op_detect_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deskId != null">desk_id,</if>
+            <if test="completeReportDate != null">complete_report_date,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="sampleMsg != null">sample_msg,</if>
+            <if test="unit != null">unit,</if>
+            <if test="detectPersonnel != null">detect_personnel,</if>
+            <if test="verifyPersonnel != null">verify_personnel,</if>
+            <if test="composePersonnel != null">compose_personnel,</if>
+            <if test="preliminaryReport != null">preliminary_report,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="detectName != null">detect_name,</if>
+            <if test="status != null">status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="entrustStatus != null">entrust_status,</if>
+            <if test="entrustNote != null">entrust_note,</if>
+            <if test="detectEngineeringParts != null">detect_engineering_parts,</if>
+            <if test="detectAmount != null">detect_amount,</if>
+            <if test="detectRemark != null">detect_remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deskId != null">#{deskId},</if>
+            <if test="completeReportDate != null">#{completeReportDate},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="sampleMsg != null">#{sampleMsg},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="detectPersonnel != null">#{detectPersonnel},</if>
+            <if test="verifyPersonnel != null">#{verifyPersonnel},</if>
+            <if test="composePersonnel != null">#{composePersonnel},</if>
+            <if test="preliminaryReport != null">#{preliminaryReport},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="detectName != null">#{detectName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="entrustStatus != null">#{entrustStatus},</if>
+            <if test="entrustNote != null">#{entrustNote},</if>
+            <if test="detectEngineeringParts != null">#{detectEngineeringParts},</if>
+            <if test="detectAmount != null">#{detectAmount},</if>
+            <if test="detectRemark != null">#{detectRemark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpDetectMsg" parameterType="OpDetectMsg">
+        update op_detect_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="completeReportDate != null">complete_report_date = #{completeReportDate},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="sampleMsg != null">sample_msg = #{sampleMsg},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="detectPersonnel != null">detect_personnel = #{detectPersonnel},</if>
+            <if test="verifyPersonnel != null">verify_personnel = #{verifyPersonnel},</if>
+            <if test="composePersonnel != null">compose_personnel = #{composePersonnel},</if>
+            <if test="preliminaryReport != null">preliminary_report = #{preliminaryReport},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+
+            <if test="detectTime != null">detect_time = #{detectTime},</if>
+            <if test="detectName != null">detect_name = #{detectName},</if>
+            <if test="detectCode != null">detect_code = #{detectCode},</if>
+            <if test="detectAmount != null">detect_amount = #{detectAmount},</if>
+            <if test="detectEngineeringParts != null">detect_engineering_parts = #{detectEngineeringParts},</if>
+            <if test="instrument != null">instrument = #{instrument},</if>
+            <if test="chemicals != null">chemicals = #{chemicals},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="entrustStatus != null">entrust_status = #{entrustStatus},</if>
+            <if test="entrustNote != null">entrust_note = #{entrustNote},</if>
+            <if test="detectRemark != null">detect_remark = #{detectRemark},</if>
+        </trim>
+        where desk_id = #{deskId}
+    </update>
+    <update id="updateMsgUser">
+        update op_detect_msg set user_id = #{userId} ,authorization_time = #{localDate}
+        where desk_id in
+        <foreach item="deskId" collection="deskIds" open="(" separator="," close=")">
+            #{deskId}
+        </foreach>
+        and exists (select 1 from op_desk_dept where op_detect_msg.desk_id = op_desk_dept.desk_id
+        and op_desk_dept.dept_Id in
+        <foreach collection="deptId" item="value" separator="," open="(" close=")">
+        #{value.deptId}
+        </foreach>
+        and op_desk_dept.permission_level = 1)
+    </update>
+    <update id="updateMsgUserAll">
+        update op_detect_msg set user_id = #{userId} ,authorization_time = #{localDate}
+        where desk_id in
+        <foreach item="deskId" collection="deskIds" open="(" separator="," close=")">
+            #{deskId}
+        </foreach>
+    </update>
+
+    <delete id="deleteOpDetectMsgByDeskId" parameterType="Long">
+        delete from op_detect_msg where desk_id =  #{deskId}
+    </delete>
+
+    <delete id="deleteOpDetectMsgByDeskIds" parameterType="String">
+        delete from op_detect_msg where desk_id in
+        <foreach item="deskId" collection="array" open="(" separator="," close=")">
+            #{deskId}
+        </foreach>
+    </delete>
+</mapper>

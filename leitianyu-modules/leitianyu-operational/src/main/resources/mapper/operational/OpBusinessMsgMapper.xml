@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpBusinessMsgMapper">
+
+    <resultMap type="OpBusinessMsg" id="OpBusinessMsgResult">
+        <result property="businessId"    column="business_id"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="status"    column="status"    />
+        <result property="collectionTime"    column="collection_time"    />
+        <result property="amount"    column="amount"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="filePath"    column="file_path"    />
+    </resultMap>
+
+    <resultMap type="OpBusinessMsgVo" id="OpBusinessMsgVoResult">
+        <result property="businessId"    column="business_id"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="status"    column="status"    />
+        <result property="collectionTime"    column="collection_time"    />
+        <result property="amount"    column="amount"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="filePath"    column="file_path"    />
+    </resultMap>
+
+    <sql id="selectOpBusinessMsgVo">
+        select business_id, report_unit, project_msg, publisher, business_manager, status, collection_time, amount, remark, create_by, create_time, update_time, file_path from op_business_msg
+    </sql>
+
+    <select id="selectOpBusinessMsgList" parameterType="OpBusinessInfo" resultMap="OpBusinessMsgVoResult">
+        <include refid="selectOpBusinessMsgVo"/>
+        <where>
+            <if test="reportUnit != null  and reportUnit != ''"> and report_unit like concat('%', #{reportUnit}, '%')</if>
+            <if test="projectMsg != null  and projectMsg != ''"> and project_msg like concat('%', #{projectMsg}, '%')</if>
+            <if test="publisher != null  and publisher != ''"> and publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="status != null and status.size() > 0 ">
+             and status in
+                <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="businessIds != null and businessIds.size() > 0 ">
+                and business_id in
+                <foreach collection="businessIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="params.beginCollectionTime != null and params.beginCollectionTime != '' and params.endCollectionTime != null and params.endCollectionTime != ''"> and collection_time between #{params.beginCollectionTime} and #{params.endCollectionTime}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+        </where>
+    </select>
+
+    <select id="selectOpBusinessMsgByBusinessId" parameterType="Long" resultMap="OpBusinessMsgVoResult">
+        <include refid="selectOpBusinessMsgVo"/>
+        where business_id = #{businessId}
+    </select>
+
+    <insert id="insertOpBusinessMsg" parameterType="OpBusinessMsgVo" useGeneratedKeys="true" keyProperty="businessId">
+        insert into op_business_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportUnit != null">report_unit,</if>
+            <if test="projectMsg != null">project_msg,</if>
+            <if test="publisher != null">publisher,</if>
+            <if test="businessManager != null">business_manager,</if>
+            <if test="status != null">status,</if>
+            <if test="collectionTime != null">collection_time,</if>
+            <if test="amount != null">amount,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="filePath != null">file_path,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportUnit != null">#{reportUnit},</if>
+            <if test="projectMsg != null">#{projectMsg},</if>
+            <if test="publisher != null">#{publisher},</if>
+            <if test="businessManager != null">#{businessManager},</if>
+            <if test="status != null">#{status},</if>
+            <if test="collectionTime != null">#{collectionTime},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="filePath != null">#{filePath},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpBusinessMsg" parameterType="OpBusinessMsgVo">
+        update op_business_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportUnit != null">report_unit = #{reportUnit},</if>
+            <if test="projectMsg != null">project_msg = #{projectMsg},</if>
+            <if test="publisher != null">publisher = #{publisher},</if>
+            <if test="businessManager != null">business_manager = #{businessManager},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="collectionTime != null">collection_time = #{collectionTime},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+        </trim>
+        where business_id = #{businessId}
+    </update>
+
+    <delete id="deleteOpBusinessMsgByBusinessId" parameterType="Long">
+        delete from op_business_msg where business_id = #{businessId}
+    </delete>
+
+    <delete id="deleteOpBusinessMsgByBusinessIds" parameterType="String">
+        delete from op_business_msg where business_id in
+        <foreach item="businessId" collection="array" open="(" separator="," close=")">
+            #{businessId}
+        </foreach>
+    </delete>
+</mapper>

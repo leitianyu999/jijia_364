@@ -13,6 +13,7 @@
         <module>leitianyu-gen</module>
         <module>leitianyu-job</module>
         <module>leitianyu-file</module>
+        <module>leitianyu-operational</module>
     </modules>
 
     <artifactId>leitianyu-modules</artifactId>

@@ -1,6 +1,6 @@
 # Tomcat
 server:
-  port: 8080
+  port: 6002
 
 # Spring
 spring: 
@@ -12,12 +12,16 @@ spring:
     active: dev
   cloud:
     nacos:
+      username: nacos
+      password: nacos
       discovery:
         # 服务注册地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.100.48:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
       config:
         # 配置中心地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.100.48:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
         # 配置文件格式
         file-extension: yml
         # 共享配置
@@ -28,7 +32,7 @@ spring:
       eager: true
       transport:
         # 控制台地址
-        dashboard: 127.0.0.1:8718
+        dashboard: 192.168.100.48:28848
       # nacos配置持久化
       datasource:
         ds1:

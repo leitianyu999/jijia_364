@@ -191,6 +191,20 @@ public class SysUserController extends BaseController
         return ajax;
     }
 
+
+    /**
+     * 根据用户编号获取详细信息
+     */
+    @RequiresPermissions("system:user:queryName")
+    @GetMapping(value = {  "/name/{userId}" })
+    public R<String> getInfoName(@PathVariable(value = "userId") Long userId)
+    {
+        userService.checkUserDataScope(userId);
+        SysUser sysUser = userService.selectUserById(userId);
+        return R.ok(sysUser.getUserName());
+    }
+
+
     /**
      * 新增用户
      */

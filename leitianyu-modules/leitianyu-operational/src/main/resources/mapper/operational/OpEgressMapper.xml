@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpEgressMapper">
+
+    <resultMap type="OpEgress" id="OpEgressResult">
+        <result property="egressId"    column="egress_id"    />
+        <result property="projecyName"    column="projecy_name"    />
+        <result property="projectWay"    column="project_way"    />
+        <result property="detectTime"    column="detect_time"    />
+        <result property="detectPeople"    column="detect_people"    />
+        <result property="detectItems"    column="detect_items"    />
+        <result property="car"    column="car"    />
+        <result property="amount"    column="amount"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="addressee"    column="addressee"    />
+        <result property="addresseeTel"    column="addressee_tel"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="filePath"    column="file_path"    />
+    </resultMap>
+
+    <sql id="selectOpEgressVo">
+        select egress_id, projecy_name, project_way, detect_time, detect_people, detect_items, car, amount, business_manager, addressee, addressee_tel, entrustment_unit, create_by, create_time, update_time,file_path from op_egress
+    </sql>
+
+    <select id="selectOpEgressList" parameterType="OpEgress" resultMap="OpEgressResult">
+        <include refid="selectOpEgressVo"/>
+        <where>
+            <if test="projecyName != null  and projecyName != ''"> and projecy_name like concat('%', #{projecyName}, '%')</if>
+            <if test="detectTime != null and detectTime != ''"> and detect_time = #{detectTime}</if>
+            <if test="detectPeople != null  and detectPeople != ''"> and detect_people like concat('%', #{detectPeople}, '%')</if>
+            <if test="detectItems != null  and detectItems != ''"> and detect_items like concat('%', #{detectItems}, '%')</if>
+            <if test="car != null  and car != ''"> and car like concat('%', #{car}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and entrustment_unit like concat('%', #{entrustmentUnit}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectOpEgressByEgressId" parameterType="Long" resultMap="OpEgressResult">
+        <include refid="selectOpEgressVo"/>
+        where egress_id = #{egressId}
+    </select>
+
+    <insert id="insertOpEgress" parameterType="OpEgress">
+        insert into op_egress
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="egressId != null">egress_id,</if>
+            <if test="projecyName != null">projecy_name,</if>
+            <if test="projectWay != null">project_way,</if>
+            <if test="detectTime != null">detect_time,</if>
+            <if test="detectPeople != null">detect_people,</if>
+            <if test="detectItems != null">detect_items,</if>
+            <if test="car != null">car,</if>
+            <if test="amount != null">amount,</if>
+            <if test="businessManager != null">business_manager,</if>
+            <if test="addressee != null">addressee,</if>
+            <if test="addresseeTel != null">addressee_tel,</if>
+            <if test="entrustmentUnit != null">entrustment_unit,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="filePath != null">file_path,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="egressId != null">#{egressId},</if>
+            <if test="projecyName != null">#{projecyName},</if>
+            <if test="projectWay != null">#{projectWay},</if>
+            <if test="detectTime != null">#{detectTime},</if>
+            <if test="detectPeople != null">#{detectPeople},</if>
+            <if test="detectItems != null">#{detectItems},</if>
+            <if test="car != null">#{car},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="businessManager != null">#{businessManager},</if>
+            <if test="addressee != null">#{addressee},</if>
+            <if test="addresseeTel != null">#{addresseeTel},</if>
+            <if test="entrustmentUnit != null">#{entrustmentUnit},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="filePath != null">#{filePath},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpEgress" parameterType="OpEgress">
+        update op_egress
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projecyName != null">projecy_name = #{projecyName},</if>
+            <if test="projectWay != null">project_way = #{projectWay},</if>
+            <if test="detectTime != null">detect_time = #{detectTime},</if>
+            <if test="detectPeople != null">detect_people = #{detectPeople},</if>
+            <if test="detectItems != null">detect_items = #{detectItems},</if>
+            <if test="car != null">car = #{car},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="businessManager != null">business_manager = #{businessManager},</if>
+            <if test="addressee != null">addressee = #{addressee},</if>
+            <if test="addresseeTel != null">addressee_tel = #{addresseeTel},</if>
+            <if test="entrustmentUnit != null">entrustment_unit = #{entrustmentUnit},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+        </trim>
+        where egress_id = #{egressId}
+    </update>
+
+    <delete id="deleteOpEgressByEgressId" parameterType="Long">
+        delete from op_egress where egress_id = #{egressId}
+    </delete>
+
+    <delete id="deleteOpEgressByEgressIds" parameterType="String">
+        delete from op_egress where egress_id in
+        <foreach item="egressId" collection="array" open="(" separator="," close=")">
+            #{egressId}
+        </foreach>
+    </delete>
+</mapper>

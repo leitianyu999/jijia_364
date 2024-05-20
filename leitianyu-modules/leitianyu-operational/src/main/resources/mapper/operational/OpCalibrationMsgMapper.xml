@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpCalibrationMsgMapper">
+
+    <resultMap type="OpCalibrationMsg" id="OpCalibrationMsgResult">
+        <result property="deskId"    column="desk_id"    />
+        <result property="pigeonholeSerialNumber"    column="pigeonhole_serial_number"    />
+        <result property="submitType"    column="submit_type"    />
+        <result property="price"    column="price"    />
+        <result property="total"    column="total"    />
+        <result property="isInvoice"    column="is_invoice"    />
+        <result property="isCollection"    column="is_collection"    />
+        <result property="presenter"    column="presenter"    />
+        <result property="courierType"    column="courier_type"    />
+        <result property="courierNumber"    column="courier_number"    />
+        <result property="address"    column="address"    />
+        <result property="addressee"    column="addressee"    />
+        <result property="reportAddressee"    column="report_addressee"    />
+        <result property="receiptTime"    column="receipt_time"    />
+        <result property="remarkTime"    column="remark_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="courierCoust"    column="courier_coust"    />
+        <result property="status"    column="status"    />
+        <result property="isUpdate"    column="is_update"    />
+        <result property="updateRemark"    column="update_remark"    />
+        <result property="isUpdateTime"    column="is_update_time"    />
+        <result property="isUpdateCollection"    column="is_update_collection"    />
+        <result property="updateCollectionTime"    column="update_collection_time"    />
+    </resultMap>
+
+    <resultMap type="OpCalibrationMsgVo" id="OpCalibrationMsgVoResult">
+        <result property="deskId"    column="desk_id"    />
+        <result property="pigeonholeSerialNumber"    column="pigeonhole_serial_number"    />
+        <result property="submitType"    column="submit_type"    />
+        <result property="price"    column="price"    />
+        <result property="total"    column="total"    />
+        <result property="isInvoice"    column="is_invoice"    />
+        <result property="isCollection"    column="is_collection"    />
+        <result property="presenter"    column="presenter"    />
+        <result property="courierType"    column="courier_type"    />
+        <result property="courierNumber"    column="courier_number"    />
+        <result property="address"    column="address"    />
+        <result property="addressee"    column="addressee"    />
+        <result property="reportAddressee"    column="report_addressee"    />
+        <result property="receiptTime"    column="receipt_time"    />
+        <result property="remarkTime"    column="remark_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="courierCoust"    column="courier_coust"    />
+        <result property="status"    column="status"    />
+        <result property="isUpdate"    column="is_update"    />
+        <result property="updateRemark"    column="update_remark"    />
+        <result property="isUpdateTime"    column="is_update_time"    />
+        <result property="isUpdateCollection"    column="is_update_collection"    />
+        <result property="updateCollectionTime"    column="update_collection_time"    />
+
+        <result property="projectType"    column="project_type"    />
+        <result property="completeReportDate"    column="complete_report_date"    />
+        <result property="entrustmentTime"    column="entrustment_time"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="entrustSerialNumber"    column="entrust_serial_number"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="recordSerialNumber"    column="record_serial_number"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="sampleMsg"    column="sample_msg"    />
+        <result property="detectCode"    column="detect_code"    />
+        <result property="detectAmount"    column="detect_amount"    />
+        <result property="unit"    column="unit"    />
+        <result property="detectPersonnel"    column="detect_personnel"    />
+        <result property="verifyPersonnel"    column="verify_personnel"    />
+        <result property="composePersonnel"    column="compose_personnel"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="deskStatus"    column="deskStatus"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="sampleAmount"    column="sample_amount"    />
+        <result property="detectRemark"    column="detect_remark"    />
+    </resultMap>
+
+    <sql id="selectOpCalibrationMsgVo">
+        select c.desk_id, c.pigeonhole_serial_number, c.submit_type, c.price, c.total, c.is_invoice, c.is_collection, c.presenter, c.courier_type
+             , c.courier_number, c.address , c.is_update, c.update_remark, c.is_update_time, c.is_update_collection, c.update_collection_time
+             , c.addressee, c.report_addressee, c.receipt_time, c.remark_time, c.remark, c.create_time, c.update_time,courier_coust, c.del_flag,c.status ,d.entrust_status,d.entrust_note,d.detect_remark
+        from op_calibration_msg c
+        left join op_detect_msg d on d.desk_id = c.desk_id
+    </sql>
+
+    <sql id="selectOpCalibrationMsg">
+        select c.desk_id, c.pigeonhole_serial_number, c.submit_type, c.price, c.total, c.is_invoice, c.is_collection, c.presenter,
+               c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.is_update, c.update_remark, c.receipt_time,
+               c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag , c.status, c.is_update_time, c.is_update_collection, c.update_collection_time,
+               b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
+               b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,
+               b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,
+               d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,d.detect_remark,
+               d.detect_engineering_parts,d.entrust_status,d.entrust_note
+        from op_calibration_msg c
+                 left join op_detect_msg d on d.desk_id = c.desk_id
+                 left join op_desk b on b.desk_id = c.desk_id
+                 left join op_project_msg a on b.project_id = a.project_id
+    </sql>
+
+    <select id="selectOpCalibrationMsgList" parameterType="OpCalibrationMsgInfo" resultMap="OpCalibrationMsgVoResult">
+        select c.desk_id, c.pigeonhole_serial_number, c.submit_type, c.price, c.total, c.is_invoice, c.is_collection, c.presenter,
+        c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.receipt_time, c.is_update, c.update_remark,
+        c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag ,c.status, c.is_update_time, c.is_update_collection, c.update_collection_time,
+        b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
+        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,
+        b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,d.detect_remark,
+        d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,
+        d.detect_engineering_parts,d.entrust_status,d.entrust_note,b.sample_amount
+        from op_calibration_msg c
+        inner join op_detect_msg d on d.desk_id = c.desk_id
+        <if test="completeReportDate != null "> and d.complete_report_date between #{completeReportDate[0]} and #{completeReportDate[1]} </if>
+        <if test="reportDate != null "> and d.report_date between #{reportDate[0]} and #{reportDate[1]}</if>
+        <if test="sampleMsg != null  and sampleMsg != ''"> and d.sample_msg  like concat('%', #{sampleMsg}, '%')</if>
+        <if test="unit != null  and unit != ''"> and d.unit  like concat('%', #{unit}, '%')</if>
+        <if test="detectPersonnel != null  and detectPersonnel != ''"> and d.detect_personnel  like concat('%', #{detectPersonnel}, '%')</if>
+        <if test="verifyPersonnel != null  and verifyPersonnel != ''"> and d.verify_personnel  like concat('%', #{verifyPersonnel}, '%')</if>
+        <if test="composePersonnel != null  and composePersonnel != ''"> and d.compose_personnel  like concat('%', #{composePersonnel}, '%')</if>
+        <if test="detectName != null  and detectName != ''"> and d.detect_name  like concat('%', #{detectName}, '%')</if>
+        <if test="detectCode != null  and detectCode != ''"> and d.detect_code  like concat('%', #{detectCode}, '%')</if>
+        <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and d.detect_engineering_parts  like concat('%', #{detectEngineeringParts}, '%')</if>
+        <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
+        inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
+        <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
+        <if test="businessManager != null  and businessManager != ''"> and b.business_manager like concat('%', #{businessManager}, '%')</if>
+        <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+        <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and b.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>
+        <if test="projectType != null and projectType.size() > 0 ">
+            and b.project_type in
+            <foreach collection="projectType" item="value" separator="," open="(" close=")">
+                #{value}
+            </foreach>
+        </if>
+        <if test="entrustmentTime != null  "> and b.entrustment_time between #{entrustmentTime[0]} and #{entrustmentTime[1]}  </if>
+        <if test="recordSerialNumber != null  and recordSerialNumber != ''"> and b.record_serial_number like concat('%', #{recordSerialNumber}, '%')</if>
+        <if test="orderTime != null "> and b.order_time between #{orderTime[0]} and #{orderTime[1]}</if>
+        <if test="issueTime != null "> and b.issue_time between #{issueTime[0]} and #{issueTime[1]}</if>
+        <if test="deskStatus != null and deskStatus.size() > 0 ">
+         and b.status in
+             <foreach collection="deskStatus" item="value" separator="," open="(" close=")">
+                #{value}
+             </foreach>
+        </if>
+        inner join op_project_msg a on b.project_id = a.project_id
+        <if test="projectName != null  and projectName != ''"> and a.project_name  like concat('%', #{projectName}, '%')</if>
+        <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and a.entrustment_unit  like concat('%', #{entrustmentUnit}, '%')</if>
+        <where>
+            <if test="pigeonholeSerialNumber != null  and pigeonholeSerialNumber != ''"> and c.pigeonhole_serial_number  like concat('%', #{pigeonholeSerialNumber}, '%')</if>
+            <if test="submitType != null  and submitType != ''"> and c.submit_type  like concat('%', #{submitType}, '%')</if>
+            <if test="isInvoice != null  and isInvoice != ''"> and c.is_invoice  =  #{isInvoice} </if>
+            <if test="isCollection != null  and isCollection != ''"> and c.is_collection  =  #{isCollection} </if>
+            <if test="presenter != null  and presenter != ''"> and c.presenter  like concat('%', #{presenter}, '%')</if>
+            <if test="courierType != null  and courierType != ''"> and c.courier_type  like concat('%', #{courierType}, '%')</if>
+            <if test="courierNumber != null  and courierNumber != ''"> and c.courier_number  like concat('%', #{courierNumber}, '%')</if>
+            <if test="addressee != null  and addressee != ''"> and c.addressee  like concat('%', #{addressee}, '%')</if>
+            <if test="isUpdate != null  and isUpdate != ''"> and c.is_update  like concat('%', #{isUpdate}, '%')</if>
+            <if test="updateRemark != null  and updateRemark != ''"> and c.update_remark  like concat('%', #{updateRemark}, '%')</if>
+            <if test="reportAddressee != null  and reportAddressee != ''"> and c.report_addressee  like concat('%', #{reportAddressee}, '%')</if>
+            <if test="receiptTime != null  "> and c.receipt_time  like concat('%', #{receiptTime}, '%')</if>
+            <if test="isUpdateCollection != null  "> and c.is_update_collection  = #{isUpdateCollection}</if>
+            <if test="params.beginIsUpdateTime != null and params.beginIsUpdateTime != '' and params.endIsUpdateTime != null and params.endIsUpdateTime != ''"> and is_update_time between #{params.beginIsUpdateTime} and #{params.endIsUpdateTime}</if>
+            <if test="params.beginUpdateCollectionTime != null and params.beginUpdateCollectionTime != '' and params.endUpdateCollectionTime != null and params.endUpdateCollectionTime != ''"> and update_collection_time between #{params.beginUpdateCollectionTime} and #{params.endUpdateCollectionTime}</if>
+            <if test="courierStatus != null and courierStatus == 1 ">and ((c.courier_number is not null and c.courier_number &lt;&gt; '') or (c.courier_type is not null and c.courier_type &lt;&gt; '')) </if>
+            <if test="courierStatus != null and courierStatus == 0 ">and (c.courier_number is null or c.courier_number = '') and (c.courier_type is null or c.courier_type = '')</if>
+            <if test="deskIds != null and deskIds.size() > 0  ">
+                and c.desk_id in
+                <foreach collection="deskIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="status != null and status.size() > 0  ">
+             and c.status in
+                 <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                 </foreach>
+            </if>
+        </where>
+        order by c.desk_id desc
+    </select>
+
+    <select id="selectOpCalibrationMsgListOutPut" parameterType="OpCalibrationMsgInfo" resultMap="OpCalibrationMsgVoResult">
+        select c.desk_id, c.pigeonhole_serial_number, c.submit_type, c.price, c.total, c.is_invoice, c.is_collection, c.presenter,
+        c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.receipt_time, c.is_update_time, c.is_update_collection, c.update_collection_time,
+        c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag ,c.status, c.is_update, c.update_remark,
+        b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
+        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,
+        b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,d.detect_remark,
+        d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,
+        d.detect_engineering_parts,d.entrust_status,d.entrust_note,b.sample_amount
+        from op_calibration_msg c
+        inner join op_detect_msg d on d.desk_id = c.desk_id
+        <if test="completeReportDate != null "> and d.complete_report_date between #{completeReportDate[0]} and #{completeReportDate[1]} </if>
+        <if test="reportDate != null "> and d.report_date between #{reportDate[0]} and #{reportDate[1]}</if>
+        <if test="sampleMsg != null  and sampleMsg != ''"> and d.sample_msg  like concat('%', #{sampleMsg}, '%')</if>
+        <if test="unit != null  and unit != ''"> and d.unit  like concat('%', #{unit}, '%')</if>
+        <if test="detectPersonnel != null  and detectPersonnel != ''"> and d.detect_personnel  like concat('%', #{detectPersonnel}, '%')</if>
+        <if test="verifyPersonnel != null  and verifyPersonnel != ''"> and d.verify_personnel  like concat('%', #{verifyPersonnel}, '%')</if>
+        <if test="composePersonnel != null  and composePersonnel != ''"> and d.compose_personnel  like concat('%', #{composePersonnel}, '%')</if>
+        <if test="detectName != null  and detectName != ''"> and d.detect_name  like concat('%', #{detectName}, '%')</if>
+        <if test="detectCode != null  and detectCode != ''"> and d.detect_code  like concat('%', #{detectCode}, '%')</if>
+        <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and d.detect_engineering_parts  like concat('%', #{detectEngineeringParts}, '%')</if>
+        <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
+        inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
+        and b.business_manager = #{businessManager}
+        <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
+        <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+        <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and b.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>
+        <if test="projectType != null and projectType.size() > 0 ">
+            and b.project_type in
+            <foreach collection="projectType" item="value" separator="," open="(" close=")">
+                #{value}
+            </foreach>
+        </if>
+        <if test="entrustmentTime != null  "> and b.entrustment_time between #{entrustmentTime[0]} and #{entrustmentTime[1]}  </if>
+        <if test="recordSerialNumber != null  and recordSerialNumber != ''"> and b.record_serial_number like concat('%', #{recordSerialNumber}, '%')</if>
+        <if test="orderTime != null "> and b.order_time between #{orderTime[0]} and #{orderTime[1]}</if>
+        <if test="issueTime != null "> and b.issue_time between #{issueTime[0]} and #{issueTime[1]}</if>
+        <if test="deskStatus != null and deskStatus.size() > 0 ">
+            and b.status in
+            <foreach collection="deskStatus" item="value" separator="," open="(" close=")">
+                #{value}
+            </foreach>
+        </if>
+        inner join op_project_msg a on b.project_id = a.project_id
+        <if test="projectName != null  and projectName != ''"> and a.project_name  like concat('%', #{projectName}, '%')</if>
+        <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and a.entrustment_unit  like concat('%', #{entrustmentUnit}, '%')</if>
+        <where>
+            <if test="pigeonholeSerialNumber != null  and pigeonholeSerialNumber != ''"> and c.pigeonhole_serial_number  like concat('%', #{pigeonholeSerialNumber}, '%')</if>
+            <if test="submitType != null  and submitType != ''"> and c.submit_type  like concat('%', #{submitType}, '%')</if>
+            <if test="isInvoice != null  and isInvoice != ''"> and c.is_invoice  =  #{isInvoice} </if>
+            <if test="isCollection != null  and isCollection != ''"> and c.is_collection  =  #{isCollection} </if>
+            <if test="presenter != null  and presenter != ''"> and c.presenter  like concat('%', #{presenter}, '%')</if>
+            <if test="isUpdate != null  and isUpdate != ''"> and c.is_update  like concat('%', #{isUpdate}, '%')</if>
+            <if test="updateRemark != null  and updateRemark != ''"> and c.update_remark  like concat('%', #{updateRemark}, '%')</if>
+            <if test="courierType != null  and courierType != ''"> and c.courier_type  like concat('%', #{courierType}, '%')</if>
+            <if test="courierNumber != null  and courierNumber != ''"> and c.courier_number  like concat('%', #{courierNumber}, '%')</if>
+            <if test="addressee != null  and addressee != ''"> and c.addressee  like concat('%', #{addressee}, '%')</if>
+            <if test="reportAddressee != null  and reportAddressee != ''"> and c.report_addressee  like concat('%', #{reportAddressee}, '%')</if>
+            <if test="receiptTime != null  "> and c.receipt_time  like concat('%', #{receiptTime}, '%')</if>
+            <if test="isUpdateCollection != null  "> and c.is_update_collection  = #{isUpdateCollection}</if>
+            <if test="params.beginIsUpdateTime != null and params.beginIsUpdateTime != '' and params.endIsUpdateTime != null and params.endIsUpdateTime != ''"> and is_update_time between #{params.beginIsUpdateTime} and #{params.endIsUpdateTime}</if>
+            <if test="params.beginUpdateCollectionTime != null and params.beginUpdateCollectionTime != '' and params.endUpdateCollectionTime != null and params.endUpdateCollectionTime != ''"> and update_collection_time between #{params.beginUpdateCollectionTime} and #{params.endUpdateCollectionTime}</if>
+            <if test="courierStatus != null and courierStatus == 1 ">and c.courier_number is not null </if>
+            <if test="courierStatus != null and courierStatus == 0 ">and c.courier_number is null</if>
+            <if test="deskIds != null and deskIds.size() > 0  ">
+                and c.desk_id in
+                <foreach collection="deskIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="status != null and status.size() > 0  ">
+                and c.status in
+                <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+        order by c.desk_id desc
+    </select>
+
+    <select id="selectOpCalibrationMsgByDeskId" parameterType="Long" resultMap="OpCalibrationMsgVoResult">
+        <include refid="selectOpCalibrationMsgVo"/>
+        where c.desk_id = #{deskId}
+    </select>
+    <select id="selectOne" resultMap="OpCalibrationMsgResult">
+        select c.desk_id, c.pigeonhole_serial_number, c.submit_type, c.price, c.total, c.is_invoice, c.is_collection, c.presenter,
+               c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.receipt_time, c.is_update, c.update_remark,
+               c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag,c.status, c.is_update_time, c.is_update_collection, c.update_collection_time
+        from op_calibration_msg c
+                 inner join op_desk desk on desk.report_serial_number = #{reportSerialNumber} and
+                                            desk.entrust_serial_number = #{entrustSerialNumber} and desk.record_serial_number = #{recordSerialNumber}
+        where desk.desk_id = c.desk_id
+    </select>
+
+    <insert id="insertOpCalibrationMsg" parameterType="OpCalibrationMsg">
+        insert into op_calibration_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deskId != null">desk_id,</if>
+            <if test="pigeonholeSerialNumber != null">pigeonhole_serial_number,</if>
+            <if test="submitType != null">submit_type,</if>
+            <if test="price != null">price,</if>
+            <if test="total != null">total,</if>
+            <if test="isInvoice != null">is_invoice,</if>
+            <if test="isCollection != null">is_collection,</if>
+            <if test="presenter != null">presenter,</if>
+            <if test="courierType != null">courier_type,</if>
+            <if test="courierNumber != null">courier_number,</if>
+            <if test="address != null">address,</if>
+            <if test="addressee != null">addressee,</if>
+            <if test="reportAddressee != null">report_addressee,</if>
+            <if test="receiptTime != null">receipt_time,</if>
+            <if test="remarkTime != null">remark_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="isUpdate != null">is_update,</if>
+            <if test="updateRemark != null">update_remark,</if>
+            <if test="isUpdateTime != null">is_update_time,</if>
+            <if test="isUpdateCollection != null">is_update_collection,</if>
+            <if test="updateCollectionTime != null">update_collection_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deskId != null">#{deskId},</if>
+            <if test="pigeonholeSerialNumber != null">#{pigeonholeSerialNumber},</if>
+            <if test="submitType != null">#{submitType},</if>
+            <if test="price != null">#{price},</if>
+            <if test="total != null">#{total},</if>
+            <if test="isInvoice != null">#{isInvoice},</if>
+            <if test="isCollection != null">#{isCollection},</if>
+            <if test="presenter != null">#{presenter},</if>
+            <if test="courierType != null">#{courierType},</if>
+            <if test="courierNumber != null">#{courierNumber},</if>
+            <if test="address != null">#{address},</if>
+            <if test="addressee != null">#{addressee},</if>
+            <if test="reportAddressee != null">#{reportAddressee},</if>
+            <if test="receiptTime != null">#{receiptTime},</if>
+            <if test="remarkTime != null">#{remarkTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test=" isUpdate != null">#{isUpdate},</if>
+            <if test=" updateRemark != null">#{updateRemark},</if>
+            <if test=" isUpdateTime != null">#{isUpdateTime},</if>
+            <if test=" isUpdateCollection != null">#{isUpdateCollection},</if>
+            <if test=" updateCollectionTime != null">#{updateCollectionTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpCalibrationMsg" parameterType="OpCalibrationMsg">
+        update op_calibration_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pigeonholeSerialNumber != null">pigeonhole_serial_number = #{pigeonholeSerialNumber},</if>
+            <if test="submitType != null">submit_type = #{submitType},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="total != null">total = #{total},</if>
+            <if test="isInvoice != null">is_invoice = #{isInvoice},</if>
+            <if test="isCollection != null">is_collection = #{isCollection},</if>
+            <if test="presenter != null">presenter = #{presenter},</if>
+            <if test="courierType != null">courier_type = #{courierType},</if>
+            <if test="courierNumber != null">courier_number = #{courierNumber},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="addressee != null">addressee = #{addressee},</if>
+            <if test="reportAddressee != null">report_addressee = #{reportAddressee},</if>
+            <if test="receiptTime != null">receipt_time = #{receiptTime},</if>
+            <if test="remarkTime != null">remark_time = #{remarkTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="courierCoust != null">courier_coust = #{courierCoust},</if>
+            <if test="isUpdate != null">is_update = #{isUpdate},</if>
+            <if test="updateRemark != null">update_remark = #{updateRemark},</if>
+            <if test="isUpdateTime != null">is_update_time = #{isUpdateTime},</if>
+            <if test="isUpdateCollection != null">is_update_collection = #{isUpdateCollection},</if>
+            <if test="updateCollectionTime != null">update_collection_time = #{updateCollectionTime},</if>
+        </trim>
+        where desk_id = #{deskId}
+    </update>
+    <update id="statusUpdate">
+        update op_calibration_msg set status = 2 where desk_id = #{deskId} and status = 1
+    </update>
+    <update id="statusBack">
+        update op_calibration_msg set status = 1 where desk_id = #{deskId} and status = 2
+    </update>
+    <update id="updateStatusToOne">
+        update op_calibration_msg set status = 1 where desk_id = #{deskId} and status = 0
+    </update>
+
+    <delete id="deleteOpCalibrationMsgByDeskId" parameterType="Long">
+        delete from op_calibration_msg where desk_id = #{deskId}
+    </delete>
+
+    <delete id="deleteOpCalibrationMsgByDeskIds" parameterType="String">
+        delete from op_calibration_msg where desk_id in
+        <foreach item="deskId" collection="array" open="(" separator="," close=")">
+            #{deskId}
+
+        </foreach>
+    </delete>
+</mapper>

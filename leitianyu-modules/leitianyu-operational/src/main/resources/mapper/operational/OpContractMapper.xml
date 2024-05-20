@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpContractMapper">
+
+    <resultMap type="OpContract" id="OpContractResult">
+        <result property="contractId"    column="contract_id"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="contractUnit"    column="contract_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="contractNumber"    column="contract_number"    />
+        <result property="amount"    column="amount"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="recipientType"    column="recipient_type"    />
+        <result property="courierNumber"    column="courier_number"    />
+        <result property="isReceipt"    column="is_receipt"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptTime"    column="receipt_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="tentativeAmount"    column="tentative_amount"    />
+        <result property="isInvoice"    column="is_invoice"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+
+    <resultMap type="OpContractVo" id="OpContractVoResult">
+        <result property="contractId"    column="contract_id"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="contractUnit"    column="contract_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="contractNumber"    column="contract_number"    />
+        <result property="amount"    column="amount"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="recipientType"    column="recipient_type"    />
+        <result property="courierNumber"    column="courier_number"    />
+        <result property="isReceipt"    column="is_receipt"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptTime"    column="receipt_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="tentativeAmount"    column="tentative_amount"    />
+        <result property="isInvoice"    column="is_invoice"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectOpContractVo">
+        select contract_id, issue_time, contract_unit, project_msg, contract_number, amount, publisher, recipient, recipient_type, courier_number, is_receipt, receipt_amount, receipt_time, remark, project_type, tentative_amount, is_invoice, create_by, create_time, update_time, update_by from op_contract
+    </sql>
+
+    <select id="selectOpContractList" parameterType="OpContractInfo" resultMap="OpContractVoResult">
+        <include refid="selectOpContractVo"/>
+        <where>
+            <if test="params.beginIssueTime != null and params.beginIssueTime != '' and params.endIssueTime != null and params.endIssueTime != ''"> and issue_time between #{params.beginIssueTime} and #{params.endIssueTime}</if>
+            <if test="contractUnit != null  and contractUnit != ''"> and contract_unit like concat('%', #{contractUnit}, '%')</if>
+            <if test="projectMsg != null  and projectMsg != ''"> and project_msg like concat('%', #{projectMsg}, '%')</if>
+            <if test="contractNumber != null  and contractNumber != ''"> and contract_number like concat('%', #{contractNumber}, '%')</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="publisher != null  and publisher != ''"> and publisher like concat('%', #{publisher}, '%')</if>
+            <if test="recipient != null  and recipient != ''"> and recipient like concat('%', #{recipient}, '%')</if>
+            <if test="recipientType != null  and recipientType != ''"> and recipient_type like concat('%', #{recipientType}, '%')</if>
+            <if test="courierNumber != null  and courierNumber != ''"> and courier_number like concat('%', #{courierNumber}, '%')</if>
+            <if test="isReceipt != null "> and is_receipt = #{isReceipt}</if>
+            <if test="receiptAmount != null "> and receipt_amount = #{receiptAmount}</if>
+            <if test="params.beginReceiptTime != null and params.beginReceiptTime != '' and params.endReceiptTime != null and params.endReceiptTime != ''"> and receipt_time between #{params.beginReceiptTime} and #{params.endReceiptTime}</if>
+            <if test="projectType != null  and projectType != ''"> and project_type like concat('%', #{projectType}, '%')</if>
+            <if test="tentativeAmount != null "> and tentative_amount = #{tentativeAmount}</if>
+            <if test="isInvoice != null  and isInvoice != ''"> and is_invoice = #{isInvoice}</if>
+            <if test="contractIds != null and contractIds.size() > 0 ">
+                and contract_id in
+                <foreach collection="contractIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+        order by contract_number desc
+    </select>
+
+    <select id="selectOpContractByContractId" parameterType="Long" resultMap="OpContractVoResult">
+        <include refid="selectOpContractVo"/>
+        where contract_id = #{contractId}
+    </select>
+
+    <insert id="insertOpContract" parameterType="OpContractVo" useGeneratedKeys="true" keyProperty="contractId">
+        insert into op_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="issueTime != null">issue_time,</if>
+            <if test="contractUnit != null">contract_unit,</if>
+            <if test="projectMsg != null">project_msg,</if>
+            <if test="contractNumber != null">contract_number,</if>
+            <if test="amount != null">amount,</if>
+            <if test="publisher != null">publisher,</if>
+            <if test="recipient != null">recipient,</if>
+            <if test="recipientType != null">recipient_type,</if>
+            <if test="courierNumber != null">courier_number,</if>
+            <if test="isReceipt != null">is_receipt,</if>
+            <if test="receiptAmount != null">receipt_amount,</if>
+            <if test="receiptTime != null">receipt_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="tentativeAmount != null">tentative_amount,</if>
+            <if test="isInvoice != null">is_invoice,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="issueTime != null">#{issueTime},</if>
+            <if test="contractUnit != null">#{contractUnit},</if>
+            <if test="projectMsg != null">#{projectMsg},</if>
+            <if test="contractNumber != null">#{contractNumber},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="publisher != null">#{publisher},</if>
+            <if test="recipient != null">#{recipient},</if>
+            <if test="recipientType != null">#{recipientType},</if>
+            <if test="courierNumber != null">#{courierNumber},</if>
+            <if test="isReceipt != null">#{isReceipt},</if>
+            <if test="receiptAmount != null">#{receiptAmount},</if>
+            <if test="receiptTime != null">#{receiptTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="tentativeAmount != null">#{tentativeAmount},</if>
+            <if test="isInvoice != null">#{isInvoice},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpContract" parameterType="OpContractVo">
+        update op_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="issueTime != null">issue_time = #{issueTime},</if>
+            <if test="contractUnit != null">contract_unit = #{contractUnit},</if>
+            <if test="projectMsg != null">project_msg = #{projectMsg},</if>
+            <if test="contractNumber != null">contract_number = #{contractNumber},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="publisher != null">publisher = #{publisher},</if>
+            <if test="recipient != null">recipient = #{recipient},</if>
+            <if test="recipientType != null">recipient_type = #{recipientType},</if>
+            <if test="courierNumber != null">courier_number = #{courierNumber},</if>
+            <if test="isReceipt != null">is_receipt = #{isReceipt},</if>
+            <if test="receiptAmount != null">receipt_amount = #{receiptAmount},</if>
+            <if test="receiptTime != null">receipt_time = #{receiptTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="tentativeAmount != null">tentative_amount = #{tentativeAmount},</if>
+            <if test="isInvoice != null">is_invoice = #{isInvoice},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where contract_id = #{contractId}
+    </update>
+
+    <delete id="deleteOpContractByContractId" parameterType="Long">
+        delete from op_contract where contract_id = #{contractId}
+    </delete>
+
+    <delete id="deleteOpContractByContractIds" parameterType="String">
+        delete from op_contract where contract_id in
+        <foreach item="contractId" collection="array" open="(" separator="," close=")">
+            #{contractId}
+        </foreach>
+    </delete>
+</mapper>

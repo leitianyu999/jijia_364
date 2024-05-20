@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.excel.EasyExcel;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -80,7 +82,7 @@ public class ExcelUtil<T>
     /**
      * Excel sheet最大行数，默认65536
      */
-    public static final int sheetSize = 65536;
+    public static final int sheetSize = 655360;
 
     /**
      * 工作表名称
@@ -1535,5 +1537,24 @@ public class ExcelUtil<T>
             log.error("获取对象异常{}", e.getMessage());
         }
         return method;
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单（EasyExcel）
+     *
+     * @param list 导出数据集合
+     * @param sheetName 工作表的名称
+     * @return 结果
+     */
+    public void exportEasyExcel(HttpServletResponse response, List<T> list, String sheetName)
+    {
+        try
+        {
+            EasyExcel.write(response.getOutputStream(), clazz).sheet(sheetName).doWrite(list);
+        }
+        catch (IOException e)
+        {
+            log.error("导出EasyExcel异常{}", e.getMessage());
+        }
     }
 }

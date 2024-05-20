@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpProjectMsgMapper">
+
+    <resultMap type="OpProjectMsg" id="OpProjectMsgResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectChahaoCode"    column="project_chahao_code"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="region"    column="region"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <resultMap type="OpProjectMsgVo" id="OpProjectMsgVOResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectOpProjectMsgVo">
+        select project_id, project_chahao_code, project_code, entrustment_unit, project_name, project_type, region, create_time, update_time, del_flag from op_project_msg
+    </sql>
+
+    <select id="selectOpProjectMsgList" parameterType="OpProjectMsg" resultMap="OpProjectMsgResult">
+        <include refid="selectOpProjectMsgVo"/>
+        <where>
+            <if test="projectChahaoCode != null  and projectChahaoCode != ''"> and project_chahao_code like concat('%', #{projectChahaoCode}, '%')</if>
+            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
+            <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and entrustment_unit like concat('%', #{entrustmentUnit}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectType != null  and projectType != ''"> and project_type = #{projectType}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+        </where>
+    </select>
+
+    <select id="selectOpProjectMsgByProjectId" parameterType="Long" resultMap="OpProjectMsgResult">
+        <include refid="selectOpProjectMsgVo"/>
+        where project_id = #{projectId}
+    </select>
+
+    <select id="selectOpProjectMsgBylast" resultMap="OpProjectMsgResult">
+        <include refid="selectOpProjectMsgVo"/>
+        where project_type = #{projectType} and del_flag = '0'  order by project_id desc limit 1
+    </select>
+    <select id="selectOpProjectMsgBylastAndType" resultMap="OpProjectMsgResult">
+        <include refid="selectOpProjectMsgVo"/>
+        where project_type = #{projectType} and region = #{region} and del_flag = '0' order by project_id desc limit 1
+    </select>
+    <select id="getListAll" parameterType="OpProjectMsgVo" resultMap="OpProjectMsgVOResult">
+        select project_id, entrustment_unit, project_name ,project_type from op_project_msg
+        <where>
+            <if test="queryString != null  and queryString != ''"> or entrustment_unit like concat('%', #{queryString}, '%')</if>
+            <if test="queryString != null  and queryString != ''"> or project_name like concat('%', #{queryString}, '%')</if>
+            and del_flag = '0'
+        </where>
+        limit 0,10
+    </select>
+    <select id="searchOne" resultType="java.lang.Integer">
+        select count(*) from op_project_msg where entrustment_unit = #{entrustmentUnit} and project_name = #{projectName} and project_type = #{projectType} and del_flag = '0'
+    </select>
+    <select id="getIdByName" resultType="java.lang.Long">
+        select project_id from op_project_msg where entrustment_unit = #{entrustmentUnit} and project_name = #{projectName} and project_type = #{projectType} and del_flag = '0'
+    </select>
+
+    <insert id="insertOpProjectMsg" parameterType="OpProjectMsg">
+        insert into op_project_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectChahaoCode != null">project_chahao_code,</if>
+            <if test="projectCode != null">project_code,</if>
+            <if test="entrustmentUnit != null">entrustment_unit,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="region != null">region,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectChahaoCode != null">#{projectChahaoCode},</if>
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="entrustmentUnit != null">#{entrustmentUnit},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="region != null">#{region},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpProjectMsg" parameterType="OpProjectMsg">
+        update op_project_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectChahaoCode != null">project_chahao_code = #{projectChahaoCode},</if>
+            <if test="projectCode != null">project_code = #{projectCode},</if>
+            <if test="entrustmentUnit != null">entrustment_unit = #{entrustmentUnit},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <update id="updateOpProjectMsgByUser" parameterType="OpProjectMsg">
+        update op_project_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="entrustmentUnit != null">entrustment_unit = #{entrustmentUnit},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteOpProjectMsgByProjectId" parameterType="Long">
+        delete from op_project_msg where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteOpProjectMsgByProjectIds" parameterType="String">
+        delete from op_project_msg where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

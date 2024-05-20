@@ -21,4 +21,9 @@ public class ServiceNameConstants
      * 文件服务的serviceid
      */
     public static final String FILE_SERVICE = "leitianyu-file";
+
+    /**
+     * 业务服务的serviceid
+     */
+    public static final String OP_SERVICE = "leitianyu-operational";
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpReadyDeptMapper">
+
+    <select id="selectOpReadyIdDeptByDeptId" resultType="java.lang.Long">
+        select dept_id from op_ready_dept
+        where ready_id = #{readyId} and permission_level = #{permissionLevel}
+    </select>
+    <select id="selectOpReadyDeptLongByDeptId" resultType="java.lang.Long">
+        select dept_id from op_ready_dept
+        where ready_id = #{readyId}
+    </select>
+
+    <insert id="insertOpReadyDept">
+        insert into op_ready_dept(dept_id,ready_id,permission_level)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item},
+            #{readyId},
+            #{permissionLevel}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteOpReadyDeptByDeptId">
+        delete from op_ready_dept where ready_id = #{readyId} and dept_id in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteByReadyId">
+        delete from op_ready_dept where ready_id = #{readyId}
+    </delete>
+
+</mapper>

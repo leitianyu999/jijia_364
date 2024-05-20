@@ -40,4 +40,15 @@ public interface RemoteUserService
      */
     @PostMapping("/user/register")
     public R<Boolean> registerUserInfo(@RequestBody SysUser sysUser, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+
+    /**
+     * 通过用户名查询用户信息
+     *
+     * @param userId 用户名
+     * @param source 请求来源
+     * @return 结果
+     */
+    @GetMapping("/user/name/{userId}")
+    public R<String> getInfoName(@PathVariable("userId") Long userId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+
 }

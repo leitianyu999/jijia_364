@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpParameterMapper">
+
+    <resultMap type="OpParameter" id="OpParameterResult">
+        <result property="parameterId"    column="parameter_id"    />
+        <result property="parameterCode"    column="parameter_code"    />
+        <result property="maxNumber"    column="max_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectOpParameterVo">
+        select parameter_id, parameter_code, max_number, create_time, update_time, del_flag from op_parameter
+    </sql>
+
+    <sql id="selectOpParameterV">
+        select a.parameter_id, a.parameter_code, a.max_number, a.create_time, a.update_time, a.del_flag from op_parameter a
+    </sql>
+
+    <select id="selectOpParameterList" parameterType="OpParameter" resultMap="OpParameterResult">
+        <include refid="selectOpParameterV"/>
+        <where>
+            <if test="parameterCode != null  and parameterCode != ''"> and a.parameter_code = #{parameterCode}</if>
+            <if test="maxNumber != null "> and a.max_number = #{maxNumber}</if>
+        </where>
+    </select>
+
+    <select id="selectOpParameterByParameterId" parameterType="Long" resultMap="OpParameterResult">
+        <include refid="selectOpParameterV"/>
+        where a.parameter_id = #{parameterId}
+    </select>
+
+
+    <select id="getOpParameterList" resultMap="OpParameterResult">
+        <include refid="selectOpParameterVo"/>
+        <where>
+            <if test="queryString != null  and queryString != ''">parameter_code like concat('%', #{queryString}, '%')</if>
+        </where>
+    </select>
+
+
+
+    <select id="getOpParameterByParameterCode" resultMap="OpParameterResult">
+        <include refid="selectOpParameterVo"/>
+        where parameter_code = #{parameterCode}
+    </select>
+
+    <select id="chargeOnlyOne" resultType="java.lang.Integer">
+        select count(*) from op_parameter where parameter_code = #{parameterCode}
+    </select>
+    <select id="selectMaxNumber" resultType="Integer">
+        select max_number from op_parameter
+        where parameter_code = #{parameterCode}
+    </select>
+
+    <insert id="insertOpParameter" parameterType="OpParameter" useGeneratedKeys="true" keyProperty="parameterId">
+        insert into op_parameter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parameterCode != null">parameter_code,</if>
+            <if test="maxNumber != null">max_number,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parameterCode != null">#{parameterCode},</if>
+            <if test="maxNumber != null">#{maxNumber},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpParameter" parameterType="OpParameter">
+        update op_parameter
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parameterCode != null">parameter_code = #{parameterCode},</if>
+            <if test="maxNumber != null">max_number = #{maxNumber},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where parameter_id = #{parameterId}
+    </update>
+
+    <delete id="deleteOpParameterByParameterId" parameterType="Long">
+        delete from op_parameter where parameter_id = #{parameterId}
+    </delete>
+
+    <delete id="deleteOpParameterByParameterIds" parameterType="String">
+        delete from op_parameter where parameter_id in
+        <foreach item="parameterId" collection="array" open="(" separator="," close=")">
+            #{parameterId}
+        </foreach>
+    </delete>
+</mapper>

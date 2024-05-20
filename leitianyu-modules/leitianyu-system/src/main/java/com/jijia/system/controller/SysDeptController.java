@@ -1,6 +1,9 @@
 package com.jijia.system.controller;
 
 import java.util.List;
+
+import com.jijia.common.core.domain.R;
+import com.jijia.system.api.domain.OpDeskDept;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +49,31 @@ public class SysDeptController extends BaseController
         return success(depts);
     }
 
+
+    /**
+     * 业务模块获取部门列表
+     */
+    @RequiresPermissions("system:dept:listmsg")
+    @GetMapping("/listmsg")
+    public AjaxResult listMsg(SysDept dept)
+    {
+        List<SysDept> depts = deptService.selectDeptList(dept);
+        return success(depts);
+    }
+
+    /**
+     * 业务模块获取部门列表
+     */
+    @RequiresPermissions("system:dept:oplist")
+    @GetMapping("/op/list")
+    public R< List<SysDept> > opList()
+    {
+        SysDept dept = new SysDept();
+        List<SysDept> depts = deptService.selectDeptList(dept);
+        return R.ok(depts);
+    }
+
+
     /**
      * 查询部门列表（排除节点）
      */
@@ -68,6 +96,23 @@ public class SysDeptController extends BaseController
         deptService.checkDeptDataScope(deptId);
         return success(deptService.selectDeptById(deptId));
     }
+
+
+    /**
+     * 根据部门编号获取详名称
+     */
+    @RequiresPermissions("system:dept:name")
+    @PostMapping(value = "/name")
+    public R<List<OpDeskDept>> getInfoName(@RequestBody List<OpDeskDept> deptId)
+    {
+        deptId.forEach(o -> {
+            deptService.checkDeptDataScope(o.getDeptId());
+            o.setDeptName(deptService.selectDeptNameById(o.getDeptId()));
+        });
+        return R.ok(deptId);
+    }
+
+
 
     /**
      * 新增部门

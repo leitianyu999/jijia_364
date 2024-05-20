@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpFinancialMsgMapper">
+
+    <resultMap type="OpFinancialMsg" id="OpFinancialMsgResult">
+        <result property="financialId"    column="financial_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="collectionTime"    column="collection_time"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="intoAmount"    column="into_amount"    />
+        <result property="outAmount"    column="out_amount"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="remark"    column="remark"    />
+        <result property="companyMsg"    column="company_msg"    />
+    </resultMap>
+    <resultMap type="OpFinancialMsgVo" id="OpFinancialMsgVoResult">
+        <result property="financialId"    column="financial_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="collectionTime"    column="collection_time"    />
+        <result property="reportUnit"    column="report_unit"    />
+        <result property="projectMsg"    column="project_msg"    />
+        <result property="intoAmount"    column="into_amount"    />
+        <result property="outAmount"    column="out_amount"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="remark"    column="remark"    />
+        <result property="companyMsg"    column="company_msg"    />
+    </resultMap>
+
+    <sql id="selectOpFinancialMsgVo">
+        select financial_id, create_by, update_by , create_time, update_time, collection_time, report_unit, project_msg, into_amount, out_amount, publisher, business_manager, pay_type, remark, company_msg from op_financial_msg
+    </sql>
+
+    <select id="selectOpFinancialMsgList" parameterType="OpFinancialMsgInfo" resultMap="OpFinancialMsgVoResult">
+        <include refid="selectOpFinancialMsgVo"/>
+        <where>
+            <if test="params.beginCollectionTime != null and params.beginCollectionTime != '' and params.endCollectionTime != null and params.endCollectionTime != ''"> and collection_time between #{params.beginCollectionTime} and #{params.endCollectionTime}</if>
+            <if test="reportUnit != null  and reportUnit != ''"> and report_unit like concat('%', #{reportUnit}, '%')</if>
+            <if test="projectMsg != null  and projectMsg != ''"> and project_msg like concat('%', #{projectMsg}, '%')</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="intoAmount != null "> and into_amount = #{intoAmount}</if>
+            <if test="outAmount != null "> and out_amount = #{outAmount}</if>
+            <if test="publisher != null  and publisher != ''"> and publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="payType != null  and payType != ''"> and pay_type like concat('%', #{payType}, '%')</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="companyMsg != null  and companyMsg != ''"> and company_msg like concat('%', #{companyMsg}, '%')</if>
+            <if test="financialIds != null and financialIds.size() > 0 ">
+                and financial_id in
+                <foreach collection="financialIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOpFinancialMsgListNumber" resultType="java.lang.Double">
+        select SUM( into_amount - out_amount ) from op_financial_msg
+        <where>
+            <if test="params.beginCollectionTime != null and params.beginCollectionTime != '' and params.endCollectionTime != null and params.endCollectionTime != ''"> and collection_time between #{params.beginCollectionTime} and #{params.endCollectionTime}</if>
+            <if test="reportUnit != null  and reportUnit != ''"> and report_unit like concat('%', #{reportUnit}, '%')</if>
+            <if test="projectMsg != null  and projectMsg != ''"> and project_msg like concat('%', #{projectMsg}, '%')</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="intoAmount != null "> and into_amount = #{intoAmount}</if>
+            <if test="outAmount != null "> and out_amount = #{outAmount}</if>
+            <if test="publisher != null  and publisher != ''"> and publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="payType != null  and payType != ''"> and pay_type like concat('%', #{payType}, '%')</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="companyMsg != null  and companyMsg != ''"> and company_msg like concat('%', #{companyMsg}, '%')</if>
+            <if test="financialIds != null and financialIds.size() > 0 ">
+                and financial_id in
+                <foreach collection="financialIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectOpFinancialMsgByFinancialId" parameterType="Long" resultMap="OpFinancialMsgVoResult">
+        <include refid="selectOpFinancialMsgVo"/>
+        where financial_id = #{financialId}
+    </select>
+
+
+    <insert id="insertOpFinancialMsg" parameterType="OpFinancialMsgVo" useGeneratedKeys="true" keyProperty="financialId">
+        insert into op_financial_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="collectionTime != null">collection_time,</if>
+            <if test="reportUnit != null">report_unit,</if>
+            <if test="projectMsg != null">project_msg,</if>
+            <if test="intoAmount != null">into_amount,</if>
+            <if test="outAmount != null">out_amount,</if>
+            <if test="publisher != null">publisher,</if>
+            <if test="businessManager != null">business_manager,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="remark != null">remark,</if>
+            <if test="companyMsg != null">company_msg,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="collectionTime != null">#{collectionTime},</if>
+            <if test="reportUnit != null">#{reportUnit},</if>
+            <if test="projectMsg != null">#{projectMsg},</if>
+            <if test="intoAmount != null">#{intoAmount},</if>
+            <if test="outAmount != null">#{outAmount},</if>
+            <if test="publisher != null">#{publisher},</if>
+            <if test="businessManager != null">#{businessManager},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="companyMsg != null">#{companyMsg},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpFinancialMsg" parameterType="OpFinancialMsgVo">
+        update op_financial_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="collectionTime != null">collection_time = #{collectionTime},</if>
+            <if test="reportUnit != null">report_unit = #{reportUnit},</if>
+            <if test="projectMsg != null">project_msg = #{projectMsg},</if>
+            <if test="intoAmount != null">into_amount = #{intoAmount},</if>
+            <if test="outAmount != null">out_amount = #{outAmount},</if>
+            <if test="publisher != null">publisher = #{publisher},</if>
+            <if test="businessManager != null">business_manager = #{businessManager},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="companyMsg != null">company_msg = #{companyMsg},</if>
+        </trim>
+        where financial_id = #{financialId}
+    </update>
+
+    <delete id="deleteOpFinancialMsgByFinancialId" parameterType="Long">
+        delete from op_financial_msg where financial_id = #{financialId}
+    </delete>
+</mapper>

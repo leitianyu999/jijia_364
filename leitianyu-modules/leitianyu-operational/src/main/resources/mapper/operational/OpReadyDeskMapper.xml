@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpReadyDeskMapper">
+
+    <resultMap type="OpReadyDesk" id="OpReadyDeskResult">
+        <result property="readyId"    column="ready_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="entrustmentTime"    column="entrustment_time"    />
+        <result property="parameterCode"    column="parameter_code"    />
+        <result property="programType"    column="program_type"    />
+        <result property="sampleAmount"    column="sample_amount"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="entrustSerialNumber"    column="entrust_serial_number"    />
+        <result property="recordSerialNumber"    column="record_serial_number"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isInterpolation"    column="is_interpolation"    />
+        <result property="status"    column="status"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="detectAmount"    column="detect_amount"    />
+    </resultMap>
+
+    <resultMap type="OpReadyDeskVo" id="OpReadyDeskVoResult">
+        <result property="readyId"    column="ready_id"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="entrustmentTime"    column="entrustment_time"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="detectAmount"    column="detect_amount"    />
+        <result property="parameterCode"    column="parameter_code"    />
+        <result property="programType"    column="program_type"    />
+        <result property="sampleAmount"    column="sample_amount"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="entrustSerialNumber"    column="entrust_serial_number"    />
+        <result property="recordSerialNumber"    column="record_serial_number"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isInterpolation"    column="is_interpolation"    />
+        <result property="status"    column="status"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="editDeptName"    column="editDeptName"    />
+        <result property="visitDeptName"    column="visitDeptName"    />
+        <result property="repeatNumber"    column="repeat_number"    />
+    </resultMap>
+
+    <sql id="selectOpReadyDeskVo">
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+               desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
+               desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
+               desk.detect_amount, desk.repeat_number, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
+        from op_ready_desk desk
+    </sql>
+
+    <select id="selectOpReadyDeskListByJob" parameterType="OpReadyInfo" resultMap="OpReadyDeskVoResult">
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
+        desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
+        desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
+        ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
+        ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
+        from op_ready_desk desk
+        inner join op_project_msg project on desk.project_id = project.project_id
+        LEFT join op_ready_dept dp on desk.ready_id = dp.ready_id
+        <where>
+            and desk.entrustment_time   &lt;= #{entrustmentTime[0]}
+        </where>
+        GROUP BY desk.ready_id
+        LIMIT #{limitNumber}
+    </select>
+
+    <select id="selectOpReadyDeskList" parameterType="OpReadyInfo" resultMap="OpReadyDeskVoResult">
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
+        desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
+        desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
+        ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
+        ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
+        from op_ready_desk desk
+        inner join op_project_msg project on desk.project_id = project.project_id
+        <if test="projectName != null  and projectName != ''"> and project.project_name like concat('%', #{projectName}, '%')</if>
+        <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and project.entrustment_unit like concat('%', #{entrustmentUnit}, '%')</if>
+        LEFT join op_ready_dept dp on desk.ready_id = dp.ready_id
+        <where>
+            <if test="publisher != null  and publisher != ''"> and desk.publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and desk.business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="issueTime != null "> and desk.issue_time between  #{issueTime[0]} and #{issueTime[1]}   </if>
+            <if test="orderTime != null "> and desk.order_time between  #{orderTime[0]} and #{orderTime[1]}   </if>
+            <if test="entrustmentTime != null  "> and desk.entrustment_time  between  #{entrustmentTime[0]} and #{entrustmentTime[1]}   </if>
+            <if test="parameterCode != null  and parameterCode != ''"> and desk.parameter_code like concat('%', #{parameterCode}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and desk.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and desk.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>
+            <if test="recordSerialNumber != null  and recordSerialNumber != ''"> and desk.record_serial_number like concat('%', #{recordSerialNumber}, '%')</if>
+            <if test="programType != null  and programType != ''"> and desk.program_type =  #{programType} </if>
+            <if test="remark != null  and remark != ''"> and desk.remark like concat('%', #{remark}, '%')</if>
+            <if test="entrustStatus != null "> and desk.entrust_status =  #{entrustStatus} </if>
+            <if test="detectName != null  and detectName != ''"> and desk.detect_name like concat('%', #{detectName}, '%')</if>
+            <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and desk.detect_engineering_parts like concat('%', #{detectEngineeringParts}, '%')</if>
+            <if test="readyIds != null and readyIds.size() > 0 ">
+                and desk.ready_id in
+                <foreach collection="readyIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="projectType != null and projectType.size() > 0 ">
+                and desk.project_type in
+                <foreach collection="projectType" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="status != null and status.size() > 0 ">
+                and desk.status in
+                <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="editDeptId != null and editDeptId.size() > 0 ">
+                and desk.ready_id in (select ready_id from op_ready_dept dept
+                where dept.ready_id = desk.ready_id and dept.dept_id in
+                <foreach collection="editDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 1)
+            </if>
+            <if test="visitDeptId != null and visitDeptId.size() > 0 ">
+                and desk.ready_id in (select ready_id from op_ready_dept dept
+                where dept.ready_id = desk.ready_id and dept.dept_id in
+                <foreach collection="visitDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 2)
+            </if>
+        </where>
+        GROUP BY desk.ready_id
+    </select>
+
+    <select id="selectOpReadyDeskByReadyId" parameterType="Long" resultMap="OpReadyDeskVoResult">
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+               desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
+               desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
+               desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
+                ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
+                ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
+        from op_ready_desk desk
+                 left join op_project_msg project on project.project_id = desk.project_id
+                 LEFT join op_ready_dept dp on desk.ready_id = dp.ready_id
+        where desk.ready_id = #{readyId}
+    </select>
+
+
+    <insert id="insertOpReadyDesk" parameterType="OpReadyDeskVo" useGeneratedKeys="true" keyProperty="readyId">
+        insert into op_ready_desk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="issueTime != null">issue_time,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="publisher != null">publisher,</if>
+            <if test="businessManager != null">business_manager,</if>
+            <if test="entrustmentTime != null">entrustment_time,</if>
+            <if test="parameterCode != null">parameter_code,</if>
+            <if test="programType != null">program_type,</if>
+            <if test="sampleAmount != null">sample_amount,</if>
+            <if test="reportSerialNumber != null">report_serial_number,</if>
+            <if test="entrustSerialNumber != null">entrust_serial_number,</if>
+            <if test="recordSerialNumber != null">record_serial_number,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isInterpolation != null">is_interpolation,</if>
+            <if test="status != null">status,</if>
+            <if test="entrustStatus != null">entrust_status,</if>
+            <if test="entrustNote != null">entrust_note,</if>
+            <if test="detectName != null">detect_name,</if>
+            <if test="detectEngineeringParts != null">detect_engineering_parts,</if>
+            <if test="detectAmount != null">detect_amount,</if>
+            <if test="repeatNumber != null">repeat_number,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="issueTime != null">#{issueTime},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="publisher != null">#{publisher},</if>
+            <if test="businessManager != null">#{businessManager},</if>
+            <if test="entrustmentTime != null">#{entrustmentTime},</if>
+            <if test="parameterCode != null">#{parameterCode},</if>
+            <if test="programType != null">#{programType},</if>
+            <if test="sampleAmount != null">#{sampleAmount},</if>
+            <if test="reportSerialNumber != null">#{reportSerialNumber},</if>
+            <if test="entrustSerialNumber != null">#{entrustSerialNumber},</if>
+            <if test="recordSerialNumber != null">#{recordSerialNumber},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isInterpolation != null">#{isInterpolation},</if>
+            <if test="status != null">#{status},</if>
+            <if test="entrustStatus != null">#{entrustStatus},</if>
+            <if test="entrustNote != null">#{entrustNote},</if>
+            <if test="detectName != null">#{detectName},</if>
+            <if test="detectEngineeringParts != null">#{detectEngineeringParts},</if>
+            <if test="detectAmount != null">#{detectAmount},</if>
+            <if test="repeatNumber != null">#{repeatNumber},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpReadyDesk" parameterType="OpReadyDeskVo">
+        update op_ready_desk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="issueTime != null">issue_time = #{issueTime},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="publisher != null">publisher = #{publisher},</if>
+            <if test="businessManager != null">business_manager = #{businessManager},</if>
+            <if test="entrustmentTime != null">entrustment_time = #{entrustmentTime},</if>
+            <if test="parameterCode != null">parameter_code = #{parameterCode},</if>
+            <if test="programType != null">program_type = #{programType},</if>
+            <if test="reportSerialNumber != null">report_serial_number = #{reportSerialNumber},</if>
+            <if test="entrustSerialNumber != null">entrust_serial_number = #{entrustSerialNumber},</if>
+            <if test="recordSerialNumber != null">record_serial_number = #{recordSerialNumber},</if>
+            <if test="sampleAmount != null">sample_amount = #{sampleAmount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isInterpolation != null">is_interpolation = #{isInterpolation},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="entrustStatus != null">entrust_status = #{entrustStatus},</if>
+            <if test="entrustNote != null">entrust_note = #{entrustNote},</if>
+            <if test="detectName != null">detect_name = #{detectName},</if>
+            <if test="detectEngineeringParts != null">detect_engineering_parts = #{detectEngineeringParts},</if>
+            <if test="detectAmount != null">detect_amount = #{detectAmount},</if>
+            <if test="repeatNumber != null">repeat_number = #{repeatNumber},</if>
+        </trim>
+        where ready_id = #{readyId}
+    </update>
+
+    <delete id="deleteOpReadyDeskByReadyId" parameterType="Long">
+        delete from op_ready_desk where ready_id = #{readyId}
+    </delete>
+
+    <delete id="deleteOpReadyDeskByReadyIds" parameterType="String">
+        delete from op_ready_desk where ready_id in
+        <foreach item="readyId" collection="array" open="(" separator="," close=")">
+            #{readyId}
+        </foreach>
+    </delete>
+</mapper>

@@ -121,4 +121,7 @@ public interface ISysDeptService
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
+
+
+    public String selectDeptNameById(Long deptId);
 }

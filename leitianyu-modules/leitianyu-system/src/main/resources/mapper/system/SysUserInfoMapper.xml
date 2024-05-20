@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.system.mapper.SysUserInfoMapper">
+
+    <resultMap type="SysUserInfo" id="SysUserInfoResult">
+        <result property="userId"    column="user_id"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="ethnic"    column="ethnic"    />
+        <result property="age"    column="age"    />
+        <result property="graduationSchool"    column="graduation_school"    />
+        <result property="degree"    column="degree"    />
+        <result property="professional"    column="professional"    />
+        <result property="graduationTime"    column="graduation_time"    />
+        <result property="professionalTitle"    column="professional_title"    />
+        <result property="politicalLandscape"    column="political_landscape"    />
+        <result property="domiciliaryRegister"    column="domiciliary_register"    />
+        <result property="onboardingTime"    column="onboarding_time"    />
+        <result property="emergencyContactsTel"    column="emergency_contacts_tel"    />
+        <result property="currentAddress"    column="current_address"    />
+        <result property="regularStaffTime"    column="regular_staff_time"    />
+        <result property="socialInsuranceTime"    column="social_insurance_time"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="bankAccount"    column="bank_account"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysUserInfoVo">
+        select user_id, id_card, ethnic, age, graduation_school, degree, professional, graduation_time, professional_title, political_landscape, domiciliary_register, onboarding_time, emergency_contacts_tel, current_address, regular_staff_time, social_insurance_time, work_time, bank_account, del_flag, create_time, update_time from sys_user_info
+    </sql>
+
+    <select id="selectSysUserInfoList" parameterType="SysUserInfo" resultMap="SysUserInfoResult">
+        <include refid="selectSysUserInfoVo"/>
+        <where>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="ethnic != null  and ethnic != ''"> and ethnic = #{ethnic}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="graduationSchool != null  and graduationSchool != ''"> and graduation_school = #{graduationSchool}</if>
+            <if test="degree != null  and degree != ''"> and degree = #{degree}</if>
+            <if test="professional != null  and professional != ''"> and professional = #{professional}</if>
+            <if test="graduationTime != null "> and graduation_time = #{graduationTime}</if>
+            <if test="professionalTitle != null  and professionalTitle != ''"> and professional_title = #{professionalTitle}</if>
+            <if test="politicalLandscape != null  and politicalLandscape != ''"> and political_landscape = #{politicalLandscape}</if>
+            <if test="domiciliaryRegister != null  and domiciliaryRegister != ''"> and domiciliary_register = #{domiciliaryRegister}</if>
+            <if test="onboardingTime != null "> and onboarding_time = #{onboardingTime}</if>
+            <if test="emergencyContactsTel != null "> and emergency_contacts_tel = #{emergencyContactsTel}</if>
+            <if test="currentAddress != null  and currentAddress != ''"> and current_address = #{currentAddress}</if>
+            <if test="regularStaffTime != null "> and regular_staff_time = #{regularStaffTime}</if>
+            <if test="socialInsuranceTime != null "> and social_insurance_time = #{socialInsuranceTime}</if>
+            <if test="workTime != null "> and work_time = #{workTime}</if>
+            <if test="bankAccount != null  and bankAccount != ''"> and bank_account = #{bankAccount}</if>
+        </where>
+    </select>
+
+    <select id="selectSysUserInfoByUserId" parameterType="Long" resultMap="SysUserInfoResult">
+        <include refid="selectSysUserInfoVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertSysUserInfo" parameterType="SysUserInfo">
+        insert into sys_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="ethnic != null">ethnic,</if>
+            <if test="age != null">age,</if>
+            <if test="graduationSchool != null">graduation_school,</if>
+            <if test="degree != null">degree,</if>
+            <if test="professional != null">professional,</if>
+            <if test="graduationTime != null">graduation_time,</if>
+            <if test="professionalTitle != null">professional_title,</if>
+            <if test="politicalLandscape != null">political_landscape,</if>
+            <if test="domiciliaryRegister != null">domiciliary_register,</if>
+            <if test="onboardingTime != null">onboarding_time,</if>
+            <if test="emergencyContactsTel != null">emergency_contacts_tel,</if>
+            <if test="currentAddress != null">current_address,</if>
+            <if test="regularStaffTime != null">regular_staff_time,</if>
+            <if test="socialInsuranceTime != null">social_insurance_time,</if>
+            <if test="workTime != null">work_time,</if>
+            <if test="bankAccount != null">bank_account,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="ethnic != null">#{ethnic},</if>
+            <if test="age != null">#{age},</if>
+            <if test="graduationSchool != null">#{graduationSchool},</if>
+            <if test="degree != null">#{degree},</if>
+            <if test="professional != null">#{professional},</if>
+            <if test="graduationTime != null">#{graduationTime},</if>
+            <if test="professionalTitle != null">#{professionalTitle},</if>
+            <if test="politicalLandscape != null">#{politicalLandscape},</if>
+            <if test="domiciliaryRegister != null">#{domiciliaryRegister},</if>
+            <if test="onboardingTime != null">#{onboardingTime},</if>
+            <if test="emergencyContactsTel != null">#{emergencyContactsTel},</if>
+            <if test="currentAddress != null">#{currentAddress},</if>
+            <if test="regularStaffTime != null">#{regularStaffTime},</if>
+            <if test="socialInsuranceTime != null">#{socialInsuranceTime},</if>
+            <if test="workTime != null">#{workTime},</if>
+            <if test="bankAccount != null">#{bankAccount},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysUserInfo" parameterType="SysUserInfo">
+        update sys_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="ethnic != null">ethnic = #{ethnic},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="graduationSchool != null">graduation_school = #{graduationSchool},</if>
+            <if test="degree != null">degree = #{degree},</if>
+            <if test="professional != null">professional = #{professional},</if>
+            <if test="graduationTime != null">graduation_time = #{graduationTime},</if>
+            <if test="professionalTitle != null">professional_title = #{professionalTitle},</if>
+            <if test="politicalLandscape != null">political_landscape = #{politicalLandscape},</if>
+            <if test="domiciliaryRegister != null">domiciliary_register = #{domiciliaryRegister},</if>
+            <if test="onboardingTime != null">onboarding_time = #{onboardingTime},</if>
+            <if test="emergencyContactsTel != null">emergency_contacts_tel = #{emergencyContactsTel},</if>
+            <if test="currentAddress != null">current_address = #{currentAddress},</if>
+            <if test="regularStaffTime != null">regular_staff_time = #{regularStaffTime},</if>
+            <if test="socialInsuranceTime != null">social_insurance_time = #{socialInsuranceTime},</if>
+            <if test="workTime != null">work_time = #{workTime},</if>
+            <if test="bankAccount != null">bank_account = #{bankAccount},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteSysUserInfoByUserId" parameterType="Long">
+        delete from sys_user_info where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteSysUserInfoByUserIds" parameterType="String">
+        delete from sys_user_info where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>
