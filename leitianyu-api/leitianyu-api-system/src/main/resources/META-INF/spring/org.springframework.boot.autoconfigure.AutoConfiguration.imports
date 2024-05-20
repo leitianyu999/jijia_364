@@ -1,0 +1,3 @@
+com.jijia.system.api.factory.RemoteUserFallbackFactory
+com.jijia.system.api.factory.RemoteLogFallbackFactory
+com.jijia.system.api.factory.RemoteFileFallbackFactory

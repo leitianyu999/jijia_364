@@ -1,0 +1,5 @@
+com.jijia.common.security.config.WebMvcConfig
+com.jijia.common.security.service.TokenService
+com.jijia.common.security.aspect.PreAuthorizeAspect
+com.jijia.common.security.aspect.InnerAuthAspect
+com.jijia.common.security.handler.GlobalExceptionHandler

@@ -1,0 +1,3 @@
+# com.jijia.common.swagger.config.SwaggerAutoConfiguration
+# com.jijia.common.swagger.config.SwaggerWebConfiguration
+# com.jijia.common.swagger.config.SwaggerBeanPostProcessor

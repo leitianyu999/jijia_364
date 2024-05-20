@@ -1,0 +1,2 @@
+com.jijia.common.log.service.AsyncLogService
+com.jijia.common.log.aspect.LogAspect

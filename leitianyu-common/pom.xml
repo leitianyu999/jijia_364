@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jijia</groupId>
+        <artifactId>leitianyu</artifactId>
+        <version>3.6.4</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>leitianyu-common-log</module>
+        <module>leitianyu-common-core</module>
+        <module>leitianyu-common-redis</module>
+        <module>leitianyu-common-seata</module>
+        <module>leitianyu-common-swagger</module>
+        <module>leitianyu-common-security</module>
+        <module>leitianyu-common-sensitive</module>
+        <module>leitianyu-common-datascope</module>
+        <module>leitianyu-common-datasource</module>
+    </modules>
+
+    <artifactId>leitianyu-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        leitianyu-common通用模块
+    </description>
+
+</project>
