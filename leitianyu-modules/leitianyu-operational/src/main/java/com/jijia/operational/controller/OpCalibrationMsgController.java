@@ -192,16 +192,16 @@ public class OpCalibrationMsgController extends BaseController
         return toAjax(opCalibrationMsgService.updateOpCalibrationMsg(opCalibrationMsg,deskIds));
     }
 
-    /**
-     * 删除综合部台账
-     */
-    @RequiresPermissions("op:calibration:remove")
-    @Log(title = "综合部台账", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{deskIds}")
-    public AjaxResult remove(@PathVariable Long[] deskIds)
-    {
-        return toAjax(opCalibrationMsgService.deleteOpCalibrationMsgByDeskIds(deskIds));
-    }
+//    /**
+//     * 删除综合部台账
+//     */
+//    @RequiresPermissions("op:calibration:remove")
+//    @Log(title = "综合部台账", businessType = BusinessType.DELETE)
+//    @DeleteMapping("/{deskIds}")
+//    public AjaxResult remove(@PathVariable Long[] deskIds)
+//    {
+//        return toAjax(opCalibrationMsgService.deleteOpCalibrationMsgByDeskIds(deskIds));
+//    }
 
     /**
      * 盖章

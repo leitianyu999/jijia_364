@@ -56,6 +56,7 @@ public class OpParameterController extends BaseController
     @GetMapping("/listAll")
     public TableDataInfo listAll(InfoVo infoVo)
     {
+        startPage();
         List<OpParameter> list = opParameterService.getOpParameterList(infoVo);
         return getDataTable(list);
     }

@@ -99,9 +99,10 @@ public class OpDetectMsgController extends BaseController
     @Log(title = "检测台账", businessType = BusinessType.IMPORT)
     @RequiresPermissions("op:msg:importall")
     @PostMapping("/gm/importData")
-    public void  importDataAll(MultipartFile file) throws Exception {
+    public AjaxResult  importDataAll(MultipartFile file) throws Exception {
         AnalysisEventListener<OpDetectMsgVo> listener = ExcelListenerUtils.getListener(this.batchInsertAll());
         EasyExcel.read(file.getInputStream(), OpDetectMsgVo.class, listener).sheet("检测台账数据").headRowNumber(2).doRead();
+        return AjaxResult.success();
     }
 
     private Consumer<List<OpDetectMsgVo>> batchInsertAll() throws Exception {
