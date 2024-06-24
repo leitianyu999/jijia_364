@@ -12,10 +12,12 @@ spring:
     active: dev
   cloud:
     nacos:
+      username: nacos
+      password: nacos
       discovery:
+        # 服务注册地址
+        server-addr: 192.168.100.74:28848
         namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
-      # 服务注册地址
-      server-addr: 192.168.100.74:28848
       config:
         # 配置中心地址
         server-addr: 192.168.100.74:28848
@@ -25,5 +27,3 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
-      username: nacos
-      password: nacos
