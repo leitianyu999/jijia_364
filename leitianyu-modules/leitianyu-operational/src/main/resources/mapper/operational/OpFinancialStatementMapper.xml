@@ -80,11 +80,11 @@
             <if test="receivableAmount != null "> and receivable_amount = #{receivableAmount}</if>
             <if test="params.beginReceivableTime != null and params.beginReceivableTime != '' and params.endReceivableTime != null and params.endReceivableTime != ''"> and receivable_time between #{params.beginReceivableTime} and #{params.endReceivableTime}</if>
             <if test="invoiceNumber != null  and invoiceNumber != ''"> and invoice_number like concat('%', #{invoiceNumber}, '%')</if>
-            <if test="params.beginInvoiceTime != null and params.beginInvoiceTime != '' and params.endInvoiceTime != null and params.endInvoiceTime != ''"> and invoice_time between #{params.beginInvoiceTime} and #{params.endInvoiceTime}</if>
+            <if test="invoiceTime != null  and invoiceTime != ''"> and invoice_time like concat('%', #{invoiceTime}, '%')</if>
             <if test="rate != null  and rate != ''"> and rate like concat('%', #{rate}, '%')</if>
             <if test="invoiceType != null  and invoiceType != ''"> and invoice_type like concat('%', #{invoiceType}, '%')</if>
             <if test="invoiceAmount != null "> and invoice_amount = #{invoiceAmount}</if>
-            <if test="params.beginArrivalTime != null and params.beginArrivalTime != '' and params.endArrivalTime != null and params.endArrivalTime != ''"> and arrival_time between #{params.beginArrivalTime} and #{params.endArrivalTime}</if>
+            <if test="arrivalTime != null  and arrivalTime != ''"> and arrival_time like concat('%', #{arrivalTime}, '%')</if>
             <if test="receivableNumber != null "> and receivable_number = #{receivableNumber}</if>
             <if test="unpaidAmount != null "> and unpaid_amount = #{unpaidAmount}</if>
             <if test="payType != null  and payType != ''"> and pay_type like concat('%', #{payType}, '%')</if>

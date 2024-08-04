@@ -60,10 +60,8 @@ public class OpFinancialStatementVo extends BaseEntity
     private String invoiceNumber;
 
     /** 发票开具日期 */
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    @ExcelProperty(value = {"应收账款台账","发票开具日期"},converter = LocalDateConverter.class)
-    private LocalDate invoiceTime;
+    @ExcelProperty(value = {"应收账款台账","发票开具日期"})
+    private String invoiceTime;
 
     /** 税率 */
     @ExcelProperty(value = {"应收账款台账","税率"})
@@ -78,10 +76,8 @@ public class OpFinancialStatementVo extends BaseEntity
     private BigDecimal invoiceAmount;
 
     /** 到款日期 */
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    @ExcelProperty(value = {"应收账款台账","到款日期"},converter = LocalDateConverter.class)
-    private LocalDate arrivalTime;
+    @ExcelProperty(value = {"应收账款台账","到款日期"})
+    private String arrivalTime;
 
 
     @ExcelProperty(value = {"应收账款台账","逾期日期"})
@@ -235,12 +231,12 @@ public class OpFinancialStatementVo extends BaseEntity
     {
         return invoiceNumber;
     }
-    public void setInvoiceTime(LocalDate invoiceTime)
+    public void setInvoiceTime(String invoiceTime)
     {
         this.invoiceTime = invoiceTime;
     }
 
-    public LocalDate getInvoiceTime()
+    public String getInvoiceTime()
     {
         return invoiceTime;
     }
@@ -271,12 +267,12 @@ public class OpFinancialStatementVo extends BaseEntity
     {
         return invoiceAmount;
     }
-    public void setArrivalTime(LocalDate arrivalTime)
+    public void setArrivalTime(String arrivalTime)
     {
         this.arrivalTime = arrivalTime;
     }
 
-    public LocalDate getArrivalTime()
+    public String getArrivalTime()
     {
         return arrivalTime;
     }

@@ -99,11 +99,11 @@ public class OpFinancialStatementController extends BaseController
     {
         opFinancialStatement.setFinancialStatementIds(financialStatementIds);
         List<OpFinancialStatementVo> list = opFinancialStatementService.selectOpFinancialStatementList(opFinancialStatement);
-        list.forEach(o -> {
-            if (o.getReceivableTime() != null && o.getArrivalTime() != null && o.getArrivalTime().isAfter(o.getReceivableTime())) {
-                o.setOverdueTime((int) o.getArrivalTime().until(o.getReceivableTime(), ChronoUnit.DAYS));
-            }
-        });
+//        list.forEach(o -> {
+//            if (o.getReceivableTime() != null && o.getArrivalTime() != null && o.getArrivalTime().isAfter(o.getReceivableTime())) {
+//                o.setOverdueTime((int) o.getArrivalTime().until(o.getReceivableTime(), ChronoUnit.DAYS));
+//            }
+//        });
         ExcelUtil<OpFinancialStatementVo> util = new ExcelUtil<OpFinancialStatementVo>(OpFinancialStatementVo.class);
         util.exportEasyExcel(response, list, "应收账款台账数据");
     }
