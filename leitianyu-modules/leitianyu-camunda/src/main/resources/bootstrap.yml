@@ -1,0 +1,33 @@
+# Tomcat
+server:
+  port: 6007
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: leitianyu-camunda
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        # 服务注册地址
+        server-addr: 100.93.241.96:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
+      config:
+        # 配置中心地址
+        server-addr: 100.93.241.96:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
