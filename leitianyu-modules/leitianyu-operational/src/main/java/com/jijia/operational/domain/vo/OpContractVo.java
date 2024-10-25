@@ -78,6 +78,12 @@ public class OpContractVo extends BaseEntity
     /** 已回日期 */
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     @JsonFormat(pattern = "yyyy/MM/dd")
+    @ExcelProperty(value = {"签订日期","已回日期"},converter = LocalDateConverter.class)
+    private LocalDate signedTime;
+
+    /** 已回日期 */
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     @ExcelProperty(value = {"合同台账","已回日期"},converter = LocalDateConverter.class)
     private LocalDate receiptTime;
 

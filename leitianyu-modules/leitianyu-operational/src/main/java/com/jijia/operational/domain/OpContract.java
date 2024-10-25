@@ -70,6 +70,11 @@ public class OpContract extends BaseEntity
 
     /** 已回日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "签订日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date signedTime;
+
+    /** 已回日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "已回日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date receiptTime;
 
@@ -169,6 +174,14 @@ public class OpContract extends BaseEntity
     public void setCourierNumber(String courierNumber)
     {
         this.courierNumber = courierNumber;
+    }
+
+    public Date getSignedTime() {
+        return signedTime;
+    }
+
+    public void setSignedTime(Date signedTime) {
+        this.signedTime = signedTime;
     }
 
     public String getCourierNumber()
