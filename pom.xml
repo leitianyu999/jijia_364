@@ -36,6 +36,7 @@
         <minio.version>8.2.2</minio.version>
         <poi.version>4.1.2</poi.version>
         <camunda.version>7.18.0</camunda.version>
+        <mybatis-plus.version>3.4.3</mybatis-plus.version>
         <transmittable-thread-local.version>2.14.4</transmittable-thread-local.version>
     </properties>
 
@@ -81,6 +82,8 @@
 
 
 
+
+
             <!-- FastDFS 分布式文件系统 -->
             <dependency>
                 <groupId>com.github.tobato</groupId>
@@ -116,16 +119,6 @@
             <dependency>
                 <groupId>org.camunda.bpm.springboot</groupId>
                 <artifactId>camunda-bpm-spring-boot-starter</artifactId>
-                <version>${camunda.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.camunda.bpm.springboot</groupId>
-                <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-                <version>${camunda.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.camunda.bpm.springboot</groupId>
-                <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
                 <version>${camunda.version}</version>
             </dependency>
 
@@ -220,6 +213,18 @@
                 <version>${leitianyu.version}</version>
             </dependency>
 
+            <!-- mybatis-plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
             <!-- 分布式事务 -->
             <dependency>
                 <groupId>com.jijia</groupId>
@@ -248,6 +253,11 @@
                 <version>${leitianyu.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.29</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

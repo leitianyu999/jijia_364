@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.camunda.mapper.CmdCategoryMapper">
+
+    <resultMap type="CmdCategory" id="CmdCategoryResult">
+        <result property="categoryId"    column="category_id"    />
+        <result property="name"    column="name"    />
+        <result property="code"    column="code"    />
+        <result property="description"    column="description"    />
+        <result property="status"    column="status"    />
+        <result property="sort"    column="sort"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCmdCategoryVo">
+        select category_id, name, code, description, status, sort, del_flag, create_by, create_time, update_by, update_time from cmd_category
+    </sql>
+
+    <select id="selectCmdCategoryList" parameterType="CmdCategory" resultMap="CmdCategoryResult">
+        <include refid="selectCmdCategoryVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+
+    <select id="selectCmdCategoryByCategoryId" parameterType="Long" resultMap="CmdCategoryResult">
+        <include refid="selectCmdCategoryVo"/>
+        where category_id = #{categoryId}
+    </select>
+
+    <insert id="insertCmdCategory" parameterType="CmdCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into cmd_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="code != null">code,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="status != null">status,</if>
+            <if test="sort != null">sort,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="code != null">#{code},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCmdCategory" parameterType="CmdCategory">
+        update cmd_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteCmdCategoryByCategoryId" parameterType="Long">
+        delete from cmd_category where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteCmdCategoryByCategoryIds" parameterType="String">
+        delete from cmd_category where category_id in
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+</mapper>
