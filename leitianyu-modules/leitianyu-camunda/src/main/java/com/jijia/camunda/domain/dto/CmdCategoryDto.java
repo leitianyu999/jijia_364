@@ -1,7 +1,8 @@
-package com.jijia.camunda.domain.vo;
+package com.jijia.camunda.domain.dto;
 
 import com.jijia.camunda.domain.BaseDO;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * TODO
@@ -12,7 +13,7 @@ import lombok.*;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CmdCategoryVo extends BaseDO {
+public class CmdCategoryDto extends BaseDO {
 
 
     private static final long serialVersionUID = 1L;

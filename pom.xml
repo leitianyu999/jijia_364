@@ -37,6 +37,8 @@
         <poi.version>4.1.2</poi.version>
         <camunda.version>7.18.0</camunda.version>
         <mybatis-plus.version>3.4.3</mybatis-plus.version>
+        <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
+        <easy-trans.version>3.0.5</easy-trans.version>
         <transmittable-thread-local.version>2.14.4</transmittable-thread-local.version>
     </properties>
 
@@ -51,6 +53,38 @@
                 <version>${spring-framework.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join-boot-starter</artifactId> <!-- MyBatis 联表查询 -->
+                <version>${mybatis-plus-join.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fhs-opensource</groupId> <!-- VO 数据翻译 -->
+                <artifactId>easy-trans-spring-boot-starter</artifactId>
+                <version>${easy-trans.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.cloud</groupId>
+                        <artifactId>spring-cloud-commons</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.fhs-opensource</groupId>
+                <artifactId>easy-trans-mybatis-plus-extend</artifactId>
+                <version>${easy-trans.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fhs-opensource</groupId>
+                <artifactId>easy-trans-anno</artifactId>
+                <version>${easy-trans.version}</version>
             </dependency>
 
             <!-- SpringCloud 微服务 -->
