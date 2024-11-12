@@ -157,8 +157,7 @@
             <if test="courierNumber != null">courier_number = #{courierNumber},</if>
             <if test="isReceipt != null">is_receipt = #{isReceipt},</if>
             <if test="receiptAmount != null">receipt_amount = #{receiptAmount},</if>
-            <if test="signedTime != null">signed_time = #{signedTime},</if>
-            <if test="receiptTime != null">receipt_time = #{receiptTime},</if>
+
             <if test="remark != null">remark = #{remark},</if>
             <if test="projectType != null">project_type = #{projectType},</if>
             <if test="tentativeAmount != null">tentative_amount = #{tentativeAmount},</if>
@@ -167,6 +166,8 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
+            signed_time = #{signedTime},
+            receipt_time = #{receiptTime},
         </trim>
         where contract_id = #{contractId}
     </update>
