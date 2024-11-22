@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jijia.system.api.domain.SysDept;
-import com.jijia.system.domain.SysMenu;
+import com.jijia.system.api.domain.SysMenu;
 
 /**
  * Treeselect树结构实体类

@@ -4,3 +4,4 @@ com.jijia.system.api.factory.RemoteFileFallbackFactory
 com.jijia.system.api.factory.RemoterDeptFallbackFactory
 com.jijia.system.api.factory.RemoteConfigFallbackFactory
 com.jijia.system.api.factory.RemoteReadyDeskFallbackFactory
+com.jijia.system.api.factory.RemoteMenuFallbackFactory

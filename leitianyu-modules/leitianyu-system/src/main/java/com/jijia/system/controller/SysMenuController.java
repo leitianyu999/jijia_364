@@ -2,6 +2,8 @@ package com.jijia.system.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ import com.jijia.common.log.annotation.Log;
 import com.jijia.common.log.enums.BusinessType;
 import com.jijia.common.security.annotation.RequiresPermissions;
 import com.jijia.common.security.utils.SecurityUtils;
-import com.jijia.system.domain.SysMenu;
+import com.jijia.system.api.domain.SysMenu;
 import com.jijia.system.service.ISysMenuService;
 
 /**
@@ -87,6 +89,7 @@ public class SysMenuController extends BaseController
     @RequiresPermissions("system:menu:add")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @Transactional(propagation = Propagation.REQUIRES_NEW , rollbackFor = Exception.class)
     public AjaxResult add(@Validated @RequestBody SysMenu menu)
     {
         if (!menuService.checkMenuNameUnique(menu))
@@ -98,8 +101,11 @@ public class SysMenuController extends BaseController
             return error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }
         menu.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(menuService.insertMenu(menu));
+        int i = menuService.insertMenu(menu);
+        return i > 0 ? success(menu) : error();
     }
+
+
 
     /**
      * 修改菜单

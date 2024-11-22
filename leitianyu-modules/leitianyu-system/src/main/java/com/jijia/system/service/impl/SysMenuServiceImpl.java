@@ -16,7 +16,7 @@ import com.jijia.common.core.utils.StringUtils;
 import com.jijia.common.security.utils.SecurityUtils;
 import com.jijia.system.api.domain.SysRole;
 import com.jijia.system.api.domain.SysUser;
-import com.jijia.system.domain.SysMenu;
+import com.jijia.system.api.domain.SysMenu;
 import com.jijia.system.domain.vo.MetaVo;
 import com.jijia.system.domain.vo.RouterVo;
 import com.jijia.system.domain.vo.TreeSelect;

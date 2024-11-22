@@ -2,7 +2,7 @@ package com.jijia.system.service;
 
 import java.util.List;
 import java.util.Set;
-import com.jijia.system.domain.SysMenu;
+import com.jijia.system.api.domain.SysMenu;
 import com.jijia.system.domain.vo.RouterVo;
 import com.jijia.system.domain.vo.TreeSelect;
 

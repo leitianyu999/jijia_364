@@ -2,7 +2,7 @@ package com.jijia.system.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.jijia.system.domain.SysMenu;
+import com.jijia.system.api.domain.SysMenu;
 
 /**
  * 菜单表 数据层

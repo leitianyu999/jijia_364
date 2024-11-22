@@ -1,4 +1,4 @@
-package com.jijia.system.domain;
+package com.jijia.system.api.domain;
 
 import java.util.ArrayList;
 import java.util.List;

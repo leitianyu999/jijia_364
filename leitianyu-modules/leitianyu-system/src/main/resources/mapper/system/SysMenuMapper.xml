@@ -155,7 +155,8 @@
 		where menu_id = #{menuId}
 	</update>
 
-	<insert id="insertMenu" parameterType="SysMenu">
+	<insert id="insertMenu" parameterType="SysMenu" keyProperty="menuId"
+			useGeneratedKeys="true">
 		insert into sys_menu(
 		<if test="menuId != null and menuId != 0">menu_id,</if>
 		<if test="parentId != null and parentId != 0">parent_id,</if>
