@@ -24,6 +24,12 @@ public class CmdCategory extends BaseDO {
     /** 分类编号 */
     private Long categoryId;
 
+    /** 菜单ID */
+    private Long menuId;
+
+    /** 父菜单ID */
+    private Long parentId;
+
     /** 分类名 */
     private String name;
 

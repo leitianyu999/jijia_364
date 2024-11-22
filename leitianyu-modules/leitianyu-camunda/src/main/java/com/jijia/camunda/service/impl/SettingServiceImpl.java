@@ -65,8 +65,8 @@ public class SettingServiceImpl implements SettingService {
 
     @Autowired
     private FormGroupService formGroupService;
-    @Resource
-    private IdWorker idWorker;
+//    @Resource
+//    private IdWorker idWorker;
     @Resource
     private RepositoryService repositoryService;
     @Resource
@@ -160,7 +160,7 @@ public class SettingServiceImpl implements SettingService {
     @Override
     public Object getFormTemplateById(String templateId) {
         ProcessTemplates processTemplates = processTemplateService.getById(templateId);
-        processTemplates.setLogo(processTemplates.getIcon());
+//        processTemplates.setLogo(processTemplates.getIcon());
         processTemplates.setFormId(processTemplates.getTemplateId());
         processTemplates.setFormName(processTemplates.getTemplateName());
         return R.ok(processTemplates);
@@ -278,108 +278,108 @@ public class SettingServiceImpl implements SettingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Object updateFormDetail(ProcessTemplates template) {
-        SettingsInfo settingsInfo = JSONObject.parseObject(template.getSettings(), new TypeReference<SettingsInfo>() {});
-        ProcessTemplates processTemplates = processTemplateService.getById(template.getFormId());
-        processTemplates.setTemplateName(template.getFormName());
-        processTemplates.setGroupId(template.getGroupId());
-        processTemplates.setFormItems(template.getFormItems());
-        processTemplates.setSettings(template.getSettings());
-        processTemplates.setProcess(template.getProcess());
-        processTemplates.setIcon(template.getIcon());
-        processTemplates.setBackground(template.getBackground());
-        processTemplates.setNotify(settingsInfo.getNotify().toJSONString());
-        String adminInfo = JSONObject.toJSONString(settingsInfo.getAdmin());
-        processTemplates.setWhoCommit(adminInfo);
-
-        processTemplates.setWhoEdit(adminInfo);
-        processTemplates.setWhoExport(adminInfo);
-        processTemplates.setRemark(template.getRemark());
-        processTemplates.setUpdated(new Date());
-        processTemplateService.updateById(processTemplates);
-        ChildNode childNode = JSONObject.parseObject(template.getProcess(), new TypeReference<ChildNode>(){});
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("processJson",template.getProcess());
-        jsonObject.put("formJson",template.getFormItems());
-        BpmnModelInstance bpmnModel = assemBpmnModel(jsonObject, childNode, template.getRemark(),
-            template.getFormName(), template.getGroupId(), template.getFormId());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        Bpmn.writeModelToStream(outputStream, bpmnModel);
-        byte[] bytes = outputStream.toByteArray();
-        System.err.println(new String(bytes));
-        Deployment deployment = repositoryService.createDeployment()
-                .addModelInstance(template.getFormName() + ".bpmn", bpmnModel)
-                .name(template.getFormName())
-//            .category(template.getGroupId() + "")
-                .deploy();
-        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-        NodeJsonData nodeJsonData = new NodeJsonData();
-        nodeJsonData.setNodeJsonData(template.getProcess());
-        nodeJsonData.setProcessDefinitionId(processDefinition.getId());
-        nodeJsonDataService.save(nodeJsonData);
+//        SettingsInfo settingsInfo = JSONObject.parseObject(template.getSettings(), new TypeReference<SettingsInfo>() {});
+//        ProcessTemplates processTemplates = processTemplateService.getById(template.getFormId());
+//        processTemplates.setTemplateName(template.getFormName());
+//        processTemplates.setGroupId(template.getGroupId());
+//        processTemplates.setFormItems(template.getFormItems());
+//        processTemplates.setSettings(template.getSettings());
+//        processTemplates.setProcess(template.getProcess());
+//        processTemplates.setIcon(template.getIcon());
+//        processTemplates.setBackground(template.getBackground());
+//        processTemplates.setNotify(settingsInfo.getNotify().toJSONString());
+//        String adminInfo = JSONObject.toJSONString(settingsInfo.getAdmin());
+//        processTemplates.setWhoCommit(adminInfo);
+//
+//        processTemplates.setWhoEdit(adminInfo);
+//        processTemplates.setWhoExport(adminInfo);
+//        processTemplates.setRemark(template.getRemark());
+//        processTemplates.setUpdated(new Date());
+//        processTemplateService.updateById(processTemplates);
+//        ChildNode childNode = JSONObject.parseObject(template.getProcess(), new TypeReference<ChildNode>(){});
+//        JSONObject jsonObject=new JSONObject();
+//        jsonObject.put("processJson",template.getProcess());
+//        jsonObject.put("formJson",template.getFormItems());
+//        BpmnModelInstance bpmnModel = assemBpmnModel(jsonObject, childNode, template.getRemark(),
+//            template.getFormName(), template.getGroupId(), template.getFormId());
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//
+//        Bpmn.writeModelToStream(outputStream, bpmnModel);
+//        byte[] bytes = outputStream.toByteArray();
+//        System.err.println(new String(bytes));
+//        Deployment deployment = repositoryService.createDeployment()
+//                .addModelInstance(template.getFormName() + ".bpmn", bpmnModel)
+//                .name(template.getFormName())
+////            .category(template.getGroupId() + "")
+//                .deploy();
+//        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
+//        NodeJsonData nodeJsonData = new NodeJsonData();
+//        nodeJsonData.setNodeJsonData(template.getProcess());
+//        nodeJsonData.setProcessDefinitionId(processDefinition.getId());
+//        nodeJsonDataService.save(nodeJsonData);
 
         return R.ok("发布更新后的表单成功");
     }
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void jsonToBpmn(FlowEngineDTO flowEngineDTO) throws InvocationTargetException, IllegalAccessException {
-        String processJson = flowEngineDTO.getProcess();
-        ChildNode childNode = JSONObject.parseObject(processJson, new TypeReference<ChildNode>(){});
-        String settingsJson = flowEngineDTO.getSettings();
-        SettingsInfo settingsInfo = JSONObject.parseObject(settingsJson, new TypeReference<SettingsInfo>() {});
-        String remark = flowEngineDTO.getRemark();
-        String formItems = flowEngineDTO.getFormItems();
-        String formName = flowEngineDTO.getFormName();
-        String logo = flowEngineDTO.getLogo();
-        Integer groupId = flowEngineDTO.getGroupId();
-        String templateId = idWorker.nextId()+"";
-
-        ProcessTemplates processTemplates = ProcessTemplates.builder().build();
-        processTemplates.setTemplateId(templateId);
-        processTemplates.setTemplateName(formName);
-        processTemplates.setGroupId(groupId);
-        processTemplates.setFormItems(formItems);
-        processTemplates.setProcess(processJson);
-        processTemplates.setIcon(logo);
-        processTemplates.setBackground(logo);
-        processTemplates.setNotify(settingsInfo.getNotify().toJSONString());
-        String adminInfo = JSONObject.toJSONString(settingsInfo.getAdmin());
-        processTemplates.setSettings(settingsJson);
-        processTemplates.setWhoCommit(adminInfo);
-        processTemplates.setWhoEdit(adminInfo);
-        processTemplates.setWhoExport(adminInfo);
-        processTemplates.setRemark(flowEngineDTO.getRemark());
-        processTemplates.setIsStop(false);
-        Date date= new Date();
-        processTemplates.setCreated(date);
-        processTemplates.setUpdated(date);
-        processTemplateService.save(processTemplates);
-        TemplateGroup templateGroup=new TemplateGroup();
-        templateGroup.setTemplateId(processTemplates.getTemplateId());
-        templateGroup.setGroupId(groupId);
-        templateGroup.setSortNum(0);
-        templateGroup.setCreated(date);
-        templateGroupService.save(templateGroup);
-
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("processJson", processJson);
-        jsonObject.put("formJson", formItems);
-        BpmnModelInstance bpmnModel = assemBpmnModel(jsonObject, childNode, remark, formName, groupId,
-            templateId);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Bpmn.writeModelToStream(outputStream, bpmnModel);
-        byte[] bytes = outputStream.toByteArray();
-        System.err.println(new String(bytes));
-        Deployment deployment = repositoryService.createDeployment()
-                .addModelInstance(processTemplates.getFormName() + ".bpmn", bpmnModel)
-                .name(processTemplates.getFormName())
-//            .category(template.getGroupId() + "")
-                .deploy();
-        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-        NodeJsonData nodeJsonData = new NodeJsonData();
-        nodeJsonData.setNodeJsonData(processTemplates.getProcess());
-        nodeJsonData.setProcessDefinitionId(processDefinition.getId());
-        nodeJsonDataService.save(nodeJsonData);
+//        String processJson = flowEngineDTO.getProcess();
+//        ChildNode childNode = JSONObject.parseObject(processJson, new TypeReference<ChildNode>(){});
+//        String settingsJson = flowEngineDTO.getSettings();
+//        SettingsInfo settingsInfo = JSONObject.parseObject(settingsJson, new TypeReference<SettingsInfo>() {});
+//        String remark = flowEngineDTO.getRemark();
+//        String formItems = flowEngineDTO.getFormItems();
+//        String formName = flowEngineDTO.getFormName();
+//        String logo = flowEngineDTO.getLogo();
+//        Integer groupId = flowEngineDTO.getGroupId();
+//        String templateId = idWorker.nextId()+"";
+//
+//        ProcessTemplates processTemplates = ProcessTemplates.builder().build();
+//        processTemplates.setTemplateId(templateId);
+//        processTemplates.setTemplateName(formName);
+//        processTemplates.setGroupId(groupId);
+//        processTemplates.setFormItems(formItems);
+//        processTemplates.setProcess(processJson);
+//        processTemplates.setIcon(logo);
+//        processTemplates.setBackground(logo);
+//        processTemplates.setNotify(settingsInfo.getNotify().toJSONString());
+//        String adminInfo = JSONObject.toJSONString(settingsInfo.getAdmin());
+//        processTemplates.setSettings(settingsJson);
+//        processTemplates.setWhoCommit(adminInfo);
+//        processTemplates.setWhoEdit(adminInfo);
+//        processTemplates.setWhoExport(adminInfo);
+//        processTemplates.setRemark(flowEngineDTO.getRemark());
+//        processTemplates.setIsStop(false);
+//        Date date= new Date();
+//        processTemplates.setCreated(date);
+//        processTemplates.setUpdated(date);
+//        processTemplateService.save(processTemplates);
+//        TemplateGroup templateGroup=new TemplateGroup();
+//        templateGroup.setTemplateId(processTemplates.getTemplateId());
+//        templateGroup.setGroupId(groupId);
+//        templateGroup.setSortNum(0);
+//        templateGroup.setCreated(date);
+//        templateGroupService.save(templateGroup);
+//
+//        JSONObject jsonObject=new JSONObject();
+//        jsonObject.put("processJson", processJson);
+//        jsonObject.put("formJson", formItems);
+//        BpmnModelInstance bpmnModel = assemBpmnModel(jsonObject, childNode, remark, formName, groupId,
+//            templateId);
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        Bpmn.writeModelToStream(outputStream, bpmnModel);
+//        byte[] bytes = outputStream.toByteArray();
+//        System.err.println(new String(bytes));
+//        Deployment deployment = repositoryService.createDeployment()
+//                .addModelInstance(processTemplates.getFormName() + ".bpmn", bpmnModel)
+//                .name(processTemplates.getFormName())
+////            .category(template.getGroupId() + "")
+//                .deploy();
+//        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
+//        NodeJsonData nodeJsonData = new NodeJsonData();
+//        nodeJsonData.setNodeJsonData(processTemplates.getProcess());
+//        nodeJsonData.setProcessDefinitionId(processDefinition.getId());
+//        nodeJsonDataService.save(nodeJsonData);
 
 
     }

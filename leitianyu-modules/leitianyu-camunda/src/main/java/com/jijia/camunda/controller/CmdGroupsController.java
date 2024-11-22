@@ -8,6 +8,8 @@ import com.jijia.common.core.web.controller.BaseController;
 import com.jijia.common.core.web.domain.AjaxResult;
 import com.jijia.common.core.web.page.TableDataInfo;
 import com.jijia.common.security.annotation.RequiresPermissions;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,13 +43,12 @@ public class CmdGroupsController extends BaseController {
     @RequiresPermissions("camunda:groups:list")
     @GetMapping("/list")
     public TableDataInfo list(CmdCategoryDto categoryDto) {
-        startPage();
         List<CmdCategoryVo> list = groupService.getGroupList(categoryDto);
         return getDataTable(list);
     }
 
     /**
-     * 获取合同详细信息
+     * 获取分类详细信息
      */
     @RequiresPermissions("camunda:groups:query")
     @GetMapping(value = "/{categoryId}")
@@ -61,7 +62,7 @@ public class CmdGroupsController extends BaseController {
      * @return 修改结果
      */
     @RequiresPermissions("camunda:groups:update")
-    @PutMapping("form/group")
+    @PutMapping
     public AjaxResult updateGroup(@RequestBody CmdCategoryDto group) {
         return toAjax(groupService.updateGroup(group));
     }
@@ -72,7 +73,9 @@ public class CmdGroupsController extends BaseController {
      * @return 添加结果
      */
     @RequiresPermissions("camunda:groups:add")
-    @PostMapping("form/group")
+    @PostMapping
+    @Transactional
+    @GlobalTransactional
     public AjaxResult createGroup(@RequestBody CmdCategoryDto group) {
         return toAjax(groupService.addGroup(group));
     }
@@ -83,6 +86,7 @@ public class CmdGroupsController extends BaseController {
      * @return 删除结果
      */
     @RequiresPermissions("camunda:groups:remove")
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{contractId}")
     public AjaxResult deleteGroup(@PathVariable Long contractId) {
         return toAjax(groupService.deleteGroup(contractId));

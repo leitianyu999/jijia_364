@@ -6,6 +6,8 @@
 
     <resultMap type="CmdCategory" id="CmdCategoryResult">
         <result property="categoryId"    column="category_id"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="parentId"    column="parent_id"    />
         <result property="name"    column="name"    />
         <result property="code"    column="code"    />
         <result property="description"    column="description"    />
@@ -19,7 +21,7 @@
     </resultMap>
 
     <sql id="selectCmdCategoryVo">
-        select category_id, name, code, description, status, sort, del_flag, create_by, create_time, update_by, update_time from cmd_category
+        select category_id, menu_id, parent_id, name, code, description, status, sort, del_flag, create_by, create_time, update_by, update_time from cmd_category
     </sql>
 
     <select id="selectCmdCategoryList" parameterType="CmdCategory" resultMap="CmdCategoryResult">
@@ -29,7 +31,7 @@
             <if test="code != null  and code != ''"> and code = #{code}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
-        order by sort
+        order by parent_id, sort
     </select>
 
 </mapper>
