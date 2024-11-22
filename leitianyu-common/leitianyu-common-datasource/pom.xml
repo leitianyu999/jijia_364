@@ -31,5 +31,11 @@
             <version>${dynamic-ds.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.jijia</groupId>
+            <artifactId>leitianyu-common-seata</artifactId>
+        </dependency>
+
+
     </dependencies>
 </project>
