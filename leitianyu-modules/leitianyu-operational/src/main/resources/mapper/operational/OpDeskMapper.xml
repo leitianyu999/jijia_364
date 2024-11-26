@@ -140,7 +140,7 @@
                 </foreach>
                 and dept.permission_level = 2)
             </if>
-            <if test="isSettlement != nul and isSettlement != '1' "> and a.is_settlement = #{isSettlement} </if>
+            <if test="isSettlement != null and !isSettlementBool "> and a.is_settlement = #{isSettlement} </if>
         </where>
         GROUP BY a.desk_id
     </select>
@@ -201,7 +201,7 @@
                 </foreach>
                 and dept.permission_level = 2)
             </if>
-            <if test="isSettlement != nul and isSettlement != '1' "> and a.is_settlement = #{isSettlement} </if>
+            <if test="isSettlement != null and !isSettlementBool "> and a.is_settlement = #{isSettlement} </if>
         </where>
     </select>
 

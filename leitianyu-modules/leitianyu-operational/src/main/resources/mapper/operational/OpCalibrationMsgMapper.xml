@@ -138,7 +138,7 @@
         <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and d.detect_engineering_parts  like concat('%', #{detectEngineeringParts}, '%')</if>
         <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
         inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
-        <if test="isSettlement != nul and isSettlement != '1' "> and b.is_settlement = #{isSettlement} </if>
+        <if test="isSettlement != null and !isSettlementBool "> and b.is_settlement = #{isSettlement} </if>
         <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
         <if test="businessManager != null  and businessManager != ''"> and b.business_manager like concat('%', #{businessManager}, '%')</if>
         <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
@@ -220,7 +220,7 @@
         <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
         inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
         and b.business_manager = #{businessManager}
-        <if test="isSettlement != nul and isSettlement != '1' "> and b.is_settlement = #{isSettlement} </if>
+        <if test="isSettlement != null and !isSettlementBool "> and b.is_settlement = #{isSettlement} </if>
         <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
         <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
         <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and b.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>

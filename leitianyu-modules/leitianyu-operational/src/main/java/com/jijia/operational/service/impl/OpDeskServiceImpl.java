@@ -83,11 +83,21 @@ public class OpDeskServiceImpl implements IOpDeskService
     @Override
     public List<OpDeskVo> selectOpDeskList(OpDeskInfo opDesk,Boolean bool)
     {
-        if (AuthUtil.hasPermi("op:desk:isSettlement")) {
-            opDesk.setIsSettlement("1");
-        } else {
-            opDesk.setIsSettlement("0");
+
+        if (opDesk.getIsSettlement() == null)  {
+            if (AuthUtil.hasPermi("op:desk:isSettlement")) {
+                opDesk.setIsSettlementBool(true);
+            } else {
+                opDesk.setIsSettlement("0");
+            }
+        } else if (opDesk.getIsSettlement().equals("1")) {
+            if (!AuthUtil.hasPermi("op:desk:isSettlement")) {
+                opDesk.setIsSettlement("0");
+            }
         }
+
+
+
         return opDeskMapper.selectOpDeskList(opDesk);
     }
 

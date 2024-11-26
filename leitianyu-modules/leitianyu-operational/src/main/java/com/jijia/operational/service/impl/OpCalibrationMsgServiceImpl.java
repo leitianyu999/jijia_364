@@ -53,10 +53,16 @@ public class OpCalibrationMsgServiceImpl implements IOpCalibrationMsgService
     @Override
     public List<OpCalibrationMsgVo> selectOpCalibrationMsgListOutPut(OpCalibrationMsgInfo opCalibrationMsg) {
 
-        if (AuthUtil.hasPermi("op:calibration:isSettlement:out")) {
-            opCalibrationMsg.setIsSettlement("1");
-        } else {
-            opCalibrationMsg.setIsSettlement("0");
+        if (opCalibrationMsg.getIsSettlement() == null)  {
+            if (AuthUtil.hasPermi("op:desk:isSettlement")) {
+                opCalibrationMsg.setSettlementBool(true);
+            } else {
+                opCalibrationMsg.setIsSettlement("0");
+            }
+        } else if (opCalibrationMsg.getIsSettlement().equals("1")) {
+            if (!AuthUtil.hasPermi("op:desk:isSettlement")) {
+                opCalibrationMsg.setIsSettlement("0");
+            }
         }
 
         return opCalibrationMsgMapper.selectOpCalibrationMsgListOutPut(opCalibrationMsg);

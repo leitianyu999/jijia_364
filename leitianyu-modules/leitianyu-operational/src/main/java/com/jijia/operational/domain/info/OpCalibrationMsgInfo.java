@@ -188,6 +188,8 @@ public class OpCalibrationMsgInfo extends BaseEntity
 
     private Integer entrustStatus;
 
+    private boolean isSettlementBool = false;
+
     public void setDeskId(Long deskId)
     {
         this.deskId = deskId;
@@ -200,6 +202,14 @@ public class OpCalibrationMsgInfo extends BaseEntity
     public void setPigeonholeSerialNumber(String pigeonholeSerialNumber)
     {
         this.pigeonholeSerialNumber = pigeonholeSerialNumber;
+    }
+
+    public boolean isSettlementBool() {
+        return isSettlementBool;
+    }
+
+    public void setSettlementBool(boolean settlementBool) {
+        isSettlementBool = settlementBool;
     }
 
     public String getIsUpdate() {
