@@ -12,12 +12,17 @@ spring:
     active: dev
   cloud:
     nacos:
+      username: nacos
+      password: nacos
       discovery:
         # 服务注册地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 100.93.241.96:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
+        ip: 100.106.226.16
       config:
         # 配置中心地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 100.93.241.96:28848
+        namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
         # 配置文件格式
         file-extension: yml
         # 共享配置

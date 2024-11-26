@@ -11,5 +11,6 @@ public interface CamundaWorkConstants {
     String PROCESS_PREFIX="Camunda:";
     String START_EVENT_ID="startEventNode";
     String EXPRESSION_CLASS="exUtils.";
+    String COMMENT_SPLIT="---";
 
 }

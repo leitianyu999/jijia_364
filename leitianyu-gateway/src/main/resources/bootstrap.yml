@@ -13,14 +13,14 @@ spring:
   cloud:
     nacos:
       username: nacos
-      password: nacos
+      password: Jijia@668699
       discovery:
         # 服务注册地址
-        server-addr: 192.168.100.74:28848
+        server-addr: leitianyu-nacos:8848
         namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
       config:
         # 配置中心地址
-        server-addr: 192.168.100.74:28848
+        server-addr: leitianyu-nacos:8848
         namespace: 69dd0ea5-1f9d-4791-a6d7-247290b372aa
         # 配置文件格式
         file-extension: yml
