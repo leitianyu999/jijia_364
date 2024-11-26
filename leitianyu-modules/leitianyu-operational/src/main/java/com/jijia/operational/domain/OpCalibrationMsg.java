@@ -3,9 +3,12 @@ package com.jijia.operational.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jijia.common.core.annotation.Excel;
 import com.jijia.common.core.web.domain.BaseEntity;
+import com.jijia.operational.utils.StringConverter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -98,12 +101,23 @@ public class OpCalibrationMsg extends BaseEntity
     @Excel(name = "修改报告收款日期", width = 30, dateFormat = "yyyy/MM/dd")
     private LocalDate updateCollectionTime;
 
+    @ExcelProperty(value = {"前台台账数据","是否结算"}, converter = StringConverter.class)
+    private String isSettlement;
+
     private Integer status;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
     private BigDecimal courierCoust;
+
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement;
+    }
 
     public void setDeskId(Long deskId)
     {

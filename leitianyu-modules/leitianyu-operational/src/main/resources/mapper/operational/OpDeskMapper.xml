@@ -26,6 +26,7 @@
         <result property="updateTime"    column="update_time"    />
         <result property="isInterpolation"    column="is_interpolation"    />
         <result property="status"    column="status"    />
+        <result property="isSettlement"    column="is_settlement"    />
     </resultMap>
 
     <resultMap type="OpDeskVo" id="OpDeskVoResult">
@@ -58,11 +59,12 @@
         <result property="entrustNote"    column="entrust_note"    />
         <result property="editDeptName"    column="editDeptName"    />
         <result property="visitDeptName"    column="visitDeptName"    />
+        <result property="isSettlement"    column="is_settlement"    />
     </resultMap>
 
     <sql id="selectOpDeskVo">
         select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
-               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,a.entrust_serial_number, a.record_serial_number,
+               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,a.entrust_serial_number, a.record_serial_number,a.is_settlement,
                a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,a.status,msg.entrust_status,msg.entrust_note,msg.detect_name,msg.detect_engineering_parts ,msg.detect_amount
         from op_desk a
         left join op_detect_msg msg on msg.desk_id = a.desk_id
@@ -71,7 +73,7 @@
 
     <sql id="selectOpDesk">
         select desk_id, project_type, issue_time, order_time, publisher, business_manager, entrustment_time,
-               project_id, parameter_code, program_type,
+               project_id, parameter_code, program_type,is_settlement,
                sample_amount, report_serial_number, entrust_serial_number, record_serial_number, remark, create_by,status,
                create_time, update_time,is_interpolation from op_desk
     </sql>
@@ -79,7 +81,7 @@
     <!--    修改时注意修改count-->
     <select id="selectOpDeskList" parameterType="OpDeskInfo" resultMap="OpDeskVoResult">
         select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
-        msg.detect_name,a.status, a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,
+        msg.detect_name,a.status, a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number, a.is_settlement,
         a.entrust_serial_number, a.record_serial_number, a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,msg.entrust_status,msg.entrust_note,msg.detect_engineering_parts ,msg.detect_amount
         ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
         ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
@@ -138,6 +140,7 @@
                 </foreach>
                 and dept.permission_level = 2)
             </if>
+            <if test="isSettlement != nul and isSettlement != '1' "> and a.is_settlement = #{isSettlement} </if>
         </where>
         GROUP BY a.desk_id
     </select>
@@ -198,12 +201,13 @@
                 </foreach>
                 and dept.permission_level = 2)
             </if>
+            <if test="isSettlement != nul and isSettlement != '1' "> and a.is_settlement = #{isSettlement} </if>
         </where>
     </select>
 
     <select id="selectOpDeskByDeskId" parameterType="Long" resultMap="OpDeskVoResult">
         select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
-               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,
+               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,a.is_settlement,
                a.entrust_serial_number, a.record_serial_number, a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,a.status,msg.entrust_status,msg.entrust_note,msg.detect_name,msg.detect_engineering_parts ,msg.detect_amount
                 ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
                 ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
@@ -295,7 +299,7 @@
     </select>
     <select id="selectOpDeskVoByNumber" resultMap="OpDeskVoResult">
         select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
-               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,
+               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number, a.is_settlement
                a.entrust_serial_number, a.record_serial_number, a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,a.status,msg.entrust_status,msg.entrust_note,msg.detect_name,msg.detect_engineering_parts ,msg.detect_amount
                 ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
                 ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
@@ -332,6 +336,7 @@
             <if test="updateTime != null">update_time,</if>
             <if test="isInterpolation != null">is_interpolation,</if>
             <if test="status != null">status,</if>
+            <if test="isSettlement != null">is_settlement,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deskId != null">#{deskId},</if>
@@ -354,6 +359,7 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="isInterpolation != null">#{isInterpolation},</if>
             <if test=" status != null">#{status},</if>
+            <if test=" isSettlement != null">#{isSettlement},</if>
         </trim>
     </insert>
 
@@ -378,6 +384,7 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
         </trim>
         where desk_id = #{deskId}
     </update>
@@ -394,6 +401,7 @@
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
         </trim>
         where desk_id = #{deskId}
     </update>
@@ -416,6 +424,7 @@
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
         </trim>
         where desk_id = #{deskId}
     </update>
@@ -437,6 +446,7 @@
             <if test="status != null">status = #{status},</if>
             <if test="programType != null">program_type = #{programType},</if>
             <if test="parameterCode != null">parameter_code = #{parameterCode},</if>
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
         </trim>
         where desk_id = #{deskId}
     </update>
@@ -450,6 +460,7 @@
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
         </trim>
         where desk_id = #{deskId}
     </update>

@@ -15,6 +15,7 @@ import com.jijia.common.core.constant.SecurityConstants;
 import com.jijia.common.core.domain.R;
 import com.jijia.common.core.exception.GlobalException;
 import com.jijia.common.core.utils.StringUtils;
+import com.jijia.common.security.auth.AuthUtil;
 import com.jijia.common.security.utils.SecurityUtils;
 import com.jijia.operational.domain.*;
 import com.jijia.operational.domain.info.OpDeskInfo;
@@ -82,6 +83,11 @@ public class OpDeskServiceImpl implements IOpDeskService
     @Override
     public List<OpDeskVo> selectOpDeskList(OpDeskInfo opDesk,Boolean bool)
     {
+        if (AuthUtil.hasPermi("op:desk:isSettlement")) {
+            opDesk.setIsSettlement("1");
+        } else {
+            opDesk.setIsSettlement("0");
+        }
         return opDeskMapper.selectOpDeskList(opDesk);
     }
 

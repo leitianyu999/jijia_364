@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jijia.common.core.exception.GlobalException;
 import com.jijia.common.core.utils.DateUtils;
+import com.jijia.common.security.auth.AuthUtil;
 import com.jijia.operational.domain.OpCalibrationMsg;
 import com.jijia.operational.domain.info.OpCalibrationMsgInfo;
 import com.jijia.operational.domain.vo.OpCalibrationMsgVo;
@@ -51,6 +52,13 @@ public class OpCalibrationMsgServiceImpl implements IOpCalibrationMsgService
      */
     @Override
     public List<OpCalibrationMsgVo> selectOpCalibrationMsgListOutPut(OpCalibrationMsgInfo opCalibrationMsg) {
+
+        if (AuthUtil.hasPermi("op:calibration:isSettlement:out")) {
+            opCalibrationMsg.setIsSettlement("1");
+        } else {
+            opCalibrationMsg.setIsSettlement("0");
+        }
+
         return opCalibrationMsgMapper.selectOpCalibrationMsgListOutPut(opCalibrationMsg);
     }
 
@@ -63,6 +71,13 @@ public class OpCalibrationMsgServiceImpl implements IOpCalibrationMsgService
     @Override
     public List<OpCalibrationMsgVo> selectOpCalibrationMsgList(OpCalibrationMsgInfo opCalibrationMsg)
     {
+
+        if (AuthUtil.hasPermi("op:calibration:isSettlement")) {
+            opCalibrationMsg.setIsSettlement("1");
+        } else {
+            opCalibrationMsg.setIsSettlement("0");
+        }
+
         return opCalibrationMsgMapper.selectOpCalibrationMsgList(opCalibrationMsg);
     }
 

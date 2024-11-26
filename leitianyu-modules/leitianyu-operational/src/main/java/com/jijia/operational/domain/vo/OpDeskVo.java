@@ -3,6 +3,7 @@ package com.jijia.operational.domain.vo;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jijia.common.core.annotation.Excel;
 import com.jijia.common.core.web.domain.BaseEntity;
 import com.jijia.operational.utils.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -138,6 +139,9 @@ public class OpDeskVo extends BaseEntity
     @ExcelProperty(value = {"前台台账数据","委托备注"})
     private String entrustNote;
 
+    @ExcelProperty(value = {"前台台账数据","是否结算"}, converter = StringConverter.class)
+    private String isSettlement;
+
     @ExcelProperty(value = {"前台台账数据","是否导入"} , converter = StringConverter.class)
     private String isImport;
 
@@ -147,6 +151,14 @@ public class OpDeskVo extends BaseEntity
     @ExcelProperty(value = {"前台台账数据","重复数量"})
     private Integer repeatNumber;
 
+
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement;
+    }
 
     public Integer getRepeatNumber() {
         return repeatNumber;

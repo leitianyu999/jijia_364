@@ -207,8 +207,18 @@ public class OpCalibrationMsgVo extends BaseEntity
     @ExcelProperty(value = {"综合部台账数据","修改报告收款日期"}, converter = LocalDateConverter.class)
     private LocalDate updateCollectionTime;
 
+    @ExcelProperty(value = {"前台台账数据","是否结算"}, converter = StringConverter.class)
+    private String isSettlement;
+
     private Integer sampleAmount;
 
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement;
+    }
 
     public String getDetectRemark() {
         return detectRemark;

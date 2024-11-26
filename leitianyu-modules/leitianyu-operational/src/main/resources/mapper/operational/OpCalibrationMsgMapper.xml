@@ -70,6 +70,7 @@
         <result property="recordSerialNumber"    column="record_serial_number"    />
         <result property="publisher"    column="publisher"    />
         <result property="businessManager"    column="business_manager"    />
+        <result property="isSettlement"    column="is_settlement"    />
 
         <result property="entrustmentUnit"    column="entrustment_unit"    />
         <result property="projectName"    column="project_name"    />
@@ -104,7 +105,7 @@
                c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.is_update, c.update_remark, c.receipt_time,
                c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag , c.status, c.is_update_time, c.is_update_collection, c.update_collection_time,
                b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
-               b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,
+               b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.is_settlement,
                b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,
                d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,d.detect_remark,
                d.detect_engineering_parts,d.entrust_status,d.entrust_note
@@ -119,7 +120,7 @@
         c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.receipt_time, c.is_update, c.update_remark,
         c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag ,c.status, c.is_update_time, c.is_update_collection, c.update_collection_time,
         b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
-        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,
+        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,b.is_settlement,
         b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,d.detect_remark,
         d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,
         d.detect_engineering_parts,d.entrust_status,d.entrust_note,b.sample_amount
@@ -137,6 +138,7 @@
         <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and d.detect_engineering_parts  like concat('%', #{detectEngineeringParts}, '%')</if>
         <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
         inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
+        <if test="isSettlement != nul and isSettlement != '1' "> and b.is_settlement = #{isSettlement} </if>
         <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
         <if test="businessManager != null  and businessManager != ''"> and b.business_manager like concat('%', #{businessManager}, '%')</if>
         <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
@@ -199,7 +201,7 @@
         c.courier_type, c.courier_number, c.address, c.addressee, c.report_addressee, c.receipt_time, c.is_update_time, c.is_update_collection, c.update_collection_time,
         c.remark_time, c.remark, c.create_time, c.update_time,c.courier_coust, c.del_flag ,c.status, c.is_update, c.update_remark,
         b.project_type,d.complete_report_date,b.entrustment_time,d.report_date,
-        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,
+        b.entrust_serial_number,b.report_serial_number,b.record_serial_number,b.publisher,b.status as deskStatus,b.order_time,b.issue_time,b.is_settlement,
         b.business_manager,a.entrustment_unit,a.project_name,d.detect_name,d.sample_msg,d.detect_remark,
         d.detect_code,d.detect_amount,d.unit,d.detect_personnel,d.verify_personnel,d.compose_personnel,
         d.detect_engineering_parts,d.entrust_status,d.entrust_note,b.sample_amount
@@ -218,6 +220,7 @@
         <if test="entrustStatus != null"> and d.entrust_status  =  #{entrustStatus} </if>
         inner join op_desk b on b.desk_id = c.desk_id and b.status in (0,3,4)
         and b.business_manager = #{businessManager}
+        <if test="isSettlement != nul and isSettlement != '1' "> and b.is_settlement = #{isSettlement} </if>
         <if test="publisher != null  and publisher != ''"> and b.publisher like concat('%', #{publisher}, '%')</if>
         <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and b.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
         <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and b.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>

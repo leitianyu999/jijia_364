@@ -80,11 +80,25 @@ public class OpDesk extends BaseEntity
     @Excel(name = "样品/记录编号")
     private String recordSerialNumber;
 
+    // 是否结算
+    @Excel(name = "是否结算")
+    private String isSettlement;
+
+
+
     /** 删除标志（0代表存在 2代表删除） */
     private String isInterpolation;
 
     private Integer status;
 
+
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement;
+    }
 
     public void setDeskId(Long deskId)
     {

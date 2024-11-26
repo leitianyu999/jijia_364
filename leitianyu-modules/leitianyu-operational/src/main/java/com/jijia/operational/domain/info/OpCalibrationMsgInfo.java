@@ -97,6 +97,10 @@ public class OpCalibrationMsgInfo extends BaseEntity
     @Excel(name = "修改报告收款日期")
     private LocalDate updateCollectionTime;
 
+    // 是否结算
+    @Excel(name = "是否结算")
+    private String isSettlement;
+
     private List<Integer> status;
 
     /** 删除标志（0代表存在 2代表删除） */
@@ -106,6 +110,13 @@ public class OpCalibrationMsgInfo extends BaseEntity
 
     private List<Integer> projectType;
 
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement;
+    }
 
     public LocalDate getIsUpdateTime() {
         return isUpdateTime;
