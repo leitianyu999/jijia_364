@@ -1,8 +1,13 @@
 package com.jijia.camunda.domain.dto;
 
+import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jijia.camunda.domain.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.List;
 
 /**
  * TODO
@@ -23,14 +28,20 @@ public class CmdFormDto extends BaseDO {
     /** 表单名 */
     private String name;
 
+    // 标识
+    private String code;
+
+    // 解释
+    private String remark;
+
     /** 开启状态 */
     private Integer status;
 
     /** 表单的配置 */
-    private String formConfig;
+    private JSONObject formConfig;
 
     /** 表单项的数组 */
-    private String widgetList;
+    private List<JSONObject> widgetList;
 
     /** 版本 */
     private Integer version;

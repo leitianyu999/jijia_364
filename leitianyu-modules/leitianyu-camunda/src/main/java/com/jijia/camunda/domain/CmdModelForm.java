@@ -1,5 +1,6 @@
 package com.jijia.camunda.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -15,7 +16,7 @@ import lombok.Data;
 @TableName(value = "cmd_model_form")
 public class CmdModelForm {
 
-    @TableId
+    @TableId(value = "model_id", type = IdType.ASSIGN_ID)
     private Long modelId;
 
     private Long formId;

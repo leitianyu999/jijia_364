@@ -2,12 +2,14 @@ package com.jijia.camunda.service.newS.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jijia.camunda.domain.CmdForm;
 import com.jijia.camunda.domain.CmdModel;
 import com.jijia.camunda.domain.CmdModelForm;
 import com.jijia.camunda.domain.dto.CmdModelDto;
 import com.jijia.camunda.domain.enums.ModelType;
 import com.jijia.camunda.domain.vo.CmdFormVo;
 import com.jijia.camunda.domain.vo.CmdModelVo;
+import com.jijia.camunda.mapper.newM.CmdFormMapper;
 import com.jijia.camunda.mapper.newM.CmdModelCateGoryMapper;
 import com.jijia.camunda.mapper.newM.CmdModelFormMapper;
 import com.jijia.camunda.mapper.newM.CmdModelMapper;
@@ -38,6 +40,8 @@ public class CmdModelServiceImpl implements CmdModelService {
     private CmdModelCateGoryMapper cmdModelCateGoryMapper;
     @Resource
     private CmdModelFormMapper cmdModelFormMapper;
+    @Resource
+    private CmdFormMapper cmdFormMapper;
 
     @Override
     public CmdFormVo getModel(Long id) {
@@ -46,13 +50,24 @@ public class CmdModelServiceImpl implements CmdModelService {
 
     @Override
     public List<CmdModelVo> getModelList(CmdModelDto cmdModelDto) {
-        return BeanUtil.copyToList(cmdModelMapper.selectCmdModelList(BeanUtil.toBean(cmdModelDto, CmdModel.class)), CmdModelVo.class);
+        List<CmdModelVo> cmdModelVos = BeanUtil.copyToList(cmdModelMapper.selectCmdModelList(BeanUtil.toBean(cmdModelDto, CmdModel.class)), CmdModelVo.class);
+
+        cmdModelVos.forEach(cmdModelVo -> {
+            CmdModelForm cmdModelForm = cmdModelFormMapper.selectById(cmdModelVo.getFormId());
+            if (cmdModelForm != null) {
+                CmdForm cmdForm = cmdFormMapper.selectById(cmdModelForm.getFormId());
+                cmdModelVo.setFormName(cmdForm.getName());
+                cmdModelVo.setFormId(cmdForm.getFormId());
+            }
+        });
+
+        return cmdModelVos;
     }
 
     @Override
     public int addModel(CmdModelDto cmdModelDto) {
         CmdModel model = BeanUtil.toBean(cmdModelDto, CmdModel.class);
-        if (model.getVersion() != 1) {
+        if (model.getVersion() == null || model.getVersion() != 1) {
             model.setModelId(1L);
         }
         model.setCreateBy(SecurityUtils.getUsername());

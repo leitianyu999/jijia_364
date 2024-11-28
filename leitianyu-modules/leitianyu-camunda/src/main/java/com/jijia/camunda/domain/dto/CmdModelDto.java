@@ -26,7 +26,7 @@ public class CmdModelDto extends BaseDO {
     private String name;
 
     /** bianma */
-    private String key;
+    private String code;
 
     /** 版本 */
     private Long version;

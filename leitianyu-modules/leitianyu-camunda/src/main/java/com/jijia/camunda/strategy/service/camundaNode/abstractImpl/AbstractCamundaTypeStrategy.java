@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jijia.camunda.domain.dto.ChildNode;
 import com.jijia.camunda.domain.dto.Properties;
 import com.jijia.camunda.domain.enums.CamundaNodeType;
-import com.jijia.camunda.enums.ModeEnums;
+import com.jijia.camunda.domain.enums.ModeEnums;
 import com.jijia.camunda.strategy.handler.HandlerCamundaNodeContext;
 import com.jijia.camunda.strategy.service.camundaNode.CamundaNodeStrategy;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +38,7 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
                                    Map<String, ChildNode> childNodeMap,
                                    SequenceFlow sequenceFlow,
                                    AbstractFlowNodeBuilder<?, ?> paramNode,
-                                   String  sequenceFlowId) {
+                                   String sequenceFlowId) {
 
         sequenceFlow.setId(sequenceFlowId);
         sequenceFlows.add(sequenceFlow);
@@ -60,19 +60,19 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
                                           List<SequenceFlow> sequenceFlows,
                                           Map<String, ChildNode> childNodeMap) {
         // 连线ID
-        String  sequenceFlowId = id("sequenceFlow");
+        String sequenceFlowId = id("sequenceFlow");
         // 跳到当前节点
         AbstractFlowNodeBuilder<?, ?> paramNode = moveToNode(cmdNode, from);
         BpmnModelInstance bpmnModelInstance = paramNode.done();
         FlowNode element = (FlowNode) paramNode.getElement();
         // 是否已经连线
         SequenceFlow sequenceFlow = iteratorSequenceFlow(element, from, to);
-        if(sequenceFlow==null){
+        if (sequenceFlow == null) {
             paramNode.connectTo(to);
-            sequenceFlow= iteratorSequenceFlow(element, from, to);
+            sequenceFlow = iteratorSequenceFlow(element, from, to);
         }
 
-        if(bpmnModelInstance.getModelElementById(from) !=null) {
+        if (bpmnModelInstance.getModelElementById(from) != null) {
             CamundaNodeStrategy instance = HandlerCamundaNodeContext.getInstance(CamundaNodeType.getByTypeClass(bpmnModelInstance.getModelElementById(from).getClass()));
             instance.afterConnectByFrom(cmdNode, toNode, from, to, sequenceFlows, childNodeMap, sequenceFlow, paramNode, sequenceFlowId);
         }
@@ -83,12 +83,12 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
 
     private static SequenceFlow iteratorSequenceFlow(FlowNode element, String from, String to) {
         Collection<SequenceFlow> outgoing = element.getOutgoing();
-        SequenceFlow resultSequenceFlow=null;
+        SequenceFlow resultSequenceFlow = null;
         for (SequenceFlow sequenceFlow : outgoing) {
-            if((ObjectUtil.isNotEmpty(sequenceFlow.getSource()) && sequenceFlow.getSource().getId().equals(from))
+            if ((ObjectUtil.isNotEmpty(sequenceFlow.getSource()) && sequenceFlow.getSource().getId().equals(from))
                     && (ObjectUtil.isNotEmpty(sequenceFlow.getTarget()) && sequenceFlow.getTarget().getId().equals(to))
-            ){
-                resultSequenceFlow=sequenceFlow;
+            ) {
+                resultSequenceFlow = sequenceFlow;
                 break;
             }
         }
@@ -96,10 +96,10 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
     }
 
     protected static String connectNextNode(AbstractFlowNodeBuilder<?, ?> builder,
-                                         String identifier,
-                                         ChildNode nextNode,
-                                         List<SequenceFlow> sequenceFlows,
-                                         Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
+                                            String identifier,
+                                            ChildNode nextNode,
+                                            List<SequenceFlow> sequenceFlows,
+                                            Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
         if (Objects.nonNull(nextNode) && StringUtils.isNotBlank(nextNode.getId())) {
             AbstractFlowNodeBuilder<?, ?> abstractFlowNodeBuilder = moveToNode(builder, identifier);
             CamundaNodeStrategy instance = HandlerCamundaNodeContext.getInstance(CamundaNodeType.valueOf(nextNode.getType()));
@@ -110,9 +110,9 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
     }
 
     protected static String createTask(AbstractFlowNodeBuilder startFlowNodeBuilder,
-                                     ChildNode flowNode,
-                                     List<SequenceFlow> sequenceFlows,
-                                     Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
+                                       ChildNode flowNode,
+                                       List<SequenceFlow> sequenceFlows,
+                                       Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
 
         // 获取当前任务的入口
         JSONObject incomingJson = flowNode.getIncoming();

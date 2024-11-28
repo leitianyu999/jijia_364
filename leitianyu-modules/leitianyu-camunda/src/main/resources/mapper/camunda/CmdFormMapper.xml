@@ -7,6 +7,7 @@
     <resultMap type="CmdForm" id="CmdFormResult">
         <result property="formId"    column="form_id"    />
         <result property="name"    column="name"    />
+        <result property="code"    column="code"    />
         <result property="status"    column="status"    />
         <result property="formConfig"    column="form_config"    />
         <result property="widgetList"    column="widget_list"    />
@@ -20,17 +21,24 @@
     </resultMap>
 
     <sql id="selectCmdFormVo">
-        select form_id, name, status, form_config, widget_list, version, remark, del_flag, create_by, create_time, update_by, update_time from cmd_form
+        select form_id, name, code, status, form_config, widget_list, version, remark, del_flag, create_by, create_time, update_by, update_time from cmd_form
     </sql>
 
     <select id="selectCmdFormList" parameterType="CmdForm" resultMap="CmdFormResult">
-        <include refid="selectCmdFormVo"/>
+        select form1.form_id, form1.name, form1.code, form1.status, form1.form_config, form1.widget_list, form1.version,
+        form1.remark, form1.del_flag, form1.create_by, form1.create_time, form1.update_by, form1.update_time
+        from cmd_form form1
+        INNER JOIN
+            ( SELECT form2.form_id,form2.code,
+                MAX( form2.version ) AS version
+                FROM cmd_form form2 GROUP BY form2.code ) form3
+        ON form1.version = form3.version
+
         <where>
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="formConfig != null  and formConfig != ''"> and form_config = #{formConfig}</if>
-            <if test="widgetList != null  and widgetList != ''"> and widget_list = #{widgetList}</if>
-            <if test="version != null "> and version = #{version}</if>
+            AND form1.code = form3.code
+            <if test="name != null  and name != ''"> and form1.name like concat('%', #{name}, '%')</if>
+            <if test="code != null  and code != ''"> and form1.code like concat('%', #{code}, '%')</if>
+            <if test="status != null "> and form1.status = #{status}</if>
         </where>
     </select>
 

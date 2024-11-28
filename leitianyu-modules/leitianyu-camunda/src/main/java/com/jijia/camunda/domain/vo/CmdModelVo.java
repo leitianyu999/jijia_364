@@ -27,7 +27,7 @@ public class CmdModelVo extends BaseDO {
     private Long categoryId;
 
     /** bianma */
-    private String key;
+    private String code;
 
     /** 版本 */
     private Long version;
@@ -40,6 +40,9 @@ public class CmdModelVo extends BaseDO {
 
     /** 表单id */
     private Long formId;
+
+
+    private String formName;
 
     /** 状态 */
     private String status;

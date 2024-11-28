@@ -1,5 +1,6 @@
 package com.jijia.camunda.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -22,14 +23,14 @@ public class CmdModel extends BaseDO{
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long modelId;
 
     /** 名称 */
     private String name;
 
     /** bianma */
-    private String key;
+    private String code;
 
     /** 版本 */
     private Long version;

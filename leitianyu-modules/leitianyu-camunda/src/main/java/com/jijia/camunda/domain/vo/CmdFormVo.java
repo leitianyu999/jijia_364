@@ -1,8 +1,11 @@
 package com.jijia.camunda.domain.vo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jijia.camunda.domain.BaseDO;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * TODO
@@ -22,6 +25,12 @@ public class CmdFormVo extends BaseDO {
 
     /** 表单名 */
     private String name;
+
+    // 标识
+    private String code;
+
+    // 解释
+    private String remark;
 
     /** 开启状态 */
     private Integer status;

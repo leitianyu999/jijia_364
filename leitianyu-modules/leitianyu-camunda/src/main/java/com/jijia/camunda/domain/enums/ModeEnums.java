@@ -1,22 +1,18 @@
-package com.jijia.camunda.enums;
+package com.jijia.camunda.domain.enums;
 
 /**
  * @Author:LoveMyOrange
  * @Description:
  * @Date:Created in 2022/10/9 18:15
  */
-public enum  AssigneeTypeEnums {
-  ASSIGN_USER("ASSIGN_USER"),
-  SELF_SELECT("SELF_SELECT"),
-  LEADER_TOP("LEADER_TOP"),
-  LEADER("LEADER"),
-  ROLE("ROLE"),
-  SELF("SELF"),
-  FORM_USER("FORM_USER");
+public enum ModeEnums {
+  AND("AND"),
+  OR("OR"),
+  NEXT("NEXT");
 
   private String typeName;
 
-  AssigneeTypeEnums(String typeName) {
+  ModeEnums(String typeName) {
     this.typeName = typeName;
   }
 
