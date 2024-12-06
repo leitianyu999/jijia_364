@@ -12,5 +12,8 @@ public interface CamundaWorkConstants {
     String START_EVENT_ID="startEventNode";
     String EXPRESSION_CLASS="exUtils.";
     String COMMENT_SPLIT="---";
-
+    String DEFAULT_NULL_ASSIGNEE="100000000000";
+    String DEFAULT_ADMIN_ASSIGNEE="381496";
+    String AUTO_REFUSE_STR="autoRefuse";
+    String MULTI_BODY="#multiInstanceBody";
 }
