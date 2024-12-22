@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.User;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -77,6 +79,28 @@ public class SysUserController extends BaseController
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
+
+    /**
+     * 获取用户名称列表
+     */
+    @RequiresPermissions("system:user:simpleList")
+    @GetMapping("/simpleList")
+    public TableDataInfo simpleList(SysUser user)
+    {
+        startPage();
+        SysUser simpleUser = new SysUser();
+        simpleUser.setUserName(user.getUserName());
+        List<SysUser> list = userService.selectUserList(simpleUser);
+        List<SysUser> userList = list.stream().map(use -> {
+            SysUser u = new SysUser();
+            u.setUserId(use.getUserId());
+            u.setUserName(use.getUserName());
+            return u;
+        }).collect(Collectors.toList());
+        return getDataTable(userList);
+    }
+
+
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
@@ -197,11 +221,11 @@ public class SysUserController extends BaseController
      */
     @RequiresPermissions("system:user:queryName")
     @GetMapping(value = {  "/name/{userId}" })
-    public R<String> getInfoName(@PathVariable(value = "userId") Long userId)
+    public R<SysUser> getInfoName(@PathVariable(value = "userId") Long userId)
     {
         userService.checkUserDataScope(userId);
         SysUser sysUser = userService.selectUserById(userId);
-        return R.ok(sysUser.getUserName());
+        return R.ok(sysUser);
     }
 
 

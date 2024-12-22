@@ -34,6 +34,15 @@ public interface ISysUserService
      */
     public List<SysUser> selectUnallocatedList(SysUser user);
 
+
+    /**
+     * 根据
+     *
+     * @param postId 岗位ID
+     * @return 用户信息集合信息
+     */
+    public List<SysUser> selectUserListByPost(Long postId);
+
     /**
      * 通过用户名查询用户
      * 

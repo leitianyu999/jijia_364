@@ -100,6 +100,20 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.selectUnallocatedList(user);
     }
 
+
+    /**
+     * 根据
+     *
+     * @param postId 岗位ID
+     * @return 用户信息集合信息
+     */
+    @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
+    public List<SysUser> selectUserListByPost(Long postId)
+    {
+        return userMapper.selectUserListByPost(postId);
+    }
+
     /**
      * 通过用户名查询用户
      * 

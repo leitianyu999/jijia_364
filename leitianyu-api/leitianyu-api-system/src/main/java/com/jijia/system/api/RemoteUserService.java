@@ -1,5 +1,7 @@
 package com.jijia.system.api;
 
+import com.jijia.common.core.web.domain.AjaxResult;
+import com.jijia.system.api.domain.SysRole;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,9 @@ import com.jijia.common.core.domain.R;
 import com.jijia.system.api.domain.SysUser;
 import com.jijia.system.api.factory.RemoteUserFallbackFactory;
 import com.jijia.system.api.model.LoginUser;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户服务
@@ -49,6 +54,7 @@ public interface RemoteUserService
      * @return 结果
      */
     @GetMapping("/user/name/{userId}")
-    public R<String> getInfoName(@PathVariable("userId") Long userId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    public R<SysUser> getInfoName(@PathVariable("userId") Long userId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+
 
 }

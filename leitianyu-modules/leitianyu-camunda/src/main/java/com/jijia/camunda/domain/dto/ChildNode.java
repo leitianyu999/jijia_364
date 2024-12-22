@@ -22,7 +22,7 @@ public class ChildNode {
     private Properties props;
     private ChildNode children;
     private List<ChildNode> branchs;
-    private String parallelStr;
+//    private String parallelStr;
     private JSONObject incoming=new JSONObject();
     private Boolean typeElse;
     private JSONObject config;

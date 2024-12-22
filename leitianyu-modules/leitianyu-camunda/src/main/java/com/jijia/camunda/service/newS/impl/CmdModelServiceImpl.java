@@ -16,11 +16,21 @@ import com.jijia.camunda.mapper.newM.CmdModelMapper;
 import com.jijia.camunda.service.newS.CmdModelService;
 import com.jijia.camunda.strategy.handler.HandlerModelContext;
 import com.jijia.camunda.strategy.service.modelUpdate.ModelStrategy;
+import com.jijia.camunda.utils.BpmnUtils;
+import com.jijia.camunda.utils.CamundaFlowUtils;
 import com.jijia.common.core.exception.GlobalException;
 import com.jijia.common.security.utils.SecurityUtils;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.repository.Deployment;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.model.bpmn.Bpmn;
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,10 +52,21 @@ public class CmdModelServiceImpl implements CmdModelService {
     private CmdModelFormMapper cmdModelFormMapper;
     @Resource
     private CmdFormMapper cmdFormMapper;
+    @Resource
+    private RepositoryService repositoryService;
 
     @Override
-    public CmdFormVo getModel(Long id) {
-        return BeanUtil.toBean(cmdModelMapper.selectById(id), CmdFormVo.class);
+    public CmdModelVo getModel(Long id) {
+        CmdModelVo cmdModelVo = BeanUtil.toBean(cmdModelMapper.selectById(id), CmdModelVo.class);
+        if (cmdModelVo != null) {
+            CmdModelForm cmdModelForm = cmdModelFormMapper.selectById(cmdModelVo.getModelId());
+            if (cmdModelForm != null) {
+                CmdForm cmdForm = cmdFormMapper.selectById(cmdModelForm.getFormId());
+                cmdModelVo.setFormName(cmdForm.getName());
+                cmdModelVo.setFormId(cmdForm.getFormId());
+            }
+        }
+        return cmdModelVo;
     }
 
     @Override
@@ -53,11 +74,48 @@ public class CmdModelServiceImpl implements CmdModelService {
         List<CmdModelVo> cmdModelVos = BeanUtil.copyToList(cmdModelMapper.selectCmdModelList(BeanUtil.toBean(cmdModelDto, CmdModel.class)), CmdModelVo.class);
 
         cmdModelVos.forEach(cmdModelVo -> {
-            CmdModelForm cmdModelForm = cmdModelFormMapper.selectById(cmdModelVo.getFormId());
+
+
+            CmdModelForm cmdModelForm = cmdModelFormMapper.selectById(cmdModelVo.getModelId());
             if (cmdModelForm != null) {
                 CmdForm cmdForm = cmdFormMapper.selectById(cmdModelForm.getFormId());
                 cmdModelVo.setFormName(cmdForm.getName());
                 cmdModelVo.setFormId(cmdForm.getFormId());
+                cmdModelVo.setFormVersion(cmdForm.getVersion().toString());
+            }
+
+            if (cmdModelVo.getVersion() == 1 && !cmdModelVo.getStatus().equals("0")) {
+                cmdModelVo.setDeployFormId(cmdModelVo.getFormId());
+                cmdModelVo.setDeployFormName(cmdModelVo.getFormName());
+                cmdModelVo.setDeployFormVersion(cmdModelVo.getFormVersion());
+                cmdModelVo.setDeployDescription(cmdModelVo.getDescription());
+                cmdModelVo.setDeployVersion(cmdModelVo.getVersion());
+                cmdModelVo.setDeployModelId(cmdModelVo.getModelId());
+                cmdModelVo.setDeployStatus(cmdModelVo.getStatus());
+            } else if (cmdModelVo.getVersion() != 1) {
+                LambdaQueryWrapper<CmdModel> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(CmdModel::getCode, cmdModelVo.getCode());
+                wrapper.eq(CmdModel::getVersion, cmdModelVo.getVersion() - 1);
+                CmdModel cmdModel = cmdModelMapper.selectOne(wrapper);
+                if (cmdModel != null) {
+                    cmdModelVo.setDeployDescription(cmdModel.getDescription());
+                    cmdModelVo.setDeployVersion(cmdModel.getVersion());
+                    cmdModelVo.setDeployModelId(cmdModel.getModelId());
+                    cmdModelVo.setDeployStatus(cmdModel.getStatus());
+                    cmdModelVo.setDeployTime(cmdModel.getDeployTime());
+
+                    CmdModelForm cmdDeployModelForm = cmdModelFormMapper.selectById(cmdModelVo.getModelId());
+                    if (cmdDeployModelForm != null) {
+                        CmdForm cmdForm = cmdFormMapper.selectById(cmdDeployModelForm.getFormId());
+                        cmdModelVo.setDeployFormName(cmdForm.getName());
+                        cmdModelVo.setDeployFormId(cmdForm.getFormId());
+                        cmdModelVo.setDeployFormVersion(cmdForm.getVersion().toString());
+                    } else {
+                        throw new GlobalException("上一版本模型表单不存在");
+                    }
+                } else {
+                    throw new GlobalException("上一版本模型不存在");
+                }
             }
         });
 
@@ -66,13 +124,30 @@ public class CmdModelServiceImpl implements CmdModelService {
 
     @Override
     public int addModel(CmdModelDto cmdModelDto) {
+
+        CmdModel cmdModel = cmdModelMapper.selectOne(new LambdaQueryWrapper<CmdModel>().eq(CmdModel::getCode, cmdModelDto.getCode()));
+        if (cmdModel != null) {
+            throw new GlobalException("模型编码已存在");
+        }
+
         CmdModel model = BeanUtil.toBean(cmdModelDto, CmdModel.class);
         if (model.getVersion() == null || model.getVersion() != 1) {
             model.setModelId(1L);
         }
         model.setCreateBy(SecurityUtils.getUsername());
         model.setCreateTime(new Date());
-        return cmdModelMapper.insert(model);
+        int insert = cmdModelMapper.insert(model);
+        if (cmdModelDto.getFormId() != null) {
+            CmdModelForm cmdModelForm = new CmdModelForm();
+            cmdModelForm.setFormId(cmdModelDto.getFormId());
+            cmdModelForm.setModelId(model.getModelId());
+            int insert1 = cmdModelFormMapper.insert(cmdModelForm);
+            if (insert1 == 0) {
+                throw new GlobalException("模型表单关联失败");
+            }
+            insert += insert1;
+        }
+        return insert;
     }
 
     @Override
@@ -97,6 +172,84 @@ public class CmdModelServiceImpl implements CmdModelService {
     @Override
     public int deleteModel(Long id) {
         return cmdModelMapper.deleteById(id);
+    }
+
+    @Override
+    public int reployModel(Long modelId) {
+        CmdModel cmdModel = cmdModelMapper.selectById(modelId);
+        if (cmdModel == null) {
+            throw new GlobalException("模型不存在");
+        }
+
+        // 是否是最新的模型
+        CmdModel newModel = cmdModelMapper.selectOne(new LambdaQueryWrapper<CmdModel>().eq(CmdModel::getCode,
+                cmdModel.getCode()).eq(CmdModel::getVersion, cmdModel.getVersion() + 1));
+        if (newModel != null) {
+            throw new GlobalException("系统错误：存在新版本模型");
+        }
+
+
+        if (cmdModel.getStatus().equals("1")) {
+            throw new GlobalException("模型已发布");
+        } else if (cmdModel.getStatus().equals("2")) {
+            if (cmdModel.getDeploymentId() == null) {
+                throw new GlobalException("系统错误：模型未发布");
+            }
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(cmdModel.getDeploymentId()).singleResult();
+            if (processDefinition != null) {
+                repositoryService.activateProcessDefinitionById(processDefinition.getId());
+                cmdModel.setStatus("1");
+                cmdModel.setDeployTime(new Date());
+                cmdModel.setUpdateBy(SecurityUtils.getUsername());
+                cmdModel.setUpdateTime(new Date());
+                return cmdModelMapper.updateById(cmdModel);
+            } else {
+                throw new GlobalException("系统错误：流程定义不存在");
+            }
+        } else {
+            // 发布模型
+            // 1.校验表单是否存在
+            validateForm(cmdModel);
+
+            // 获取模型的xml
+            BpmnModelInstance xml = BpmnUtils.getBpmnXmlByJson(cmdModel);
+            // 2.校验bpmn
+            Bpmn.validateModel(xml);
+            validateBpmn(xml);
+
+            // 3.发布模型
+            Deployment deployment = repositoryService.createDeployment()
+                    .addModelInstance(cmdModel.getName() + ".bpmn", xml)
+                    .name(cmdModel.getName())
+                    .deploy();
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Bpmn.writeModelToStream(outputStream, xml);
+            byte[] bytes = outputStream.toByteArray();
+            cmdModel.setStatus("1");
+            cmdModel.setBpmnXml(Arrays.toString(bytes));
+            cmdModel.setDeploymentId(processDefinition.getDeploymentId());
+            return cmdModelMapper.updateById(cmdModel);
+        }
+    }
+
+    private void validateBpmn(BpmnModelInstance xml) {
+        if (xml == null) {
+            throw new GlobalException("模型生成失败");
+        }
+        BpmnUtils.validateBpmn(xml);
+    }
+
+    private void validateForm(CmdModel cmdModel) {
+        CmdModelForm cmdModelForm = cmdModelFormMapper.selectById(cmdModel.getModelId());
+        if (cmdModelForm == null) {
+            throw new GlobalException("模型表单关联不存在");
+        }
+        CmdForm cmdForm = cmdFormMapper.selectById(cmdModelForm.getFormId());
+        if (cmdForm == null) {
+            throw new GlobalException("模型表单不存在");
+        }
     }
 
 

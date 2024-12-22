@@ -25,6 +25,7 @@ import com.jijia.operational.utils.constants.DeskConstants;
 import com.jijia.system.api.RemoteUserService;
 import com.jijia.system.api.RemoterDeptService;
 import com.jijia.system.api.domain.SysDept;
+import com.jijia.system.api.domain.SysUser;
 import com.jijia.system.api.model.LoginUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -97,9 +98,9 @@ public class OpDetectMsgServiceImpl implements IOpDetectMsgService
                     if (item.getUserId().equals(SecurityUtils.getUserId())) {
                         item.setUserName(SecurityUtils.getUsername());
                     } else {
-                        R<String> infoName = remoteUserService.getInfoName(item.getUserId(), SecurityConstants.INNER);
-                        if (infoName.getCode() == HttpStatus.SUCCESS ) {
-                            item.setUserName(infoName.getData());
+                        R<SysUser> userR = remoteUserService.getInfoName(item.getUserId(), SecurityConstants.INNER);
+                        if (userR.getCode() == HttpStatus.SUCCESS ) {
+                            item.setUserName(userR.getData().getUserName());
                         }
                     }
 

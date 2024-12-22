@@ -68,6 +68,7 @@ public class HandlerCamundaNodeContext implements ApplicationContextAware {
     /**
      * 初始化
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static void initStrategy() {
         synchronized (LOCK) {
             // 获取接口下所有实例bean
@@ -92,13 +93,15 @@ public class HandlerCamundaNodeContext implements ApplicationContextAware {
                     }
                 }
                 // 支持多个事件类型
-                CamundaNodeType typeEnum = annotation.setNodeType();
+                CamundaNodeType[] typeEnum = annotation.setNodeType();
                 //String key = getKey(typeEnum.getOrderType());
-                if (orderStrategyBeanMap.containsKey(typeEnum)) {
-                    logger.error("代码配置错误：一个修改类型({})只能对应一个修改策略实现{}", typeEnum, strategyClazz.getName());
-                    throw new GlobalException("代码配置错误：一个模型类型(" + typeEnum + ")只能对应一个修改实现bean");
+                for (CamundaNodeType type : typeEnum) {
+                    if (orderStrategyBeanMap.containsKey(type)) {
+                        logger.error("代码配置错误：一个修改类型({})只能对应一个修改策略实现{}", typeEnum, strategyClazz.getName());
+                        throw new GlobalException("代码配置错误：一个模型类型(" + type + ")只能对应一个修改实现bean");
+                    }
+                    orderStrategyBeanMap.put(type, strategyClazz);
                 }
-                orderStrategyBeanMap.put(typeEnum, strategyClazz);
             }
 
             if (orderStrategyBeanMap.isEmpty()) {

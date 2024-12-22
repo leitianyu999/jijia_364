@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CmdModelService {
 
-    CmdFormVo getModel(Long id);
+    CmdModelVo getModel(Long id);
 
     List<CmdModelVo> getModelList(CmdModelDto cmdModelDto);
 
@@ -19,4 +19,5 @@ public interface CmdModelService {
 
     int deleteModel(Long id);
 
+    int reployModel(Long modelId);
 }

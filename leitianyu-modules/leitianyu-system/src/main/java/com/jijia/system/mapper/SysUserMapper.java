@@ -36,6 +36,14 @@ public interface SysUserMapper
     public List<SysUser> selectUnallocatedList(SysUser user);
 
     /**
+     * 根据条件分页查询岗位下的用户
+     *
+     * @param postId 岗位ID
+     * @return 用户信息集合信息
+     */
+    public List<SysUser> selectUserListByPost(Long postId);
+
+    /**
      * 通过用户名查询用户
      * 
      * @param userName 用户名

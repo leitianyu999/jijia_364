@@ -32,7 +32,7 @@ public class ModelUnreleasedImpl extends AbstractModelStrategy {
 
     public int updateBpmnXml(CmdModelDto cmdModelDto, CmdModel cmdModel) {
 
-        cmdModel.setBpmnXml(cmdModelDto.getBpmnXml());
+        cmdModel.setNodeJsonData(cmdModelDto.getNodeJsonData());
         cmdModel.setUpdateBy(SecurityUtils.getUsername());
         cmdModel.setUpdateTime(new Date());
         return cmdModelMapper.updateById(cmdModel);

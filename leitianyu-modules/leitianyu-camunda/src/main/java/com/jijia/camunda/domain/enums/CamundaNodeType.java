@@ -23,10 +23,16 @@ public enum CamundaNodeType {
      */
     CONDITION("CONDITION", Condition.class),
     CONDITIONS("CONDITIONS", ExclusiveGateway.class),
+    /*
+     * 包容事件
+     */
+    INCLUSIVE("INCLUSIVE", SequenceFlow.class),
+    INCLUSIVES("INCLUSIVES", InclusiveGateway.class),
     /**
      * 任务
      */
     USER_TASK("APPROVAL", UserTask.class),
+    TASK("TASK", UserTask.class),
     EMPTY("EMPTY", Object.class),
     ROOT("ROOT", UserTask.class),
     CC("CC", ServiceTask.class),

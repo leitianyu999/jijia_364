@@ -1,7 +1,12 @@
 package com.jijia.system.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jijia.common.core.domain.R;
+import com.jijia.system.api.domain.SysUser;
+import com.jijia.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +39,8 @@ public class SysPostController extends BaseController
 {
     @Autowired
     private ISysPostService postService;
+    @Autowired
+    private ISysUserService userService;
 
     /**
      * 获取岗位列表
@@ -65,6 +72,17 @@ public class SysPostController extends BaseController
     public AjaxResult getInfo(@PathVariable Long postId)
     {
         return success(postService.selectPostById(postId));
+    }
+
+    /**
+     * 查询已分配用户角色列表
+     */
+    @RequiresPermissions("system:post:getPostUser")
+    @GetMapping("/getPostUser/{postId}")
+    public R<List<Long>> getPostUser(@PathVariable("postId") Long postId) {
+        List<SysUser> list = userService.selectUserListByPost(postId);
+        List<Long> userList = list.stream().map(SysUser::getUserId).collect(Collectors.toList());
+        return R.ok(userList);
     }
 
     /**

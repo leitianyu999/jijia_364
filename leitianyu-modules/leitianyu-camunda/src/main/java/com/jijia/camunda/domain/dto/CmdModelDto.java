@@ -34,6 +34,9 @@ public class CmdModelDto extends BaseDO {
     /** 流程XML */
     private String bpmnXml;
 
+    /** node */
+    private String nodeJsonData;
+
     /** 流程部署id */
     private String deploymentId;
 

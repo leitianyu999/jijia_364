@@ -20,14 +20,16 @@ public class Properties {
     private List<Long> assignedUser;
     //发起人自旋  multiple true false
     private Map<String,Object> selfSelect;
-    //连续主管 endCondition TOP   LEAVE    endLevel  level
-    private Map<String,Object> leaderTop=new HashMap<>();
-    //指定主管审批
-    private Map<String,Object> leader=new HashMap<>();
+//    //连续主管 endCondition TOP   LEAVE    endLevel  level
+//    private Map<String,Object> leaderTop=new HashMap<>();
+//    //指定主管审批
+//    private Map<String,Object> leader=new HashMap<>();
     //系统角色
     private List<Map<String,Object>> role;
-    //表单人员
-    private String formUser;
+//    //表单人员
+//    private String formUser;
+    //系统岗位
+    private List<Map<String,Object>> post;
 
 
     //审批人为空的规则  hander 和 assignedUser
@@ -50,6 +52,7 @@ public class Properties {
     private Boolean shouldAdd;
     //
     private String type;
+
     private Long time;
     private String unit;
     private String dateTime;

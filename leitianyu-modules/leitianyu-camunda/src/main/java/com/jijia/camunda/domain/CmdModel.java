@@ -3,7 +3,10 @@ package com.jijia.camunda.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+
+import java.util.Date;
 
 /**
  * TODO
@@ -38,6 +41,9 @@ public class CmdModel extends BaseDO{
     /** 流程XML */
     private String bpmnXml;
 
+    /** node */
+    private String nodeJsonData;
+
     /** 流程部署id */
     private String deploymentId;
 
@@ -46,6 +52,10 @@ public class CmdModel extends BaseDO{
 
     /** 描述 */
     private String description;
+
+    /** 部署时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date deployTime;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;

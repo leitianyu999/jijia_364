@@ -10,9 +10,10 @@ public interface CamundaWorkConstants {
 
     String PROCESS_PREFIX="Camunda:";
     String START_EVENT_ID="startEventNode";
+    String END_EVENT_ID="endEventNode";
     String EXPRESSION_CLASS="exUtils.";
     String COMMENT_SPLIT="---";
-    String DEFAULT_NULL_ASSIGNEE="100000000000";
+    Long DEFAULT_NULL_ASSIGNEE=99999999L;
     String DEFAULT_ADMIN_ASSIGNEE="381496";
     String AUTO_REFUSE_STR="autoRefuse";
     String MULTI_BODY="#multiInstanceBody";

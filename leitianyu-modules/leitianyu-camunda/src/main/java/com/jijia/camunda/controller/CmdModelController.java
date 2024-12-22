@@ -89,4 +89,15 @@ public class CmdModelController extends BaseController {
         return toAjax(cmdModelService.deleteModel(modelId));
     }
 
+    /**
+     * 部署模型
+     */
+    @RequiresPermissions("camunda:model:deploy")
+    @Log(title = "部署模型", businessType = BusinessType.OTHER)
+    @PutMapping("/deploy/{modelId}")
+    public AjaxResult deploy(@PathVariable Long modelId)
+    {
+        return toAjax(cmdModelService.reployModel(modelId));
+    }
+
 }

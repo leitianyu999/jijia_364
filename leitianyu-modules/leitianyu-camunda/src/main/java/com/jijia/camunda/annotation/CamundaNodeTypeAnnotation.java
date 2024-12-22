@@ -2,7 +2,6 @@ package com.jijia.camunda.annotation;
 
 
 import com.jijia.camunda.domain.enums.CamundaNodeType;
-import com.jijia.camunda.domain.enums.ModelType;
 
 import java.lang.annotation.*;
 
@@ -20,7 +19,7 @@ public @interface CamundaNodeTypeAnnotation {
     /**
      * 模型修改策略
      */
-    CamundaNodeType setNodeType();
+    CamundaNodeType[] setNodeType();
 
 
 

@@ -16,7 +16,7 @@ import java.util.Map;
  * @author leitianyu
  */
 @Component
-@CamundaNodeTypeAnnotation(setNodeType = CamundaNodeType.USER_TASK)
+@CamundaNodeTypeAnnotation(setNodeType = {CamundaNodeType.USER_TASK, CamundaNodeType.TASK} )
 public class UserTaskImpl extends AbstractCamundaTypeStrategy {
 
 

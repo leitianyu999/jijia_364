@@ -1,7 +1,10 @@
 package com.jijia.system.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jijia.common.core.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -166,6 +169,7 @@ public class SysRoleController extends BaseController
     {
         return success(roleService.selectRoleAll());
     }
+
     /**
      * 查询已分配用户角色列表
      */
@@ -176,6 +180,19 @@ public class SysRoleController extends BaseController
         startPage();
         List<SysUser> list = userService.selectAllocatedList(user);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询已分配用户角色列表
+     */
+    @RequiresPermissions("system:role:getAuthUser")
+    @GetMapping("/authUser/getAuthUser/{roleId}")
+    public R<List<Long>> getAuthUser(@PathVariable("roleId") Long roleId) {
+        SysUser user = new SysUser();
+        user.setRoleId(roleId);
+        List<SysUser> list = userService.selectAllocatedList(user);
+        List<Long> userList = list.stream().map(SysUser::getUserId).collect(Collectors.toList());
+        return R.ok(userList);
     }
 
     /**

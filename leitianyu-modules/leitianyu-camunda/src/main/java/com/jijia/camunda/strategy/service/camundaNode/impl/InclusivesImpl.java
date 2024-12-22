@@ -15,6 +15,7 @@ import com.jijia.camunda.strategy.service.camundaNode.abstractImpl.AbstractCamun
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
 import org.camunda.bpm.model.bpmn.builder.ExclusiveGatewayBuilder;
+import org.camunda.bpm.model.bpmn.builder.InclusiveGatewayBuilder;
 import org.camunda.bpm.model.bpmn.instance.ConditionExpression;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
@@ -30,8 +31,8 @@ import java.util.stream.Collectors;
  * @author leitianyu
  */
 @Component
-@CamundaNodeTypeAnnotation(setNodeType = CamundaNodeType.CONDITIONS)
-public class ConditionsImpl extends AbstractCamundaTypeStrategy {
+@CamundaNodeTypeAnnotation(setNodeType = CamundaNodeType.INCLUSIVES)
+public class InclusivesImpl extends AbstractCamundaTypeStrategy {
 
 
     @Override
@@ -44,17 +45,17 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
         // 添加节点进入列表
         childNodeMap.put(flowNode.getId(), flowNode);
         String name = flowNode.getName();
-        String exclusiveGatewayId = flowNode.getId();
+        String InclusiveGatewayId = flowNode.getId();
 
         // 创建排他网关
-        ExclusiveGatewayBuilder exclusiveGatewayBuilder = builder.exclusiveGateway(exclusiveGatewayId).name(name);
+        InclusiveGatewayBuilder inclusiveGatewayBuilder = builder.inclusiveGateway(InclusiveGatewayId).name(name);
         AbstractFlowNodeBuilder<?, ?> fromBuilder = moveToNode(builder, eventId);
-        AbstractFlowNodeBuilder<?, ?> toBuilder = moveToNode(builder, exclusiveGatewayId);
-        connect(fromBuilder, toBuilder, eventId, exclusiveGatewayId, sequenceFlows, childNodeMap);
+        AbstractFlowNodeBuilder<?, ?> toBuilder = moveToNode(builder, InclusiveGatewayId);
+        connect(fromBuilder, toBuilder, eventId, InclusiveGatewayId, sequenceFlows, childNodeMap);
 
         // 排他网关的后置节点是否存在
         if (Objects.isNull(flowNode.getBranchs()) && Objects.isNull(flowNode.getChildren())) {
-            return exclusiveGatewayId;
+            return InclusiveGatewayId;
         }
 
         // 排他网关的后置条件节点列表
@@ -74,13 +75,13 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
 
             // 设置默认分支
             if (Boolean.TRUE.equals(typeElse)) {
-                exclusiveGatewayBuilder.defaultFlow(exclusiveGatewayBuilder.done().getModelElementById(element.getId()));
+                inclusiveGatewayBuilder.defaultFlow(inclusiveGatewayBuilder.done().getModelElementById(element.getId()));
             }
 
             // 是否有子节点
             if (Objects.isNull(childNode) || StringUtils.isBlank(childNode.getId())) {
 
-                incoming.add(exclusiveGatewayId);
+                incoming.add(InclusiveGatewayId);
                 JSONObject condition = new JSONObject();
                 // 设置条件内容
                 condition.fluentPut("nodeName", nodeName)
@@ -97,12 +98,12 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
 
             // 只生成一个任务，同时设置当前任务的条件
             JSONObject incomingObj = childNode.getIncoming();
-            incomingObj.put("incoming", Collections.singletonList(exclusiveGatewayId));
+            incomingObj.put("incoming", Collections.singletonList(InclusiveGatewayId));
 
             CamundaNodeStrategy instance = HandlerCamundaNodeContext.getInstance(CamundaNodeType.valueOf(childNode.getType()));
-            String identifier = instance.connect(exclusiveGatewayBuilder, exclusiveGatewayId, childNode, sequenceFlows, childNodeMap);
+            String identifier = instance.connect(inclusiveGatewayBuilder, InclusiveGatewayId, childNode, sequenceFlows, childNodeMap);
 
-            List<SequenceFlow> flows = sequenceFlows.stream().filter(flow -> StringUtils.equals(exclusiveGatewayId, flow.getSource().getId()))
+            List<SequenceFlow> flows = sequenceFlows.stream().filter(flow -> StringUtils.equals(InclusiveGatewayId, flow.getSource().getId()))
                     .collect(Collectors.toList());
             flows.stream().forEach(
                     e -> {
@@ -111,11 +112,11 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
                         }
                         // 设置条件表达式
                         if (Objects.isNull(e.getConditionExpression()) && StringUtils.isNotBlank(expression)) {
-                            Method createInstance = getDeclaredMethod(exclusiveGatewayBuilder, "createInstance", Class.class);
+                            Method createInstance = getDeclaredMethod(inclusiveGatewayBuilder, "createInstance", Class.class);
                             Objects.requireNonNull(createInstance).setAccessible(true);
                             ConditionExpression conditionExpression = null;
                             try {
-                                conditionExpression = (ConditionExpression) createInstance.invoke(exclusiveGatewayBuilder, ConditionExpression.class);
+                                conditionExpression = (ConditionExpression) createInstance.invoke(inclusiveGatewayBuilder, ConditionExpression.class);
                             } catch (IllegalAccessException | InvocationTargetException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -140,11 +141,11 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
             String type = childNode.getType();
             if (!CamundaNodeType.EMPTY.isEqual(type)) {
             } else {
-                if (CamundaNodeType.CONDITIONS.isEqual(parentChildNode.getType())) {
+                if (CamundaNodeType.INCLUSIVES.isEqual(parentChildNode.getType())) {
                     String endExId = parentChildNode.getId() + "ex";
                     if (incoming.isEmpty()) {
                         CamundaNodeStrategy instance = HandlerCamundaNodeContext.getInstance(CamundaNodeType.valueOf(childNode.getType()));
-                        return instance.connect(exclusiveGatewayBuilder, exclusiveGatewayId, childNode, sequenceFlows,
+                        return instance.connect(inclusiveGatewayBuilder, InclusiveGatewayId, childNode, sequenceFlows,
                                 childNodeMap);
                     } else {
                         JSONObject incomingObj = childNode.getIncoming();
@@ -171,7 +172,7 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
                             List<SequenceFlow> flows = sequenceFlows.stream().filter(
                                             flow -> StringUtils.equals(flowElement1.getId(), flow.getTarget().getId()))
                                     .filter(
-                                            flow -> StringUtils.equals(flow.getSource().getId(), exclusiveGatewayId))
+                                            flow -> StringUtils.equals(flow.getSource().getId(), InclusiveGatewayId))
                                     .collect(Collectors.toList());
                             flows.forEach(sequenceFlow -> {
                                 if (!conditions.isEmpty()) {
@@ -186,11 +187,11 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
                                     // 设置条件表达式
                                     if (Objects.isNull(sequenceFlow.getConditionExpression())
                                             && StringUtils.isNotBlank(expression)) {
-                                        Method createInstance = getDeclaredMethod(exclusiveGatewayBuilder, "createInstance", Class.class);
+                                        Method createInstance = getDeclaredMethod(inclusiveGatewayBuilder, "createInstance", Class.class);
                                         createInstance.setAccessible(true);
                                         ConditionExpression conditionExpression = null;
                                         try {
-                                            conditionExpression = (ConditionExpression) createInstance.invoke(exclusiveGatewayBuilder, ConditionExpression.class);
+                                            conditionExpression = (ConditionExpression) createInstance.invoke(inclusiveGatewayBuilder, ConditionExpression.class);
                                         } catch (IllegalAccessException e) {
                                             throw new RuntimeException(e);
                                         } catch (InvocationTargetException e) {
@@ -203,7 +204,7 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
                                     FlowElement flowElement2 = builder.done().getModelElementById(sequenceFlow.getId());
                                     if (flowElement2 != null) {
                                         flowElement2.setId(condition.getString("elseSequenceFlowId"));
-                                        exclusiveGatewayBuilder.defaultFlow(exclusiveGatewayBuilder.done().getModelElementById(flowElement2.getId()));
+                                        inclusiveGatewayBuilder.defaultFlow(inclusiveGatewayBuilder.done().getModelElementById(flowElement2.getId()));
                                         ;
                                     }
 
@@ -222,7 +223,7 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
             }
 
         }
-        return exclusiveGatewayId;
+        return InclusiveGatewayId;
     }
 
     @Override

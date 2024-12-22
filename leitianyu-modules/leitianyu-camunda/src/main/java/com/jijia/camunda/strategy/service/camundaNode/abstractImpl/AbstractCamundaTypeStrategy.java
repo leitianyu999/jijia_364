@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
+import org.camunda.bpm.model.bpmn.builder.EndEventBuilder;
 import org.camunda.bpm.model.bpmn.builder.MultiInstanceLoopCharacteristicsBuilder;
 import org.camunda.bpm.model.bpmn.builder.UserTaskBuilder;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -51,6 +52,11 @@ public abstract class AbstractCamundaTypeStrategy implements CamundaNodeStrategy
 
     protected static String id(String prefix) {
         return prefix + "_" + UUID.randomUUID().toString().replace("-", "").toLowerCase();
+    }
+
+    @Override
+    public void connect(AbstractFlowNodeBuilder<?, ?> builder, String eventId, EndEventBuilder endEventBuilder, List<SequenceFlow> sequenceFlows, Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
+        connect(builder, endEventBuilder, eventId, endEventBuilder.getElement().getId(), sequenceFlows, childNodeMap);
     }
 
     protected static SequenceFlow connect(AbstractFlowNodeBuilder<?, ?> cmdNode,

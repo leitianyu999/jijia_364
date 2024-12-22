@@ -1,5 +1,6 @@
 package com.jijia.system.api.factory;
 
+import com.jijia.common.core.web.domain.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -38,8 +39,8 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
             }
 
             @Override
-            public R<String> getInfoName(Long userId, String source) {
-                return R.fail("获取用户名称失败:" + throwable.getMessage());
+            public R<SysUser> getInfoName(Long userId, String source) {
+                return R.fail("获取用户信息失败:" + throwable.getMessage());
             }
         };
     }

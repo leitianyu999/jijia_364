@@ -60,6 +60,7 @@ public class ConcurrentsImpl extends AbstractCamundaTypeStrategy {
         List<String> incoming = Lists.newArrayListWithCapacity(flowNodes.size());
 
         // 遍历后置节点
+
         for (ChildNode element : flowNodes) {
             childNodeMap.put(element.getId(), element);
             ChildNode childNode = element.getChildren();
