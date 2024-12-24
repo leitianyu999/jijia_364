@@ -36,9 +36,10 @@
         FROM cmd_model m2 GROUP BY m2.code ) m3
         ON m1.version = m3.version
         <where>
-            AND m1.code = m3.code
+            AND m1.code = m3.code AND m1.del_flag = 0
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="code != null  and code != ''"> and key = #{code}</if>
         </where>
+        order by m1.create_time desc
     </select>
 </mapper>

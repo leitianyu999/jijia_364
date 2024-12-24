@@ -1,8 +1,10 @@
 package com.jijia.camunda.domain.enums;
 
 import com.google.common.collect.Maps;
+import com.jijia.camunda.constants.CamundaWorkConstants;
 import org.camunda.bpm.model.bpmn.instance.*;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -31,13 +33,15 @@ public enum CamundaNodeType {
     /**
      * 任务
      */
-    USER_TASK("APPROVAL", UserTask.class),
+    APPROVAL("APPROVAL", UserTask.class),
     TASK("TASK", UserTask.class),
-    EMPTY("EMPTY", Object.class),
     ROOT("ROOT", UserTask.class),
     CC("CC", ServiceTask.class),
     TRIGGER("TRIGGER", ServiceTask.class),
-    DELAY("DELAY", IntermediateCatchEvent.class);
+    DELAY("DELAY", IntermediateCatchEvent.class),
+    START_EVENT(CamundaWorkConstants.START_EVENT_ID, StartEvent.class),
+    END_EVENT(CamundaWorkConstants.END_EVENT_ID, EndEvent.class),
+    EMPTY("EMPTY", Object.class),;
     private String type;
 
     private Class<?> typeClass;
@@ -47,10 +51,12 @@ public enum CamundaNodeType {
         this.typeClass = typeClass;
     }
 
+
+
     public static CamundaNodeType getByTypeClass(Class<?> typeClass) {
         for (CamundaNodeType element : CamundaNodeType.values()) {
             // 判断是否继承
-            if (element.typeClass.isInstance(typeClass)) {
+            if (typeClass.isInstance(element.typeClass) || Arrays.stream(typeClass.getInterfaces()).anyMatch(aClass -> aClass.equals(element.typeClass))) {
                 return element;
             }
         }

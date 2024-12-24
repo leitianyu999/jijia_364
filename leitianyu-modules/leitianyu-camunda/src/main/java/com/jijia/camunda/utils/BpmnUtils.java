@@ -135,12 +135,20 @@ public class BpmnUtils {
                 if (StringUtils.isNotBlank(branch.getId()) && branch.getId().equals(nodeId)){
                     return branch;
                 }
-                return getChildNode(branch.getChildren(),nodeId);
+                if (branch.getChildren()!=null){
+                    ChildNode result = getChildNode(branch.getChildren(), nodeId);
+                    if (result!=null && StringUtils.isNotBlank(result.getId())){
+                        return result;
+                    }
+                }
             }
         }
 
-        if (childNode.getChildren()!=null){
-            return getChildNode(childNode.getChildren(),nodeId);
+        if (childNode.getChildren()!=null && StringUtils.isNotBlank(childNode.getChildren().getId())){
+            ChildNode result = getChildNode(childNode.getChildren(), nodeId);
+            if (result!=null && StringUtils.isNotBlank(result.getId())){
+                return result;
+            }
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package com.jijia.camunda.strategy.service.modelUpdate.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.jijia.camunda.annotation.ModelAnnotation;
 import com.jijia.camunda.domain.CmdModel;
@@ -40,8 +41,16 @@ public class ModelUnreleasedImpl extends AbstractModelStrategy {
 
     @Override
     public int updateModelForm(CmdModelDto cmdModelDto, CmdModel cmdModel) {
-        CmdModelForm cmdModelForm = cmdModelFormMapper.selectOne(new LambdaQueryChainWrapper<>(cmdModelFormMapper).eq(CmdModelForm::getModelId, cmdModel.getModelId()));
+        LambdaQueryWrapper<CmdModelForm> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CmdModelForm::getModelId, cmdModel.getModelId());
+        CmdModelForm cmdModelForm = cmdModelFormMapper.selectOne(queryWrapper);
         if (cmdModelForm != null) {
+            if (cmdModel.getNodeJsonData() != null) {
+                cmdModel.setNodeJsonData(null);
+                cmdModel.setUpdateBy(SecurityUtils.getUsername());
+                cmdModel.setUpdateTime(new Date());
+                cmdModelMapper.updateById(cmdModel);
+            }
             cmdModelForm.setFormId(cmdModelDto.getFormId());
             return cmdModelFormMapper.updateById(cmdModelForm);
         } else {
@@ -50,6 +59,11 @@ public class ModelUnreleasedImpl extends AbstractModelStrategy {
             add.setFormId(cmdModelDto.getFormId());
             return cmdModelFormMapper.insert(add);
         }
+    }
+
+    @Override
+    public int updateModelStatus(CmdModelDto cmdModelDto, CmdModel cmdModel) {
+        throw new RuntimeException("未发布模型不允许修改状态");
     }
 
 

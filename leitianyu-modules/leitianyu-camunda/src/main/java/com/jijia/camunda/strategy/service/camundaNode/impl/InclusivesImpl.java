@@ -214,6 +214,7 @@ public class InclusivesImpl extends AbstractCamundaTypeStrategy {
 
                         }
 
+                        childNode.setChildren(nextNode);
                         // 1.1 边连接完成后，在进行 nextNode 创建
                         return connectNextNode(builder, identifier, nextNode, sequenceFlows, childNodeMap);
                     }

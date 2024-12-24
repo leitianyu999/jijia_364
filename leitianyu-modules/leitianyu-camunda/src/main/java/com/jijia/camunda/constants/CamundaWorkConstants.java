@@ -8,7 +8,7 @@ package com.jijia.camunda.constants;
  */
 public interface CamundaWorkConstants {
 
-    String PROCESS_PREFIX="Camunda:";
+    String PROCESS_PREFIX="Camunda-";
     String START_EVENT_ID="startEventNode";
     String END_EVENT_ID="endEventNode";
     String EXPRESSION_CLASS="exUtils.";

@@ -16,14 +16,12 @@ import java.util.Map;
  * @author leitianyu
  */
 @Component
-@CamundaNodeTypeAnnotation(setNodeType = {CamundaNodeType.APPROVAL, CamundaNodeType.TASK} )
-public class UserTaskImpl extends AbstractCamundaTypeStrategy {
+@CamundaNodeTypeAnnotation(setNodeType = CamundaNodeType.START_EVENT)
+public class StartEventImpl extends AbstractCamundaTypeStrategy {
 
 
     @Override
     public String connect(AbstractFlowNodeBuilder<?, ?> builder, String eventId, ChildNode flowNode, List<SequenceFlow> sequenceFlows, Map<String, ChildNode> childNodeMap) throws InvocationTargetException, IllegalAccessException {
-        return super.taskConnect(builder, eventId, flowNode, sequenceFlows, childNodeMap);
+        return super.taskConnect(builder,eventId,flowNode,sequenceFlows,childNodeMap);
     }
-
-
 }

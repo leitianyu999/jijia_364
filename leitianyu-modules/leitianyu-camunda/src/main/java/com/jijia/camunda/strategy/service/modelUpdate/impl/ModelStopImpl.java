@@ -1,16 +1,11 @@
 package com.jijia.camunda.strategy.service.modelUpdate.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.jijia.camunda.annotation.ModelAnnotation;
-import com.jijia.camunda.domain.CmdForm;
 import com.jijia.camunda.domain.CmdModel;
 import com.jijia.camunda.domain.CmdModelForm;
 import com.jijia.camunda.domain.dto.CmdModelDto;
 import com.jijia.camunda.domain.enums.ModelType;
-import com.jijia.camunda.mapper.newM.CmdFormMapper;
-import com.jijia.camunda.mapper.newM.CmdModelCateGoryMapper;
 import com.jijia.camunda.mapper.newM.CmdModelFormMapper;
 import com.jijia.camunda.mapper.newM.CmdModelMapper;
 import com.jijia.camunda.strategy.service.modelUpdate.abstractImpl.AbstractModelStrategy;
@@ -27,42 +22,24 @@ import java.util.Date;
  * @author leitianyu
  */
 @Component
-@ModelAnnotation(modelUpdateType = ModelType.is_PUBLISH)
-public class ModelPublishImpl extends AbstractModelStrategy {
+@ModelAnnotation(modelUpdateType = ModelType.is_STOP)
+public class ModelStopImpl extends AbstractModelStrategy {
 
     @Resource
     private CmdModelMapper cmdModelMapper;
     @Resource
     private CmdModelFormMapper cmdModelFormMapper;
     @Resource
-    private CmdFormMapper cmdFormMapper;
-    @Resource
-    private CmdModelCateGoryMapper cmdModelCateGoryMapper;
-    @Resource
     private RepositoryService repositoryService;
 
 
-
-    @Override
     public int updateBpmnXml(CmdModelDto cmdModelDto, CmdModel cmdModel) {
         return newModel(cmdModelDto, cmdModel);
     }
 
     @Override
     public int updateModelForm(CmdModelDto cmdModelDto, CmdModel cmdModel) {
-        LambdaQueryWrapper<CmdForm> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(CmdForm::getFormId, cmdModelDto.getFormId());
-        CmdForm cmdForm = cmdFormMapper.selectOne(queryWrapper);
-        if (cmdForm == null) {
-            throw new GlobalException("表单不存在");
-        }
-
-        int insert = addNewModelNotNode(cmdModelDto, cmdModel);
-
-        CmdModelForm cmdModelForm = new CmdModelForm();
-        cmdModelForm.setFormId(cmdForm.getFormId());
-        cmdModelForm.setModelId(cmdModel.getModelId());
-        return insert + cmdModelFormMapper.insert(cmdModelForm);
+        throw new GlobalException("已发布模型不允许修改表单");
     }
 
     @Override
@@ -72,10 +49,11 @@ public class ModelPublishImpl extends AbstractModelStrategy {
         if (processDefinition == null) {
             throw new GlobalException("流程定义不存在");
         }
-        repositoryService.suspendProcessDefinitionById(processDefinition.getId());
-        cmdModel.setStatus("2");
+        repositoryService.activateProcessDefinitionById(processDefinition.getId());
+        cmdModel.setStatus("1");
         cmdModel.setUpdateBy(SecurityUtils.getUsername());
         cmdModel.setUpdateTime(new Date());
+        cmdModel.setDeployTime(new Date());
         return cmdModelMapper.updateById(cmdModel);
     }
 

@@ -106,8 +106,8 @@ public class CmdFormServiceImpl implements CmdFormService {
         List<CmdModelForm> cmdModelForms = cmdModelFormMapper.selectList(queryWrapper);
         for (CmdModelForm cmdModelForm : cmdModelForms) {
             LambdaQueryWrapper<CmdModel> queryWrapperModel = new LambdaQueryWrapper<>();
-            queryWrapperModel.eq(CmdModel::getModelId, cmdModelForm.getModelId())
-                    .eq(CmdModel::getStatus, 1);
+            queryWrapperModel.eq(CmdModel::getModelId, cmdModelForm.getModelId());
+            queryWrapperModel.and(i -> i.eq(CmdModel::getStatus, 2).or().eq(CmdModel::getStatus, 1).or().isNotNull(CmdModel::getNodeJsonData));
             CmdModel cmdModel = cmdModelMapper.selectOne(queryWrapperModel);
             if (cmdModel != null) {
                 return true;

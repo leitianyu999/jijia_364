@@ -72,10 +72,7 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
             Properties props = element.getProps();
             String expression = props.getExpression();
 
-            // 设置默认分支
-            if (Boolean.TRUE.equals(typeElse)) {
-                exclusiveGatewayBuilder.defaultFlow(exclusiveGatewayBuilder.done().getModelElementById(element.getId()));
-            }
+
 
             // 是否有子节点
             if (Objects.isNull(childNode) || StringUtils.isBlank(childNode.getId())) {
@@ -128,6 +125,11 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
             );
             if (Objects.nonNull(identifier)) {
                 incoming.add(identifier);
+            }
+
+            // 设置默认分支
+            if (Boolean.TRUE.equals(typeElse)) {
+                exclusiveGatewayBuilder.defaultFlow(exclusiveGatewayBuilder.done().getModelElementById(element.getId()));
             }
 
         }
@@ -213,6 +215,7 @@ public class ConditionsImpl extends AbstractCamundaTypeStrategy {
 
                         }
 
+                        childNode.setChildren(nextNode);
                         // 1.1 边连接完成后，在进行 nextNode 创建
                         return connectNextNode(builder, identifier, nextNode, sequenceFlows, childNodeMap);
                     }

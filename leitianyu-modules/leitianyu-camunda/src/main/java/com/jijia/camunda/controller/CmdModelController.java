@@ -72,6 +72,7 @@ public class CmdModelController extends BaseController {
      */
     @RequiresPermissions("camunda:model:edit")
     @Log(title = "模型修改", businessType = BusinessType.UPDATE)
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping
     public AjaxResult edit(@RequestBody CmdModelDto cmdModel)
     {
@@ -83,6 +84,7 @@ public class CmdModelController extends BaseController {
      */
     @RequiresPermissions("system:model:remove")
     @Log(title = "删除模型", businessType = BusinessType.DELETE)
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{modelId}")
     public AjaxResult remove(@PathVariable Long modelId)
     {
@@ -94,6 +96,7 @@ public class CmdModelController extends BaseController {
      */
     @RequiresPermissions("camunda:model:deploy")
     @Log(title = "部署模型", businessType = BusinessType.OTHER)
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping("/deploy/{modelId}")
     public AjaxResult deploy(@PathVariable Long modelId)
     {

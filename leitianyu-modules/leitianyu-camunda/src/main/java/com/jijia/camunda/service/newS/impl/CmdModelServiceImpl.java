@@ -20,6 +20,7 @@ import com.jijia.camunda.utils.BpmnUtils;
 import com.jijia.camunda.utils.CamundaFlowUtils;
 import com.jijia.common.core.exception.GlobalException;
 import com.jijia.common.security.utils.SecurityUtils;
+import org.bouncycastle.math.raw.Mod;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -92,6 +93,15 @@ public class CmdModelServiceImpl implements CmdModelService {
                 cmdModelVo.setDeployVersion(cmdModelVo.getVersion());
                 cmdModelVo.setDeployModelId(cmdModelVo.getModelId());
                 cmdModelVo.setDeployStatus(cmdModelVo.getStatus());
+            } else if (cmdModelVo.getVersion() != 1 && !cmdModelVo.getStatus().equals("0")) {
+                cmdModelVo.setDeployFormId(cmdModelVo.getFormId());
+                cmdModelVo.setDeployFormName(cmdModelVo.getFormName());
+                cmdModelVo.setDeployFormVersion(cmdModelVo.getFormVersion());
+                cmdModelVo.setDeployDescription(cmdModelVo.getDescription());
+                cmdModelVo.setDeployVersion(cmdModelVo.getVersion());
+                cmdModelVo.setDeployModelId(cmdModelVo.getModelId());
+                cmdModelVo.setDeployStatus(cmdModelVo.getStatus());
+                cmdModelVo.setDeployTime(cmdModelVo.getDeployTime());
             } else if (cmdModelVo.getVersion() != 1) {
                 LambdaQueryWrapper<CmdModel> wrapper = new LambdaQueryWrapper<>();
                 wrapper.eq(CmdModel::getCode, cmdModelVo.getCode());
@@ -104,7 +114,7 @@ public class CmdModelServiceImpl implements CmdModelService {
                     cmdModelVo.setDeployStatus(cmdModel.getStatus());
                     cmdModelVo.setDeployTime(cmdModel.getDeployTime());
 
-                    CmdModelForm cmdDeployModelForm = cmdModelFormMapper.selectById(cmdModelVo.getModelId());
+                    CmdModelForm cmdDeployModelForm = cmdModelFormMapper.selectById(cmdModel.getModelId());
                     if (cmdDeployModelForm != null) {
                         CmdForm cmdForm = cmdFormMapper.selectById(cmdDeployModelForm.getFormId());
                         cmdModelVo.setDeployFormName(cmdForm.getName());
@@ -158,13 +168,7 @@ public class CmdModelServiceImpl implements CmdModelService {
             throw new GlobalException("模型不存在");
         }
 
-        ModelStrategy instance;
-
-        if (cmdModel.getStatus().equals("1")) {
-            instance = HandlerModelContext.getInstance(ModelType.is_PUBLISH);
-        } else {
-            instance = HandlerModelContext.getInstance(ModelType.is_NOT_PUBLISH);
-        }
+        ModelStrategy instance = HandlerModelContext.getInstance(ModelType.getEnum(cmdModel.getStatus()));
 
         return instance.updateModel(cmdModelDto, cmdModel);
     }
@@ -224,12 +228,31 @@ public class CmdModelServiceImpl implements CmdModelService {
                     .deploy();
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
 
+            // 4.挂起模型
+            LambdaQueryWrapper<CmdModel> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(CmdModel::getCode, cmdModel.getCode()).eq(CmdModel::getVersion, cmdModel.getVersion() - 1);
+            CmdModel cmdModel1 = cmdModelMapper.selectOne(wrapper);
+            if (cmdModel1 != null) {
+                ProcessDefinition processDefinition1 = repositoryService.createProcessDefinitionQuery().deploymentId(cmdModel1.getDeploymentId()).singleResult();
+                if (processDefinition1 != null) {
+                    repositoryService.suspendProcessDefinitionById(processDefinition1.getId());
+                } else {
+                    throw new GlobalException("系统错误：上一版本流程定义不存在");
+                }
+                cmdModel1.setStatus("2");
+                cmdModel1.setUpdateTime(new Date());
+                cmdModel1.setUpdateBy(SecurityUtils.getUsername());
+                cmdModelMapper.updateById(cmdModel1);
+            }
+
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Bpmn.writeModelToStream(outputStream, xml);
-            byte[] bytes = outputStream.toByteArray();
             cmdModel.setStatus("1");
-            cmdModel.setBpmnXml(Arrays.toString(bytes));
+            cmdModel.setBpmnXml(outputStream.toString());
             cmdModel.setDeploymentId(processDefinition.getDeploymentId());
+            cmdModel.setDeployTime(new Date());
+            cmdModel.setUpdateBy(SecurityUtils.getUsername());
+            cmdModel.setUpdateTime(new Date());
             return cmdModelMapper.updateById(cmdModel);
         }
     }

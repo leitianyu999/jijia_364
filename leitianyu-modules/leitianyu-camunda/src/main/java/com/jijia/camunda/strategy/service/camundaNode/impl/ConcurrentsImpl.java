@@ -114,7 +114,7 @@ public class ConcurrentsImpl extends AbstractCamundaTypeStrategy {
                             connect(abstractFlowNodeBuilder, toNode, incoming.get(i), identifier, sequenceFlows, childNodeMap);
                         }
                         // 1.1 边连接完成后，在进行 nextNode 创建
-
+                        childNode.setChildren(nextNode);
                         return connectNextNode(builder, identifier, nextNode, sequenceFlows, childNodeMap);
                     }
                 }

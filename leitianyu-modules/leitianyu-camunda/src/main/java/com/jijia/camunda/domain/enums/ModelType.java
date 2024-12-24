@@ -11,7 +11,9 @@ public enum ModelType {
 
     is_PUBLISH("已发布"),
     is_NOT_PUBLISH("未发布"),
+    is_STOP("已停用"),
     ;
+
 
 
 
@@ -23,6 +25,17 @@ public enum ModelType {
     }
 
 
+    public static ModelType getEnum(String value) {
+        switch (value) {
+            case "1":
+                return is_PUBLISH;
+            case "0":
+                return is_NOT_PUBLISH;
+            case "2":
+                return is_STOP;
+        }
+        return null;
+    }
 
 
 }
