@@ -1,15 +1,16 @@
-package com.jijia.operational.domain.info;
+package com.jijia.operational.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jijia.common.core.annotation.Excel;
 import com.jijia.common.core.web.domain.BaseEntity;
+import com.jijia.operational.utils.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.Max;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,8 @@ import java.util.List;
  * @author leitianyu
  * @date 2023-02-04
  */
-public class OpDeskInfo extends BaseEntity
+@ExcelIgnoreUnannotated
+public class OpSettleVo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -26,109 +28,130 @@ public class OpDeskInfo extends BaseEntity
     private Long deskId;
 
     /** 工程类别 */
-    @Excel(name = "工程类别")
-    private List<Integer> projectType;
+    @ExcelProperty(value = {"前台台账数据","工程类别"},converter = ProjectTypeConverter.class)
+    private Integer projectType;
 
     /** 发单日期 */
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     @JsonFormat(pattern = "yyyy/MM/dd")
-    @Excel(name = "发单日期", width = 30, dateFormat = "yyyy/MM/dd")
-    private List<LocalDate> issueTime;
+    @ExcelProperty(value = {"前台台账数据","发单日期"},converter = LocalDateConverter.class)
+    private LocalDate issueTime;
 
     /** 下单日期 */
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     @JsonFormat(pattern = "yyyy/MM/dd")
-    @Excel(name = "下单日期", width = 30, dateFormat = "yyyy/MM/dd")
-    private List<LocalDate> orderTime;
-
-    /** 工程名称 */
-    @Excel(name = "工程名称")
-    private String projectName;
+    @ExcelProperty(value = {"前台台账数据","下单日期"},converter = LocalDateConverter.class)
+    private LocalDate orderTime;
 
     /** 下单人 */
-    @Excel(name = "下单人")
+    @ExcelProperty(value = {"前台台账数据","下单人"})
     private String publisher;
 
     /** 业务经理 */
-    @Excel(name = "业务经理")
+    @ExcelProperty(value = {"前台台账数据","业务经理"})
     private String businessManager;
 
     /** 委托日期 */
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     @JsonFormat(pattern = "yyyy/MM/dd")
-    @Excel(name = "委托日期", width = 30, dateFormat = "yyyy/MM/dd")
-    private List<LocalDate> entrustmentTime;
+    @ExcelProperty(value = {"前台台账数据","委托日期"},converter = LocalDateConverter.class)
+    private LocalDate entrustmentTime;
 
     private LocalDate firstTime;
 
     private LocalDate lastTime;
 
-    private List<Long> deskIds;
-
 
     /** 委托单位 */
-    @Excel(name = "委托单位")
+    @ExcelProperty(value = {"前台台账数据","委托单位"})
     private String entrustmentUnit;
+
+    /** 工程名称 */
+    @ExcelProperty(value = {"前台台账数据","工程名称"})
+    private String projectName;
 
     /** 工程id */
     private Long projectId;
 
     /** 检测项目 */
-    @Excel(name = "检测项目")
+    @ExcelProperty(value = {"前台台账数据","检测项目"})
     private String detectName;
 
 
     /** 工程部位 */
-    @Excel(name = "工程部位")
+    @ExcelProperty(value = {"前台台账数据","工程部位（原材需填）"})
     private String detectEngineeringParts;
 
     /** 数量 */
-    @Excel(name = "数量")
+    @ExcelProperty(value = {"前台台账数据","数量"})
+    @Max(value = 20000,message = "数量不能超过20000")
     private Double detectAmount;
 
     /** 参数代码 */
-    @Excel(name = "参数代码")
+    @ExcelProperty(value = {"前台台账数据","参数代码"})
     private String parameterCode;
 
     /** 项目类型 */
-    @Excel(name = "项目类型")
+    @ExcelProperty(value = {"前台台账数据","检测类别"},converter = ProgramTypeConverter.class)
     private Integer programType;
 
-    private Integer entrustStatus;
-
     /** 样品数量 */
-    @Excel(name = "样品数量")
+    @ExcelProperty(value = {"前台台账数据","样品数量"})
+    @Max(value = 20000,message = "数量不能超过20000")
     private Integer sampleAmount;
 
     /** 报告编号 */
-    @Excel(name = "报告编号")
+    @ExcelProperty(value = {"前台台账数据","报告编号"})
     private String reportSerialNumber;
 
     /** 委托编号 */
-    @Excel(name = "委托编号")
+    @ExcelProperty(value = {"前台台账数据","委托编号"})
     private String entrustSerialNumber;
 
     /** 样品/记录编号 */
-    @Excel(name = "样品/记录编号")
+    @ExcelProperty(value = {"前台台账数据","样品/记录编号"})
     private String recordSerialNumber;
 
-    // 是否结算
-    @Excel(name = "是否结算")
-    private String isSettlement;
+    @ExcelProperty(value = {"前台台账数据","备注"})
+    /** 备注 */
+    private String remark;
 
-    @Excel(name = "结算金额")
-    private Integer settleAmount;
-
-    private boolean isSettlementBool = false;
-
-    /** 删除标志（0代表存在 2代表删除） */
+    @ExcelProperty(value = {"前台台账数据","综合判定是否插号"} , converter = StringConverter.class)
     private String isInterpolation;
 
-    private List<Integer> status;
+    @ExcelProperty(value = {"前台台账数据","状态"},converter = StatusConverter.class)
+    private Integer status;
+
+    @ExcelProperty(value = {"前台台账数据","分配部门"})
+    private String editDeptName;
 
     private List<Long> editDeptId;
 
+    @ExcelProperty(value = {"前台台账数据","查看部门"})
+    private String visitDeptName;
+
     private List<Long> visitDeptId;
+
+    @ExcelProperty(value = {"前台台账数据","委托状态"},converter = EntrustStatusConverter.class)
+    private Integer entrustStatus;
+
+    @ExcelProperty(value = {"前台台账数据","委托备注"})
+    private String entrustNote;
+
+    @ExcelProperty(value = {"前台台账数据","是否结算"}, converter = StringConverter.class)
+    private String isSettlement;
+
+    @ExcelProperty(value = {"前台台账数据","结算金额"})
+    private Integer settleAmount;
+
+    @ExcelProperty(value = {"前台台账数据","是否导入"} , converter = StringConverter.class)
+    private String isImport;
+
+    @ExcelProperty(value = {"前台台账数据","是否修改"} , converter = StringConverter.class)
+    private String isUpdate;
+
+    @ExcelProperty(value = {"前台台账数据","重复数量"})
+    private Integer repeatNumber;
 
     public Integer getSettleAmount() {
         return settleAmount;
@@ -136,14 +159,6 @@ public class OpDeskInfo extends BaseEntity
 
     public void setSettleAmount(Integer settleAmount) {
         this.settleAmount = settleAmount;
-    }
-
-    public boolean getIsSettlementBool() {
-        return isSettlementBool;
-    }
-
-    public void setIsSettlementBool(boolean isSettlementBool) {
-        this.isSettlementBool = isSettlementBool;
     }
 
     public String getIsSettlement() {
@@ -154,65 +169,66 @@ public class OpDeskInfo extends BaseEntity
         this.isSettlement = isSettlement;
     }
 
+    public Integer getRepeatNumber() {
+        return repeatNumber;
+    }
+
+    public void setRepeatNumber(Integer repeatNumber) {
+        this.repeatNumber = repeatNumber;
+    }
+
     public void setDeskId(Long deskId)
     {
         this.deskId = deskId;
+    }
+
+    public String getIsUpdate() {
+        return isUpdate;
+    }
+
+    public void setIsUpdate(String isUpdate) {
+        this.isUpdate = isUpdate;
     }
 
     public Long getDeskId()
     {
         return deskId;
     }
-    public void setProjectType(List<Integer> projectType)
+    public void setProjectType(Integer projectType)
     {
         this.projectType = projectType;
     }
 
-    public List<Integer> getProjectType()
+    public String getIsImport() {
+        return isImport;
+    }
+
+    public void setIsImport(String isImport) {
+        this.isImport = isImport;
+    }
+
+    public Integer getProjectType()
     {
         return projectType;
     }
-
-    public List<LocalDate> getIssueTime() {
-        return issueTime;
-    }
-
-    public void setIssueTime(List<LocalDate> issueTime) {
+    public void setIssueTime(LocalDate issueTime)
+    {
         this.issueTime = issueTime;
     }
 
-    public List<LocalDate> getOrderTime() {
-        return orderTime;
+    public LocalDate getIssueTime()
+    {
+        return issueTime;
     }
-
-    public void setOrderTime(List<LocalDate> orderTime) {
+    public void setOrderTime(LocalDate orderTime)
+    {
         this.orderTime = orderTime;
     }
 
-    public Integer getEntrustStatus() {
-        return entrustStatus;
+    public LocalDate getOrderTime()
+    {
+        return orderTime;
     }
-
-    public List<Long> getEditDeptId() {
-        return editDeptId;
-    }
-
-    public void setEditDeptId(List<Long> editDeptId) {
-        this.editDeptId = editDeptId;
-    }
-
-    public List<Long> getVisitDeptId() {
-        return visitDeptId;
-    }
-
-    public void setVisitDeptId(List<Long> visitDeptId) {
-        this.visitDeptId = visitDeptId;
-    }
-
-    public void setEntrustStatus(Integer entrustStatus) {
-        this.entrustStatus = entrustStatus;
-    }
-
     public void setProjectName(String projectName)
     {
         this.projectName = projectName;
@@ -227,6 +243,31 @@ public class OpDeskInfo extends BaseEntity
         this.publisher = publisher;
     }
 
+
+    public Integer getEntrustStatus() {
+        return entrustStatus;
+    }
+
+    public void setEntrustStatus(Integer entrustStatus) {
+        this.entrustStatus = entrustStatus;
+    }
+
+    public String getEntrustNote() {
+        return entrustNote;
+    }
+
+    public void setEntrustNote(String entrustNote) {
+        this.entrustNote = entrustNote;
+    }
+
+    public String getEditDeptName() {
+        return editDeptName;
+    }
+
+    public void setEditDeptName(String editDeptName) {
+        this.editDeptName = editDeptName;
+    }
+
     public String getPublisher()
     {
         return publisher;
@@ -236,35 +277,67 @@ public class OpDeskInfo extends BaseEntity
         this.businessManager = businessManager;
     }
 
-    public List<Long> getDeskIds() {
-        return deskIds;
-    }
-
-    public void setDeskIds(List<Long> deskIds) {
-        this.deskIds = deskIds;
-    }
-
-    public List<Integer> getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(List<Integer> status) {
+    public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<Long> getEditDeptId() {
+        return editDeptId;
+    }
+
+    public String getDetectEngineeringParts() {
+        return detectEngineeringParts;
+    }
+
+    public void setDetectEngineeringParts(String detectEngineeringParts) {
+        this.detectEngineeringParts = detectEngineeringParts;
+    }
+
+    public String getVisitDeptName() {
+        return visitDeptName;
+    }
+
+    public void setVisitDeptName(String visitDeptName) {
+        this.visitDeptName = visitDeptName;
+    }
+
+    public List<Long> getVisitDeptId() {
+        return visitDeptId;
+    }
+
+    public void setVisitDeptId(List<Long> visitDeptId) {
+        this.visitDeptId = visitDeptId;
+    }
+
+    public Double getDetectAmount() {
+        return detectAmount;
+    }
+
+    public void setDetectAmount(Double detectAmount) {
+        this.detectAmount = detectAmount;
+    }
+
+    public void setEditDeptId(List<Long> editDeptId) {
+        this.editDeptId = editDeptId;
     }
 
     public String getBusinessManager()
     {
         return businessManager;
     }
-
-    public List<LocalDate> getEntrustmentTime() {
-        return entrustmentTime;
-    }
-
-    public void setEntrustmentTime(List<LocalDate> entrustmentTime) {
+    public void setEntrustmentTime(LocalDate entrustmentTime)
+    {
         this.entrustmentTime = entrustmentTime;
     }
 
+    public LocalDate getEntrustmentTime()
+    {
+        return entrustmentTime;
+    }
     public void setEntrustmentUnit(String entrustmentUnit)
     {
         this.entrustmentUnit = entrustmentUnit;
@@ -304,22 +377,6 @@ public class OpDeskInfo extends BaseEntity
     public void setProgramType(Integer programType)
     {
         this.programType = programType;
-    }
-
-    public String getDetectEngineeringParts() {
-        return detectEngineeringParts;
-    }
-
-    public void setDetectEngineeringParts(String detectEngineeringParts) {
-        this.detectEngineeringParts = detectEngineeringParts;
-    }
-
-    public Double getDetectAmount() {
-        return detectAmount;
-    }
-
-    public void setDetectAmount(Double detectAmount) {
-        this.detectAmount = detectAmount;
     }
 
     public Integer getProgramType()
@@ -387,7 +444,15 @@ public class OpDeskInfo extends BaseEntity
         this.lastTime = lastTime;
     }
 
+    @Override
+    public String getRemark() {
+        return remark;
+    }
 
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     @Override
     public String toString() {
@@ -415,5 +480,7 @@ public class OpDeskInfo extends BaseEntity
                 .append("updateTime", getUpdateTime())
                 .toString();
     }
+
+
 }
 

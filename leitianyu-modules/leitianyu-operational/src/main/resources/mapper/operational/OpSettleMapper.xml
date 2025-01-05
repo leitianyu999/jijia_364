@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jijia.operational.mapper.OpSettleMapper">
+
+    <resultMap type="OpSettleVo" id="OpSettleVoResult">
+        <result property="deskId"    column="desk_id"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="publisher"    column="publisher"    />
+        <result property="businessManager"    column="business_manager"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="entrustmentUnit"    column="entrustment_unit"    />
+        <result property="entrustmentTime"    column="entrustment_time"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="detectName"    column="detect_name"    />
+        <result property="detectEngineeringParts"    column="detect_engineering_parts"    />
+        <result property="detectAmount"    column="detect_amount"    />
+        <result property="parameterCode"    column="parameter_code"    />
+        <result property="programType"    column="program_type"    />
+        <result property="sampleAmount"    column="sample_amount"    />
+        <result property="reportSerialNumber"    column="report_serial_number"    />
+        <result property="entrustSerialNumber"    column="entrust_serial_number"    />
+        <result property="recordSerialNumber"    column="record_serial_number"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isInterpolation"    column="is_interpolation"    />
+        <result property="status"    column="status"    />
+        <result property="entrustStatus"    column="entrust_status"    />
+        <result property="entrustNote"    column="entrust_note"    />
+        <result property="editDeptName"    column="editDeptName"    />
+        <result property="visitDeptName"    column="visitDeptName"    />
+        <result property="isSettlement"    column="is_settlement"    />
+        <result property="settleAmount"    column="settle_amount"    />
+    </resultMap>
+
+    <sql id="selectOpDeskVo">
+        select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
+               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,a.entrust_serial_number, a.record_serial_number,a.is_settlement,a.settle_amount,
+               a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,a.status,msg.entrust_status,msg.entrust_note,msg.detect_name,msg.detect_engineering_parts ,msg.detect_amount
+        from op_desk a
+        left join op_detect_msg msg on msg.desk_id = a.desk_id
+        left join op_project_msg b on a.project_id = b.project_id
+    </sql>
+    <update id="updateOpDesk" parameterType="OpSettleVo">
+        update op_desk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="isSettlement != null">is_settlement = #{isSettlement},</if>
+            <if test="settleAmount != null">settle_amount = #{settleAmount},</if>
+        </trim>
+        where desk_id = #{deskId}
+    </update>
+
+    <!--    修改时注意修改count-->
+    <select id="selectOpDeskList" parameterType="OpDeskInfo" resultMap="OpSettleVoResult">
+        select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
+        msg.detect_name,a.status, a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number, a.is_settlement,a.settle_amount,
+        a.entrust_serial_number, a.record_serial_number, a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,msg.entrust_status,msg.entrust_note,msg.detect_engineering_parts ,msg.detect_amount
+        ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
+        ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
+        from op_desk a
+        inner join op_detect_msg msg on msg.desk_id = a.desk_id
+        <if test="entrustStatus != null "> and msg.entrust_status =  #{entrustStatus} </if>
+        <if test="detectName != null  and detectName != ''"> and msg.detect_name like concat('%', #{detectName}, '%')</if>
+        <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and msg.detect_engineering_parts like concat('%', #{detectEngineeringParts}, '%')</if>
+        inner join op_project_msg b on a.project_id = b.project_id
+        <if test="projectName != null  and projectName != ''"> and b.project_name like concat('%', #{projectName}, '%')</if>
+        <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and b.entrustment_unit like concat('%', #{entrustmentUnit}, '%')</if>
+        LEFT join op_desk_dept dp on a.desk_id = dp.desk_id
+        <where>
+            <if test="publisher != null  and publisher != ''"> and a.publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and a.business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and a.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and a.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>
+            <if test="issueTime != null "> and a.issue_time between  #{issueTime[0]} and #{issueTime[1]}   </if>
+            <if test="orderTime != null "> and a.order_time between  #{orderTime[0]} and #{orderTime[1]}   </if>
+            <if test="entrustmentTime != null  "> and a.entrustment_time  between  #{entrustmentTime[0]} and #{entrustmentTime[1]}   </if>
+            <if test="parameterCode != null  and parameterCode != ''"> and a.parameter_code like concat('%', #{parameterCode}, '%')</if>
+            <if test="programType != null  and programType != ''"> and a.program_type =  #{programType} </if>
+            <if test="recordSerialNumber != null  and recordSerialNumber != ''"> and a.record_serial_number like concat('%', #{recordSerialNumber}, '%')</if>
+            <if test="remark != null  and remark != ''"> and a.remark like concat('%', #{remark}, '%')</if>
+            <if test="deskIds != null and deskIds.size() > 0 ">
+                and a.desk_id in
+                    <foreach collection="deskIds" item="value" separator="," open="(" close=")">
+                        #{value}
+                    </foreach>
+            </if>
+            <if test="projectType != null and projectType.size() > 0 ">
+                and a.project_type in
+                <foreach collection="projectType" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="status != null and status.size() > 0 ">
+             and a.status in
+                 <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                 </foreach>
+            </if>
+            <if test="editDeptId != null and editDeptId.size() > 0 ">
+                and a.desk_id in (select desk_id from op_desk_dept dept
+                where dept.desk_id = a.desk_id and dept.dept_id in
+                <foreach collection="editDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 1)
+            </if>
+            <if test="visitDeptId != null and visitDeptId.size() > 0 ">
+                and a.desk_id in (select desk_id from op_desk_dept dept
+                where dept.desk_id = a.desk_id and dept.dept_id in
+                <foreach collection="visitDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 2)
+            </if>
+            <if test="isSettlement != null and !isSettlementBool "> and a.is_settlement = #{isSettlement} </if>
+        </where>
+        GROUP BY a.desk_id
+    </select>
+
+    <select id="selectOpDeskList_COUNT" parameterType="OpDeskInfo" resultType="Long">
+        select count(*)
+        from op_desk a
+        inner join op_detect_msg msg on msg.desk_id = a.desk_id
+        <if test="entrustStatus != null "> and msg.entrust_status =  #{entrustStatus} </if>
+        <if test="detectName != null  and detectName != ''"> and msg.detect_name like concat('%', #{detectName}, '%')</if>
+        <if test="detectEngineeringParts != null  and detectEngineeringParts != ''"> and msg.detect_engineering_parts like concat('%', #{detectEngineeringParts}, '%')</if>
+        inner join op_project_msg b on a.project_id = b.project_id
+        <if test="projectName != null  and projectName != ''"> and b.project_name like concat('%', #{projectName}, '%')</if>
+        <if test="entrustmentUnit != null  and entrustmentUnit != ''"> and b.entrustment_unit like concat('%', #{entrustmentUnit}, '%')</if>
+        <where>
+            <if test="publisher != null  and publisher != ''"> and a.publisher like concat('%', #{publisher}, '%')</if>
+            <if test="businessManager != null  and businessManager != ''"> and a.business_manager like concat('%', #{businessManager}, '%')</if>
+            <if test="reportSerialNumber != null  and reportSerialNumber != ''"> and a.report_serial_number like concat('%', #{reportSerialNumber}, '%')</if>
+            <if test="entrustSerialNumber != null  and entrustSerialNumber != ''"> and a.entrust_serial_number like concat('%', #{entrustSerialNumber}, '%')</if>
+            <if test="issueTime != null "> and a.issue_time between  #{issueTime[0]} and #{issueTime[1]}   </if>
+            <if test="orderTime != null "> and a.order_time between  #{orderTime[0]} and #{orderTime[1]}   </if>
+            <if test="entrustmentTime != null  "> and a.entrustment_time  between  #{entrustmentTime[0]} and #{entrustmentTime[1]}   </if>
+            <if test="parameterCode != null  and parameterCode != ''"> and a.parameter_code like concat('%', #{parameterCode}, '%')</if>
+            <if test="programType != null  and programType != ''"> and a.program_type =  #{programType} </if>
+            <if test="recordSerialNumber != null  and recordSerialNumber != ''"> and a.record_serial_number like concat('%', #{recordSerialNumber}, '%')</if>
+            <if test="remark != null  and remark != ''"> and a.remark like concat('%', #{remark}, '%')</if>
+            <if test="deskIds != null and deskIds.size() > 0 ">
+                and a.desk_id in
+                <foreach collection="deskIds" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="projectType != null and projectType.size() > 0 ">
+                and a.project_type in
+                <foreach collection="projectType" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="status != null and status.size() > 0 ">
+                and a.status in
+                <foreach collection="status" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </if>
+            <if test="editDeptId != null and editDeptId.size() > 0 ">
+                and a.desk_id in (select desk_id from op_desk_dept dept
+                where dept.desk_id = a.desk_id and dept.dept_id in
+                <foreach collection="editDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 1)
+            </if>
+            <if test="visitDeptId != null and visitDeptId.size() > 0 ">
+                and a.desk_id in (select desk_id from op_desk_dept dept
+                where dept.desk_id = a.desk_id and dept.dept_id in
+                <foreach collection="visitDeptId" item="value" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+                and dept.permission_level = 2)
+            </if>
+            <if test="isSettlement != null and !isSettlementBool "> and a.is_settlement = #{isSettlement} </if>
+        </where>
+    </select>
+    <select id="selectOpDeskByDeskId" parameterType="Long" resultMap="OpSettleVoResult">
+        select a.desk_id, a.project_type, a.issue_time, a.order_time, a.publisher,b.entrustment_unit,b.project_name, a.business_manager, a.entrustment_time, a.project_id,
+               a.parameter_code, a.program_type, a.sample_amount, a.report_serial_number,a.is_settlement,a.settle_amount,
+               a.entrust_serial_number, a.record_serial_number, a.remark, a.create_by, a.create_time, a.update_time, a.is_interpolation,a.status,msg.entrust_status,msg.entrust_note,msg.detect_name,msg.detect_engineering_parts ,msg.detect_amount
+                ,GROUP_CONCAT(IF( dp.permission_level = 1, dp.dept_id, NULL) SEPARATOR ',') as editDeptName
+                ,GROUP_CONCAT(IF( dp.permission_level = 2, dp.dept_id, NULL) SEPARATOR ',') as visitDeptName
+        from op_desk a
+                 left join op_detect_msg msg on msg.desk_id = a.desk_id
+                 left join op_project_msg b on a.project_id = b.project_id
+                 LEFT join op_desk_dept dp on a.desk_id = dp.desk_id
+        where a.desk_id = #{deskId}
+    </select>
+
+
+</mapper>

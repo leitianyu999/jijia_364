@@ -54,13 +54,13 @@ public class OpCalibrationMsgServiceImpl implements IOpCalibrationMsgService
     public List<OpCalibrationMsgVo> selectOpCalibrationMsgListOutPut(OpCalibrationMsgInfo opCalibrationMsg) {
 
         if (opCalibrationMsg.getIsSettlement() == null)  {
-            if (AuthUtil.hasPermi("op:desk:isSettlement")) {
+            if (AuthUtil.hasPermi("op:calibration:isSettlement:out")) {
                 opCalibrationMsg.setSettlementBool(true);
             } else {
                 opCalibrationMsg.setIsSettlement("0");
             }
         } else if (opCalibrationMsg.getIsSettlement().equals("1")) {
-            if (!AuthUtil.hasPermi("op:desk:isSettlement")) {
+            if (!AuthUtil.hasPermi("op:calibration:isSettlement:out")) {
                 opCalibrationMsg.setIsSettlement("0");
             }
         }
@@ -78,10 +78,16 @@ public class OpCalibrationMsgServiceImpl implements IOpCalibrationMsgService
     public List<OpCalibrationMsgVo> selectOpCalibrationMsgList(OpCalibrationMsgInfo opCalibrationMsg)
     {
 
-        if (AuthUtil.hasPermi("op:calibration:isSettlement")) {
-            opCalibrationMsg.setIsSettlement("1");
-        } else {
-            opCalibrationMsg.setIsSettlement("0");
+        if (opCalibrationMsg.getIsSettlement() == null)  {
+            if (AuthUtil.hasPermi("op:calibration:isSettlement")) {
+                opCalibrationMsg.setSettlementBool(true);
+            } else {
+                opCalibrationMsg.setIsSettlement("0");
+            }
+        } else if (opCalibrationMsg.getIsSettlement().equals("1")) {
+            if (!AuthUtil.hasPermi("op:calibration:isSettlement")) {
+                opCalibrationMsg.setIsSettlement("0");
+            }
         }
 
         return opCalibrationMsgMapper.selectOpCalibrationMsgList(opCalibrationMsg);
