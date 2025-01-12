@@ -119,6 +119,8 @@ public class OpDeskInfo extends BaseEntity
     @Excel(name = "结算金额")
     private Integer settleAmount;
 
+    private Integer settleType;
+
     private boolean isSettlementBool = false;
 
     /** 删除标志（0代表存在 2代表删除） */
@@ -129,6 +131,14 @@ public class OpDeskInfo extends BaseEntity
     private List<Long> editDeptId;
 
     private List<Long> visitDeptId;
+
+    public Integer getSettleType() {
+        return settleType;
+    }
+
+    public void setSettleType(Integer settleType) {
+        this.settleType = settleType;
+    }
 
     public Integer getSettleAmount() {
         return settleAmount;

@@ -44,7 +44,7 @@ public class OpSettleServiceImpl implements IOpSettleService {
         Arrays.stream(deskIds).forEach(item -> {
             //复制属性
             OpSettleVo opSettle = settleMapper.selectOpDeskByDeskId(item);
-            if (opSettle != null && (opSettleVo.getIsSettlement() != null || opSettleVo.getSettleAmount() != null)) {
+            if (opSettle != null && (opSettleVo.getIsSettlement() != null || opSettleVo.getSettleAmount() != null || opSettleVo.getSettleType() != null)) {
                 OpSettleVo update = new OpSettleVo();
                 update.setDeskId(opSettle.getDeskId());
                 if (opSettleVo.getIsSettlement() != null) {
@@ -52,6 +52,9 @@ public class OpSettleServiceImpl implements IOpSettleService {
                 }
                 if (opSettleVo.getSettleAmount() != null) {
                     update.setSettleAmount(opSettleVo.getSettleAmount());
+                }
+                if (opSettleVo.getSettleType() != null) {
+                    update.setSettleType(opSettleVo.getSettleType());
                 }
                 atomicInteger.addAndGet(settleMapper.updateOpDesk(update));
             }
