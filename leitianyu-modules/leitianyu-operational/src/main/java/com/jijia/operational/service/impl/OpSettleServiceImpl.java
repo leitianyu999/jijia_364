@@ -56,6 +56,9 @@ public class OpSettleServiceImpl implements IOpSettleService {
                 if (opSettleVo.getSettleType() != null) {
                     update.setSettleType(opSettleVo.getSettleType());
                 }
+                if (opSettleVo.getSettleRemark() != null) {
+                    update.setSettleRemark(opSettleVo.getSettleRemark());
+                }
                 atomicInteger.addAndGet(settleMapper.updateOpDesk(update));
             }
         });

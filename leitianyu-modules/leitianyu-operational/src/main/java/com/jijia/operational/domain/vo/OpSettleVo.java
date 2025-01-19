@@ -147,6 +147,10 @@ public class OpSettleVo extends BaseEntity
     @ExcelProperty(value = {"前台台账数据","结算类型"},converter = SettleConverter.class)
     private Integer settleType;
 
+    @ExcelProperty(value = {"前台台账数据","结算备注"})
+    /** 备注 */
+    private String settleRemark;
+
 
     @ExcelProperty(value = {"前台台账数据","是否导入"} , converter = StringConverter.class)
     private String isImport;
@@ -156,6 +160,15 @@ public class OpSettleVo extends BaseEntity
 
     @ExcelProperty(value = {"前台台账数据","重复数量"})
     private Integer repeatNumber;
+
+
+    public String getSettleRemark() {
+        return settleRemark;
+    }
+
+    public void setSettleRemark(String settleRemark) {
+        this.settleRemark = settleRemark;
+    }
 
     public Integer getSettleType() {
         return settleType;
