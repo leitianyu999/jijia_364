@@ -1,15 +1,16 @@
 package com.jijia.camunda.controller;
 
+import com.jijia.camunda.domain.dto.CmdCategoryDto;
 import com.jijia.camunda.domain.dto.HandleDataDTO;
 import com.jijia.camunda.domain.dto.ProcessInstanceDto;
+import com.jijia.camunda.service.newS.CmdGroupService;
 import com.jijia.camunda.service.newS.CmdTaskService;
 import com.jijia.common.core.web.controller.BaseController;
 import com.jijia.common.core.web.domain.AjaxResult;
 import com.jijia.common.core.web.page.TableDataInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.jijia.common.security.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,6 +26,8 @@ public class CmdTaskController extends BaseController {
 
     @Resource
     private CmdTaskService cmdTaskService;
+    @Autowired
+    private CmdGroupService cmdGroupService;
 
 
     // 启动流程
@@ -68,5 +71,13 @@ public class CmdTaskController extends BaseController {
         return AjaxResult.success();
     }
 
-
+    /**
+     * 获取分类树列表
+     */
+    @RequiresPermissions("camunda:model:list")
+    @GetMapping("/deptTree")
+    public AjaxResult categoryTree(CmdCategoryDto cmdCategoryDto)
+    {
+        return success(cmdGroupService.selectCategoryTreeList(cmdCategoryDto));
+    }
 }

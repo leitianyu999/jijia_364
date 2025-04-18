@@ -4,11 +4,14 @@ package com.jijia.camunda.controller;
 import com.jijia.camunda.domain.dto.CmdCategoryDto;
 import com.jijia.camunda.domain.vo.CmdCategoryVo;
 import com.jijia.camunda.service.newS.CmdGroupService;
+import com.jijia.common.core.utils.StringUtils;
 import com.jijia.common.core.web.controller.BaseController;
 import com.jijia.common.core.web.domain.AjaxResult;
 import com.jijia.common.core.web.page.TableDataInfo;
 import com.jijia.common.security.annotation.RequiresPermissions;
+import com.jijia.system.api.domain.SysDept;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,9 +45,9 @@ public class CmdGroupsController extends BaseController {
      */
     @RequiresPermissions("camunda:groups:list")
     @GetMapping("/list")
-    public TableDataInfo list(CmdCategoryDto categoryDto) {
+    public AjaxResult list(CmdCategoryDto categoryDto) {
         List<CmdCategoryVo> list = groupService.getGroupList(categoryDto);
-        return getDataTable(list);
+        return success(list);
     }
 
     /**
@@ -54,6 +57,19 @@ public class CmdGroupsController extends BaseController {
     @GetMapping(value = "/{categoryId}")
     public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return success(groupService.getGroup(categoryId));
+    }
+
+
+    /**
+     * 查询部门列表（排除节点）
+     */
+    @RequiresPermissions("camunda:groups:list")
+    @GetMapping("/list/exclude/{categoryId}")
+    public AjaxResult excludeChild(@PathVariable(value = "categoryId", required = false) Long categoryId)
+    {
+        List<CmdCategoryVo> categoryVos = groupService.getGroupList(new CmdCategoryDto());
+        categoryVos.removeIf(d -> d.getCategoryId().intValue() == categoryId || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), categoryId + ""));
+        return success(categoryVos);
     }
 
     /**

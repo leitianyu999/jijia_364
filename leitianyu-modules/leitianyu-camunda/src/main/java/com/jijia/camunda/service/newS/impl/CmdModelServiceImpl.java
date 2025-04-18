@@ -7,6 +7,7 @@ import com.jijia.camunda.domain.CmdModel;
 import com.jijia.camunda.domain.CmdModelForm;
 import com.jijia.camunda.domain.dto.CmdModelDto;
 import com.jijia.camunda.domain.enums.ModelType;
+import com.jijia.camunda.domain.vo.CmdCategoryVo;
 import com.jijia.camunda.domain.vo.CmdFormVo;
 import com.jijia.camunda.domain.vo.CmdModelVo;
 import com.jijia.camunda.mapper.newM.CmdFormMapper;
@@ -19,6 +20,7 @@ import com.jijia.camunda.strategy.service.modelUpdate.ModelStrategy;
 import com.jijia.camunda.utils.BpmnUtils;
 import com.jijia.camunda.utils.CamundaFlowUtils;
 import com.jijia.common.core.exception.GlobalException;
+import com.jijia.common.core.utils.SpringUtils;
 import com.jijia.common.security.utils.SecurityUtils;
 import org.bouncycastle.math.raw.Mod;
 import org.camunda.bpm.engine.RepositoryService;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -257,6 +260,23 @@ public class CmdModelServiceImpl implements CmdModelService {
         }
     }
 
+    // 根据code获取最新运行的模型
+    @SuppressWarnings("unchecked")
+    @Override
+    public CmdModelVo getModelByCode(String code) {
+        LambdaQueryWrapper<CmdModel> queryWrapper =  new LambdaQueryWrapper<>();
+        queryWrapper.eq(CmdModel::getCode, code)
+                .eq(CmdModel::getStatus, "1")
+                .orderByDesc(CmdModel::getVersion);
+        CmdModel cmdModel = cmdModelMapper.selectList(queryWrapper).stream().findFirst().orElse(null);
+        if (cmdModel == null) {
+            throw new GlobalException("模型不存在或未启用");
+        }
+        CmdModelVo cmdModelVo = BeanUtil.toBean(cmdModel, CmdModelVo.class);
+        return cmdModelVo;
+
+    }
+
     private void validateBpmn(BpmnModelInstance xml) {
         if (xml == null) {
             throw new GlobalException("模型生成失败");
@@ -274,6 +294,8 @@ public class CmdModelServiceImpl implements CmdModelService {
             throw new GlobalException("模型表单不存在");
         }
     }
+
+
 
 
 }

@@ -1,5 +1,7 @@
 package com.jijia.camunda.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
@@ -22,6 +24,7 @@ public class CmdCategory extends BaseDO {
     private static final long serialVersionUID = 1L;
 
     /** 分类编号 */
+    @TableId(type = IdType.AUTO)
     private Long categoryId;
 
     /** 菜单ID */
@@ -29,6 +32,9 @@ public class CmdCategory extends BaseDO {
 
     /** 父菜单ID */
     private Long parentId;
+
+    /** 祖级列表 */
+    private String ancestors;
 
     /** 分类名 */
     private String name;

@@ -2,6 +2,7 @@ package com.jijia.camunda.service.newS;
 
 import com.jijia.camunda.domain.dto.CmdCategoryDto;
 import com.jijia.camunda.domain.vo.CmdCategoryVo;
+import com.jijia.camunda.domain.vo.TreeSelect;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface CmdGroupService {
 
     int deleteGroup(Long id);
 
+    List<TreeSelect> selectCategoryTreeList(CmdCategoryDto cmdCategoryDto);
 }

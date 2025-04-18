@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @TableName(value = "cmd_model_category")
 public class CmdModelCategory {
 
-    private Long modelId;
+    private String modelCode;
 
     private Long categoryId;
 

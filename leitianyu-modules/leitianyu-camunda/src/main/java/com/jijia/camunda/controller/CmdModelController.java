@@ -1,8 +1,10 @@
 package com.jijia.camunda.controller;
 
 import com.jijia.camunda.domain.CmdModel;
+import com.jijia.camunda.domain.dto.CmdCategoryDto;
 import com.jijia.camunda.domain.dto.CmdModelDto;
 import com.jijia.camunda.domain.vo.CmdModelVo;
+import com.jijia.camunda.service.newS.CmdGroupService;
 import com.jijia.camunda.service.newS.CmdModelService;
 import com.jijia.common.core.web.controller.BaseController;
 import com.jijia.common.core.web.domain.AjaxResult;
@@ -10,6 +12,7 @@ import com.jijia.common.core.web.page.TableDataInfo;
 import com.jijia.common.log.annotation.Log;
 import com.jijia.common.log.enums.BusinessType;
 import com.jijia.common.security.annotation.RequiresPermissions;
+import com.jijia.system.api.domain.SysDept;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,8 @@ public class CmdModelController extends BaseController {
 
     @Resource
     private CmdModelService cmdModelService;
+    @Resource
+    private CmdGroupService cmdGroupService;
 
     /**
      * 查询模型列表
@@ -102,5 +107,7 @@ public class CmdModelController extends BaseController {
     {
         return toAjax(cmdModelService.reployModel(modelId));
     }
+
+
 
 }

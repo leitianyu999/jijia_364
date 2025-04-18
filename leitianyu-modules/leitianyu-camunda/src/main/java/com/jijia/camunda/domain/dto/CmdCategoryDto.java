@@ -26,6 +26,9 @@ public class CmdCategoryDto extends BaseDO {
     /** 父菜单ID */
     private Long parentId;
 
+    /** 祖级列表 */
+    private String ancestors;
+
     /** 分类名 */
     private String name;
 
@@ -69,7 +72,7 @@ public class CmdCategoryDto extends BaseDO {
     private String icon;
 
 
-    private Long ModelId;
+    private String ModelCode;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
