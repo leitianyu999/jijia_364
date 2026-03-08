@@ -150,7 +150,7 @@ public class OpDetectMsgController extends BaseController
     public void exportAll(HttpServletResponse response, OpDetectMsgInfo opDetectMsg, @PathVariable(value = "deskIds",required = false) List<Long> deskIds)
     {
         opDetectMsg.setDeskIds(deskIds);
-        List<OpDetectMsgVo> list = opDetectMsgService.selectOpDetectMsgList(opDetectMsg, Boolean.FALSE, Boolean.FALSE);
+        List<OpDetectMsgVo> list = opDetectMsgService.selectOpDetectMsgList(opDetectMsg, Boolean.FALSE, Boolean.TRUE);
         list.forEach(item -> {
             if (item.getSampleAmount()!=1) {
                 int i = Integer.parseInt(item.getRecordSerialNumber().substring(item.getRecordSerialNumber().length()-4)) + item.getSampleAmount();
