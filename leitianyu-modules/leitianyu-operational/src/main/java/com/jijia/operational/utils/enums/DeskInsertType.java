@@ -16,7 +16,9 @@ public enum DeskInsertType {
     //水利报建策略
     BAO_JIAN(3,DeskConstants.Desk_BAOJIAN),
     //24水利策略
-    SHUI_LI_24(4,DeskConstants.Desk_SHUILI_24);
+    SHUI_LI_24(4,DeskConstants.Desk_SHUILI_24),
+    //住建资质策略
+    ZHUJIAN_ZIZHI(5, DeskConstants.Desk_ZHUJIAN_ZIZHI);
 
 
 

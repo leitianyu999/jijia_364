@@ -22,6 +22,8 @@ public class DeskConstants {
 
     public static final Integer SHUILI_24 = 4;
 
+    public static final Integer ZHUJIAN_ZIZHI = 5;
+
     public static final Integer JIANSHE = 1;
 
     public static final Integer BAOJIAN = 3;
@@ -57,6 +59,8 @@ public class DeskConstants {
     public static final String Desk_SHUILI_23 = "23水利";
 
     public static final String Desk_SHUILI_24 = "24水利";
+
+    public static final String Desk_ZHUJIAN_ZIZHI = "住建资质";
 
     public static final String Desk_JIANSHE = "建设";
 

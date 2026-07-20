@@ -290,7 +290,9 @@ public class OpDeskServiceImpl implements IOpDeskService
 
     private void updateOpDeskByImport(OpDeskVo opDeskVo) {
         try {
-            if (opDeskVo.getProjectType().equals(DeskConstants.SHUILI_23) || opDeskVo.getProjectType().equals(DeskConstants.SHUILI_24)) {
+            if (opDeskVo.getProjectType().equals(DeskConstants.SHUILI_23)
+                    || opDeskVo.getProjectType().equals(DeskConstants.SHUILI_24)
+                    || opDeskVo.getProjectType().equals(DeskConstants.ZHUJIAN_ZIZHI)) {
                 opDeskVo.setRecordSerialNumber(opDeskVo.getRecordSerialNumber().split("~")[0]);
             } else if (opDeskVo.getProjectType().equals(DeskConstants.BAOJIAN)){
                 opDeskVo.setRecordSerialNumber(opDeskVo.getRecordSerialNumber().substring(0,18));
