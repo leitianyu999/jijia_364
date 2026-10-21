@@ -212,6 +212,30 @@ public class OpCalibrationMsgVo extends BaseEntity
 
     private Integer sampleAmount;
 
+    /** 送样人 */
+    @ExcelProperty(value = {"综合部台账数据","送样人"})
+    private String sampleSender;
+
+    /** 收样人 */
+    @ExcelProperty(value = {"综合部台账数据","收样人"})
+    private String sampleReceiver;
+
+    public String getSampleSender() {
+        return sampleSender;
+    }
+
+    public void setSampleSender(String sampleSender) {
+        this.sampleSender = sampleSender;
+    }
+
+    public String getSampleReceiver() {
+        return sampleReceiver;
+    }
+
+    public void setSampleReceiver(String sampleReceiver) {
+        this.sampleReceiver = sampleReceiver;
+    }
+
     public String getIsSettlement() {
         return isSettlement;
     }

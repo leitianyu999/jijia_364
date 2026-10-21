@@ -142,6 +142,30 @@ public class OpReadyDeskVo extends BaseEntity
     @ExcelProperty(value = {"前台台账数据","重复数量"})
     private Integer repeatNumber;
 
+    /** 送样人 */
+    @ExcelProperty(value = {"前台台账数据","送样人"})
+    private String sampleSender;
+
+    /** 收样人 */
+    @ExcelProperty(value = {"前台台账数据","收样人"})
+    private String sampleReceiver;
+
+    public String getSampleSender() {
+        return sampleSender;
+    }
+
+    public void setSampleSender(String sampleSender) {
+        this.sampleSender = sampleSender;
+    }
+
+    public String getSampleReceiver() {
+        return sampleReceiver;
+    }
+
+    public void setSampleReceiver(String sampleReceiver) {
+        this.sampleReceiver = sampleReceiver;
+    }
+
     public String getReportSerialNumber() {
         return reportSerialNumber;
     }
@@ -404,6 +428,8 @@ public class OpReadyDeskVo extends BaseEntity
                 .append("issueTime", getIssueTime())
                 .append("orderTime", getOrderTime())
                 .append("publisher", getPublisher())
+                .append("sampleSender", getSampleSender())
+                .append("sampleReceiver", getSampleReceiver())
                 .append("businessManager", getBusinessManager())
                 .append("entrustmentTime", getEntrustmentTime())
                 .append("parameterCode", getParameterCode())

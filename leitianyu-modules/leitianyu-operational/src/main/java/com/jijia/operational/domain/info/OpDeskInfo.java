@@ -132,6 +132,30 @@ public class OpDeskInfo extends BaseEntity
 
     private List<Long> visitDeptId;
 
+    /** 送样人 */
+    @Excel(name = "送样人")
+    private String sampleSender;
+
+    /** 收样人 */
+    @Excel(name = "收样人")
+    private String sampleReceiver;
+
+    public String getSampleSender() {
+        return sampleSender;
+    }
+
+    public void setSampleSender(String sampleSender) {
+        this.sampleSender = sampleSender;
+    }
+
+    public String getSampleReceiver() {
+        return sampleReceiver;
+    }
+
+    public void setSampleReceiver(String sampleReceiver) {
+        this.sampleReceiver = sampleReceiver;
+    }
+
     public Integer getSettleType() {
         return settleType;
     }
@@ -408,6 +432,8 @@ public class OpDeskInfo extends BaseEntity
                 .append("orderTime", getOrderTime())
                 .append("projectName", getProjectName())
                 .append("publisher", getPublisher())
+                .append("sampleSender", getSampleSender())
+                .append("sampleReceiver", getSampleReceiver())
                 .append("businessManager", getBusinessManager())
                 .append("entrustmentTime", getEntrustmentTime())
                 .append("entrustmentUnit", getEntrustmentUnit())

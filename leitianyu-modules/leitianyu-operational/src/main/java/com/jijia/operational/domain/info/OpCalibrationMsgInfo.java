@@ -110,6 +110,28 @@ public class OpCalibrationMsgInfo extends BaseEntity
 
     private List<Integer> projectType;
 
+    /** 送样人 */
+    private String sampleSender;
+
+    /** 收样人 */
+    private String sampleReceiver;
+
+    public String getSampleSender() {
+        return sampleSender;
+    }
+
+    public void setSampleSender(String sampleSender) {
+        this.sampleSender = sampleSender;
+    }
+
+    public String getSampleReceiver() {
+        return sampleReceiver;
+    }
+
+    public void setSampleReceiver(String sampleReceiver) {
+        this.sampleReceiver = sampleReceiver;
+    }
+
     public String getIsSettlement() {
         return isSettlement;
     }

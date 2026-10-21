@@ -11,6 +11,8 @@
         <result property="issueTime"    column="issue_time"    />
         <result property="orderTime"    column="order_time"    />
         <result property="publisher"    column="publisher"    />
+        <result property="sampleSender" column="sample_sender" />
+        <result property="sampleReceiver" column="sample_receiver" />
         <result property="businessManager"    column="business_manager"    />
         <result property="entrustmentTime"    column="entrustment_time"    />
         <result property="parameterCode"    column="parameter_code"    />
@@ -38,6 +40,8 @@
         <result property="issueTime"    column="issue_time"    />
         <result property="orderTime"    column="order_time"    />
         <result property="publisher"    column="publisher"    />
+        <result property="sampleSender" column="sample_sender" />
+        <result property="sampleReceiver" column="sample_receiver" />
         <result property="businessManager"    column="business_manager"    />
         <result property="projectName"    column="project_name"    />
         <result property="entrustmentUnit"    column="entrustment_unit"    />
@@ -66,7 +70,7 @@
     </resultMap>
 
     <sql id="selectOpReadyDeskVo">
-        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.sample_sender, desk.sample_receiver, desk.business_manager,
                desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
                desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
                desk.detect_amount, desk.repeat_number, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
@@ -74,7 +78,7 @@
     </sql>
 
     <select id="selectOpReadyDeskListByJob" parameterType="OpReadyInfo" resultMap="OpReadyDeskVoResult">
-        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.sample_sender, desk.sample_receiver, desk.business_manager,
         desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
         desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
         desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
@@ -91,7 +95,7 @@
     </select>
 
     <select id="selectOpReadyDeskList" parameterType="OpReadyInfo" resultMap="OpReadyDeskVoResult">
-        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.sample_sender, desk.sample_receiver, desk.business_manager,
         desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
         desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
         desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
@@ -104,6 +108,8 @@
         LEFT join op_ready_dept dp on desk.ready_id = dp.ready_id
         <where>
             <if test="publisher != null  and publisher != ''"> and desk.publisher like concat('%', #{publisher}, '%')</if>
+            <if test="sampleSender != null and sampleSender != ''"> and desk.sample_sender like concat('%', #{sampleSender}, '%')</if>
+            <if test="sampleReceiver != null and sampleReceiver != ''"> and desk.sample_receiver like concat('%', #{sampleReceiver}, '%')</if>
             <if test="businessManager != null  and businessManager != ''"> and desk.business_manager like concat('%', #{businessManager}, '%')</if>
             <if test="issueTime != null "> and desk.issue_time between  #{issueTime[0]} and #{issueTime[1]}   </if>
             <if test="orderTime != null "> and desk.order_time between  #{orderTime[0]} and #{orderTime[1]}   </if>
@@ -156,7 +162,7 @@
     </select>
 
     <select id="selectOpReadyDeskByReadyId" parameterType="Long" resultMap="OpReadyDeskVoResult">
-        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.business_manager,
+        select desk.ready_id, desk.project_id, desk.project_type, desk.issue_time, desk.order_time, desk.publisher, desk.sample_sender, desk.sample_receiver, desk.business_manager,
                desk.entrustment_time, desk.parameter_code, desk.program_type, desk.sample_amount, desk.remark, desk.create_by, desk.create_time,
                desk.update_time, desk.is_interpolation, desk.status, desk.entrust_status, desk.entrust_note, desk.detect_name, desk.detect_engineering_parts,
                desk.detect_amount, desk.repeat_number, project.entrustment_unit, project.project_name, desk.report_serial_number,desk.entrust_serial_number, desk.record_serial_number
@@ -177,6 +183,8 @@
             <if test="issueTime != null">issue_time,</if>
             <if test="orderTime != null">order_time,</if>
             <if test="publisher != null">publisher,</if>
+            <if test="sampleSender != null">sample_sender,</if>
+            <if test="sampleReceiver != null">sample_receiver,</if>
             <if test="businessManager != null">business_manager,</if>
             <if test="entrustmentTime != null">entrustment_time,</if>
             <if test="parameterCode != null">parameter_code,</if>
@@ -204,6 +212,8 @@
             <if test="issueTime != null">#{issueTime},</if>
             <if test="orderTime != null">#{orderTime},</if>
             <if test="publisher != null">#{publisher},</if>
+            <if test="sampleSender != null">#{sampleSender},</if>
+            <if test="sampleReceiver != null">#{sampleReceiver},</if>
             <if test="businessManager != null">#{businessManager},</if>
             <if test="entrustmentTime != null">#{entrustmentTime},</if>
             <if test="parameterCode != null">#{parameterCode},</if>
@@ -235,6 +245,8 @@
             <if test="issueTime != null">issue_time = #{issueTime},</if>
             <if test="orderTime != null">order_time = #{orderTime},</if>
             <if test="publisher != null">publisher = #{publisher},</if>
+            <if test="sampleSender != null">sample_sender = #{sampleSender},</if>
+            <if test="sampleReceiver != null">sample_receiver = #{sampleReceiver},</if>
             <if test="businessManager != null">business_manager = #{businessManager},</if>
             <if test="entrustmentTime != null">entrustment_time = #{entrustmentTime},</if>
             <if test="parameterCode != null">parameter_code = #{parameterCode},</if>

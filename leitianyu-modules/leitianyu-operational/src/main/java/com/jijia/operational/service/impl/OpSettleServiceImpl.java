@@ -1,22 +1,15 @@
 package com.jijia.operational.service.impl;
 
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.jijia.common.core.exception.GlobalException;
-import com.jijia.common.security.auth.AuthUtil;
 import com.jijia.operational.domain.info.OpDeskInfo;
-import com.jijia.operational.domain.vo.OpDeskVo;
 import com.jijia.operational.domain.vo.OpSettleVo;
 import com.jijia.operational.mapper.OpSettleMapper;
-import com.jijia.operational.service.*;
+import com.jijia.operational.service.IOpSettleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -34,34 +27,48 @@ public class OpSettleServiceImpl implements IOpSettleService {
 
     @Override
     public List<OpSettleVo> selectOpDeskList(OpDeskInfo opDesk) {
-            return settleMapper.selectOpDeskList(opDesk);
-
+        return settleMapper.selectOpDeskList(opDesk);
     }
 
     @Override
     public int updateOpDeskAll(OpSettleVo opSettleVo, Long[] deskIds) {
-        AtomicInteger atomicInteger = new AtomicInteger(0);
-        Arrays.stream(deskIds).forEach(item -> {
-            //复制属性
-            OpSettleVo opSettle = settleMapper.selectOpDeskByDeskId(item);
-            if (opSettle != null && (opSettleVo.getIsSettlement() != null || opSettleVo.getSettleAmount() != null || opSettleVo.getSettleType() != null)) {
-                OpSettleVo update = new OpSettleVo();
-                update.setDeskId(opSettle.getDeskId());
-                if (opSettleVo.getIsSettlement() != null) {
-                    update.setIsSettlement(opSettleVo.getIsSettlement());
-                }
-                if (opSettleVo.getSettleAmount() != null) {
-                    update.setSettleAmount(opSettleVo.getSettleAmount());
-                }
-                if (opSettleVo.getSettleType() != null) {
-                    update.setSettleType(opSettleVo.getSettleType());
-                }
-                if (opSettleVo.getSettleRemark() != null) {
-                    update.setSettleRemark(opSettleVo.getSettleRemark());
-                }
-                atomicInteger.addAndGet(settleMapper.updateOpDesk(update));
+        if (deskIds == null || deskIds.length == 0) {
+            throw new GlobalException("请选择需要修改的结算台账");
+        }
+        if (opSettleVo == null || (opSettleVo.getIsSettlement() == null
+                && opSettleVo.getSettleAmount() == null && opSettleVo.getSettleType() == null
+                && opSettleVo.getSettleRemark() == null)) {
+            throw new GlobalException("请至少填写一项结算信息");
+        }
+        if (opSettleVo.getIsSettlement() != null && !"0".equals(opSettleVo.getIsSettlement())
+                && !"1".equals(opSettleVo.getIsSettlement())) {
+            throw new GlobalException("是否结算只能为是或否");
+        }
+        if (opSettleVo.getSettleAmount() != null && opSettleVo.getSettleAmount() < 0) {
+            throw new GlobalException("结算金额不能小于0");
+        }
+        if (opSettleVo.getSettleType() != null && opSettleVo.getSettleType() != 0
+                && opSettleVo.getSettleType() != 1) {
+            throw new GlobalException("结算类型不正确");
+        }
+        int updated = 0;
+        for (Long item : deskIds) {
+            if (item == null) {
+                throw new GlobalException("结算台账编号不能为空");
             }
-        });
-        return atomicInteger.get();
+            OpSettleVo opSettle = settleMapper.selectOpDeskByDeskId(item);
+            if (opSettle == null || opSettle.getDeskId() == null) {
+                throw new GlobalException("结算台账不存在：" + item);
+            }
+            // 仅更新本次传入的结算字段，未填写的字段保持原值。
+            OpSettleVo update = new OpSettleVo();
+            update.setDeskId(opSettle.getDeskId());
+            update.setIsSettlement(opSettleVo.getIsSettlement());
+            update.setSettleAmount(opSettleVo.getSettleAmount());
+            update.setSettleType(opSettleVo.getSettleType());
+            update.setSettleRemark(opSettleVo.getSettleRemark());
+            updated += settleMapper.updateOpDesk(update);
+        }
+        return updated;
     }
 }

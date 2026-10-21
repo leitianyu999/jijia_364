@@ -110,6 +110,30 @@ public class OpReadyDesk extends BaseEntity
     @Excel(name = "重复数量")
     private Integer repeatNumber;
 
+    /** 送样人 */
+    @Excel(name = "送样人")
+    private String sampleSender;
+
+    /** 收样人 */
+    @Excel(name = "收样人")
+    private String sampleReceiver;
+
+    public String getSampleSender() {
+        return sampleSender;
+    }
+
+    public void setSampleSender(String sampleSender) {
+        this.sampleSender = sampleSender;
+    }
+
+    public String getSampleReceiver() {
+        return sampleReceiver;
+    }
+
+    public void setSampleReceiver(String sampleReceiver) {
+        this.sampleReceiver = sampleReceiver;
+    }
+
     public String getReportSerialNumber() {
         return reportSerialNumber;
     }
@@ -314,6 +338,8 @@ public class OpReadyDesk extends BaseEntity
                 .append("issueTime", getIssueTime())
                 .append("orderTime", getOrderTime())
                 .append("publisher", getPublisher())
+                .append("sampleSender", getSampleSender())
+                .append("sampleReceiver", getSampleReceiver())
                 .append("businessManager", getBusinessManager())
                 .append("entrustmentTime", getEntrustmentTime())
                 .append("parameterCode", getParameterCode())

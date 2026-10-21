@@ -139,7 +139,7 @@ public class OpCalibrationMsgController extends BaseController
         //选中导出相关数据
         opCalibrationMsg.setDeskIds(deskIds);
         opCalibrationMsg.setBusinessManager(SecurityUtils.getUsername());
-        List<OpCalibrationMsgVo> list = opCalibrationMsgService.selectOpCalibrationMsgList(opCalibrationMsg);
+        List<OpCalibrationMsgVo> list = opCalibrationMsgService.selectOpCalibrationMsgListOutPut(opCalibrationMsg);
         AtomicInteger atomicInteger = new AtomicInteger();
         list.forEach(item -> {
             if (item.getSampleAmount()!=1) {

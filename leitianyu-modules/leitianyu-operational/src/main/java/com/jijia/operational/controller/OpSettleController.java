@@ -55,7 +55,7 @@ public class OpSettleController extends BaseController {
      * 导出前台台账列表
      */
     @RequiresPermissions("op:settle:export")
-    @Log(title = "前台台账", businessType = BusinessType.EXPORT)
+    @Log(title = "结算台账", businessType = BusinessType.EXPORT)
     @PostMapping(value = {"/export/{deskIds}","/export/"})
     public void export(HttpServletResponse response, OpDeskInfo opDesk , @PathVariable(value = "deskIds",required = false) List<Long> deskIds)
     {
@@ -119,7 +119,7 @@ public class OpSettleController extends BaseController {
      * 批量修改修改前台台账
      */
     @RequiresPermissions("op:settle:editall")
-    @Log(title = "前台台账", businessType = BusinessType.UPDATE)
+    @Log(title = "结算台账", businessType = BusinessType.UPDATE)
     @PostMapping("/edit/{deskIds}")
     @Transactional(rollbackFor = Exception.class)
     public AjaxResult editAll(@RequestBody OpSettleVo opSettleVo,@PathVariable("deskIds") Long[] deskIds)
